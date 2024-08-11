@@ -5,20 +5,29 @@
   "type": "module",
   "scripts": {
     "build": "remix vite:build",
-    "dev": "remix vite:dev",
+    "dev": "remix vite:dev --host",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.9.0",
     "@remix-run/node": "^2.11.1",
     "@remix-run/react": "^2.11.1",
     "@remix-run/serve": "^2.11.1",
+    "@tanstack/react-query": "^5.51.23",
+    "axios": "^1.7.3",
+    "date-fns": "^3.6.0",
     "isbot": "^4.4.0",
+    "lodash": "^4.17.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.52.2",
+    "react-icons": "^5.2.1",
     "remix-auth": "^3.7.0",
-    "remix-auth-form": "^1.5.0"
+    "remix-auth-form": "^1.5.0",
+    "remix-hook-form": "^5.0.4",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.11.1",
