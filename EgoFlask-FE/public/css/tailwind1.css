@@ -1,13 +1,14 @@
 /* Global css go here */
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 :root {
-    --primary-color: #0055C3;
+  --primary-color: #0055C3;
 }
 
 html,
 body {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
+  font-family: 'Inter', sans-serif;
 }

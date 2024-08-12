@@ -1,116 +1,64 @@
-import Logo from "../../public/images/Logo.png";
-import Search from "../../public/icons/Search.svg";
-import Cart from "../../public/icons/Cart.svg";
-import Account from "../../public/icons/Account.svg";
-import { useState } from "react";
+import { IoCartOutline, IoPersonOutline, IoSearch } from "react-icons/io5";
+import { NavLink, useNavigate } from "@remix-run/react";
+import _ from "lodash";
 
 export const Header = () => {
-  const [isActive, setIsActive] = useState("");
+  const navigate = useNavigate();
 
-  const handleClick = (section: string) => {
-    setIsActive(section);
-  };
+  const navBar = [
+    {
+      'title': 'Trang chủ',
+      'link': "/",
+    },
+    {
+      'title': 'Sản phẩm',
+      'link': '/products'
+    },
+    {
+      'title': 'Thiết kế',
+      'link': '/design'
+    },
+    {
+      'title': 'Liên hệ',
+      'link': '/contact'
+    },
+  ]
 
   return (
     <header>
-      <div
-        className="top-bar"
-        style={{
-          height: "37px",
-          background: "#0055C3",
-          color: "#fff",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        Miễn phí vận chuyển cho đơn hàng trên 1.000.000 VND
-      </div>
-      <div
-        className="nav-bar"
-        style={{
-          maxWidth: "1425px",
-          height: "45px",
-          margin: "7px auto 0",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <ul
-          className="menu"
-          style={{
-            listStyle: "none",
-            padding: 0,
-            display: "flex",
-            gap: "50px",
-            fontWeight: "500",
-          }}
-        >
-          <li>
-            <a
-              href="#!"
-              onClick={() => handleClick("home")}
-              className={`text-black ${
-                isActive === "home" ? "text-[#0255C3]" : "hover:text-[#0255C3]"
-              } active:text-[#0255C3]`}
-            >
-              Trang chủ
-            </a>
-          </li>
-          <li>
-            <a
-              href="#!"
-              onClick={() => handleClick("products")}
-              className={`text-black ${
-                isActive === "products"
-                  ? "text-[#0255C3]"
-                  : "hover:text-[#0255C3]"
-              } active:text-[#0255C3]`}
-            >
-              Sản phẩm
-            </a>
-          </li>
-          <li>
-            <a
-              href="#!"
-              onClick={() => handleClick("design")}
-              className={`text-black ${
-                isActive === "design"
-                  ? "text-[#0255C3]"
-                  : "hover:text-[#0255C3]"
-              } active:text-[#0255C3]`}
-            >
-              Thiết kế
-            </a>
-          </li>
-          <li>
-            <a
-              href="#!"
-              onClick={() => handleClick("contact")}
-              className={`text-black ${
-                isActive === "contact"
-                  ? "text-[#0255C3]"
-                  : "hover:text-[#0255C3]"
-              } active:text-[#0255C3]`}
-            >
-              Liên hệ
-            </a>
-          </li>
-        </ul>
-        <img
-          src={Logo}
-          alt="Logo"
-          className="logo"
-          style={{ width: "157px", objectFit: "contain", marginRight: "280px" }}
-        />
+      <div className="flex flex-col items-center justify-center gap-2">
         <div
-          className="nav-act"
-          style={{ display: "flex", gap: "16px", width: "120px" }}
+          className="top-bar w-full h-[37px] flex flex-rows items-center justify-center py-2 text-white bg-[#0055C3]"
         >
-          <img src={Search} alt="" />
-          <img src={Account} alt="" />
-          <img src={Cart} alt="" />
+          Miễn phí vận chuyển cho đơn hàng trên 1.000.000 VND
+        </div>
+        <div
+          className="nav-bar flex flex-rows items-center justify-between w-full h-12 px-16"
+        >
+          <nav className="flex flex-row justify-start items-center space-x-8">
+            {_.map(navBar, (item, index) => (
+              <NavLink key={index} to={item.link} className={({ isActive }) =>
+                `flex flex-rows text-base hover:no-underline ${isActive ? 'text-[#0055C3] font-bold' : 'text-black hover:text-[#0255C3]'}`
+              }>
+                {item.title}
+              </NavLink>
+            ))}
+          </nav>
+          <div className="flex items-center -translate-x-1/2">
+            <img
+              src="/images/Logo.png"
+              alt="Logo"
+              className="logo w-[157px] h-[45px] cursor-pointer"
+              onClick={() => navigate('/')}
+            />
+          </div>
+          <div
+            className="nav-act flex flex-rows gap-4"
+          >
+            <IoSearch className="cursor-pointer w-6 h-6" />
+            <IoPersonOutline className="cursor-pointer w-6 h-6" />
+            <IoCartOutline className="cursor-pointer w-6 h-6" />
+          </div>
         </div>
       </div>
     </header>
