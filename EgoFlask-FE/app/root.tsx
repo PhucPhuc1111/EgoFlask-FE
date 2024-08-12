@@ -9,23 +9,24 @@ import "./tailwind.css";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LinksFunction } from "@remix-run/node";
-import styles from './tailwind.css?url';
+import styles from "./tailwind.css?url";
 
 export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: styles, as: 'style' },
-  { rel: "stylesheet", href: '/css/tailwind1.css' },
-]
+  { rel: "stylesheet", href: styles, as: "style" },
+  { rel: "stylesheet", href: "/css/tailwind1.css" },
+];
 
 export default function App() {
-  const [queryClient] = useState(() =>
-    new QueryClient({
-      defaultOptions: {
-        queries: {
-          staleTime: 60 * 1000,
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000,
+          },
         },
-      },
-    })
-  )
+      })
+  );
 
   return (
     <html lang="en">
