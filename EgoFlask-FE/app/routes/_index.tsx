@@ -3,14 +3,14 @@ import { Header } from "~/components";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
+    { title: "EgoFlask" },
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
 
 export default function Index() {
   return (
-    <div className="font-sans p-4">
+    <div className="p-4">
       <Header />
       <ul className="list-disc mt-4 pl-6 space-y-2">
         <li>
