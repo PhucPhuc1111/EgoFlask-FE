@@ -10,7 +10,7 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="font-sans">
+    <div className="">
       <Header />
       <ul className="list-disc mt-4 pl-6 space-y-2">
         <li>
