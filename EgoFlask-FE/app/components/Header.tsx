@@ -4,7 +4,7 @@ import _ from "lodash";
 
 export const Header = () => {
   const navigate = useNavigate();
-  
+
   const navBar = [
     {
       'title': 'Trang chủ',
@@ -25,28 +25,28 @@ export const Header = () => {
   ]
 
   return (
-    <header>
+    <header className="flex flex-col items-center justify-center gap-2">
       <div
-        className="top-bar w-full h-[37px] flex flex-1 items-center justify-center text-white bg-[#0055C3]"
+        className="top-bar w-full h-[37px] flex flex-rows items-center justify-center py-2 text-white bg-[#0055C3]"
       >
         Miễn phí vận chuyển cho đơn hàng trên 1.000.000 VND
       </div>
       <div
-        className="nav-bar flex flex-rows items-center justify-between w-full h-12 px-16 mt-2"
+        className="nav-bar flex flex-rows items-center justify-between h-12 px-16 w-full"
       >
-        <div className="flex flex-row justify-start items-center gap-8">
+        <nav className="flex flex-row justify-start items-center gap-8">
           {_.map(navBar, (item, index) => (
             <NavLink key={index} to={item.link} className={({ isActive }) =>
-              `flex flex-rows text-base ${isActive ? 'text-[#0055C3] font-bold' : 'text-black hover:text-[#0255C3]'}`
+              `flex flex-rows text-base hover:no-underline ${isActive ? 'text-[#0055C3] font-bold' : 'text-black hover:text-[#0255C3]'}`
             }>
               {item.title}
             </NavLink>
           ))}
-        </div>
+        </nav>
         <img
           src="/images/Logo.png"
           alt="Logo"
-          className="logo w-[157px] h-[45px] mr-52 cursor-pointer"
+          className="logo w-[157px] h-[45px] cursor-pointer lg:mr-56"
           onClick={() => navigate('/')}
         />
         <div
