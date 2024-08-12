@@ -25,7 +25,7 @@ export const Header = () => {
   ]
 
   return (
-    <header>
+    <header className="absolute top-0 w-full">
       <div className="flex flex-col items-center justify-center gap-2">
         <div
           className="top-bar w-full h-[37px] flex flex-rows items-center justify-center py-2 text-white bg-[#0055C3]"
@@ -56,7 +56,9 @@ export const Header = () => {
             className="nav-act flex flex-rows gap-4"
           >
             <IoSearch className="cursor-pointer w-6 h-6" />
-            <IoPersonOutline className="cursor-pointer w-6 h-6" />
+            <IoPersonOutline className="cursor-pointer w-6 h-6" 
+              onClick={() => navigate('/login')}
+            />
             <IoCartOutline className="cursor-pointer w-6 h-6" />
           </div>
         </div>
