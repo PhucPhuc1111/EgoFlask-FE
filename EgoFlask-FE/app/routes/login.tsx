@@ -1,5 +1,18 @@
-import { NavLink } from "@remix-run/react"
+import { ActionFunctionArgs, json } from "@remix-run/node"
+import { Form, NavLink } from "@remix-run/react"
 import _ from "lodash"
+import { authenticator } from "~/services/auth.server"
+
+export async function action({ request }: ActionFunctionArgs) {
+  const formData = await request.formData()
+  console.log(formData.get('username'))
+  console.log(formData.get('password'))
+  // return authenticator.authenticate('user-pass', request, {
+  //   successRedirect: '/profile',
+  //   failureRedirect: '/login',
+  // })
+  return json({ message: 'success' })
+}
 
 const links = [
   {
@@ -33,7 +46,15 @@ export default function Login() {
               {link.label}
             </NavLink>
           ))}
+
         </div>
+        <Form method="post" className="flex flex-col">
+          <label htmlFor="">Username</label>
+          <input name="username" type="text" />
+          <label htmlFor="">Password</label>
+          <input name="password" type="password" />
+          <button type="submit">Submit</button>
+        </Form>
       </div>
     </main>
   )
