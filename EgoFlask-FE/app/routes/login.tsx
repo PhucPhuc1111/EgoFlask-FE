@@ -14,8 +14,8 @@ const links = [
 
 export default function Login() {
   return (
-    <main className="flex items-center justify-center h-96 max-h-screen mt-[--m-header-top]">
-      <div className="w-full flex flex-col items-center justify-center gap-4">
+    <main className="mt-[--m-header-top]">
+      <div className="w-full flex flex-col items-center justify-center gap-4 pt-52 mx-auto">
         <div className="flex flex-col items-center justify-center">
           <h4 className="uppercase text-xl leading-6">
             CHÀO BẠN!
