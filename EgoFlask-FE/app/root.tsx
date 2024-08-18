@@ -14,7 +14,12 @@ import { Header } from "./components";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles, as: "style" },
-  { rel: "stylesheet", href: "/css/tailwind1.css" },
+  { rel: "stylesheet", href: "/css/tailwind1.css?v=1" },
+  { rel: 'stylesheet', href: '/css/uikit.css?v=1' },
+  { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap' },
+  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+  { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
+  { rel: 'icon', href: '/images/favicon.ico' },
 ];
 
 export default function App() {
@@ -30,16 +35,13 @@ export default function App() {
   );
 
   return (
-    <html lang="en">
+    <html lang="vi">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link href="/images/favicon.ico" rel="icon" />
-        <link rel="preconnect" href="https://fonts.googleapis.com"></link>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin={"anonymous"}></link>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"></link>
         <title>EgoFlask</title>
         <meta name="description" content="Ego Flask" />
+        <script src="/js/uikit.min.js"></script>
         <Meta />
         <Links />
       </head>
