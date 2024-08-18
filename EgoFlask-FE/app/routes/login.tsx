@@ -1,39 +1,17 @@
 import { NavLink } from "@remix-run/react"
 import _ from "lodash"
-
-const links = [
-  {
-    'to': '/register',
-    'label': 'KHÔNG, TÔI LÀ NGƯỜI MỚI'
-  },
-  {
-    'to': '/login',
-    'label': 'TÔI ĐÃ CÓ TÀI KHOẢN'
-  },
-]
+import { LoginNavbar } from "~/components"
 
 export default function Login() {
   return (
     <main className="mt-[--m-header-top]">
-      <div className="w-full flex flex-col items-center justify-center gap-4 pt-52 mx-auto">
-        <div className="flex flex-col items-center justify-center">
-          <h4 className="uppercase text-xl leading-6">
-            CHÀO BẠN!
-          </h4>
-          <h4 className="uppercase text-xl leading-6">
-            BẠN ĐÃ CÓ TÀI KHOẢN CHƯA ?
-          </h4>
-        </div>
-        <div className="flex flex-1">
-          {_.map(links, (link, index) => (
-            <NavLink key={index} to={link.to}
-              className={({ isActive }) =>
-                `${isActive ? 'bg-[#0055C3] text-white' : 'text-[#0055C3]'} flex items-center justify-center border-[1px] border-[#0055C3] px-3 py-4 rounded-md uppercase h-14`}
-            >
-              {link.label}
-            </NavLink>
-          ))}
-        </div>
+      <div className="w-full flex flex-col items-center justify-center gap-9 pt-52 px-36 mx-auto">
+        <LoginNavbar />
+        <p className="text-center text-[#393334] text-base">
+          Bạn đã trải nghiệm dịch vụ của Ego Flask? Tuyệt vời! <br />
+          Chỉ cần dùng email mà bạn đã sử dụng để đăng ký trước đây nhé !
+        </p>
+        <input type="text" placeholder="Email" />
       </div>
     </main>
   )
