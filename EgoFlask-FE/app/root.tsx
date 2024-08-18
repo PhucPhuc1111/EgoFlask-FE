@@ -14,8 +14,8 @@ import { Header } from "./components";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles, as: "style" },
-  { rel: "stylesheet", href: "/css/tailwind1.css" },
-  { rel: 'stylesheet', href: '/css/uikit.min.css' },
+  { rel: "stylesheet", href: "/css/tailwind1.css?v=1" },
+  { rel: 'stylesheet', href: '/css/uikit.css?v=1' },
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap' },
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
@@ -42,7 +42,6 @@ export default function App() {
         <title>EgoFlask</title>
         <meta name="description" content="Ego Flask" />
         <script src="/js/uikit.min.js"></script>
-        <script src="/js/uikit.js"></script>
         <Meta />
         <Links />
       </head>
