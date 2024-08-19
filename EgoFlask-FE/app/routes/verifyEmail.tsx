@@ -12,7 +12,7 @@ const verifyEmail = () => {
       <div>
         <label htmlFor="verification-code" className="block text-sm font-medium text-center text-gray-700 mb-2">
           Mã xác minh đã được gửi đến Email
-          <p className="text-lg font-semibold">nguyenvanA@gmail.com</p>
+          <p className=" font-semibold">nguyenvanA@gmail.com</p>
         </label>
         <input
           type="text"

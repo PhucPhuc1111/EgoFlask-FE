@@ -50,7 +50,7 @@ export default function Index() {
         </ul> */}
         <div className="flex justify-center">
           <div className="">
-            <img className="max-h-full md:max-h-screen" src={Banner} alt="" />
+            <img className="max-h-full  " src={Banner} alt="" />
           </div>
         </div>
         <div>
