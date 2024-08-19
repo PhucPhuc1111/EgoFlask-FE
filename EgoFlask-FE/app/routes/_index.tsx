@@ -2,8 +2,9 @@ import type { MetaFunction } from "@remix-run/node";
 import Banner from "/images/Banner.png";
 import subBanner1 from "/images/subBanner1.png";
 import subBanner2 from "/images/subBanner2.png";
-import binh1 from "/images/binh1.png";
 import { SubFooter } from "~/components";
+import _ from "lodash";
+import { Link } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -11,6 +12,25 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
+
+const products = [
+  {
+    'name': 'Graceful',
+    'image': '/images/products/binh1.png',
+  },
+  {
+    'name': 'Gracious',
+    'image': '/images/products/bottle-2.png',
+  },
+  {
+    'name': 'Creative',
+    'image': '/images/products/bottle-3.png',
+  },
+  {
+    'name': 'Dynamic',
+    'image': '/images/products/bottle-4.png',
+  },
+]
 
 export default function Index() {
   return (
@@ -50,18 +70,18 @@ export default function Index() {
         </ul> */}
         <div className="flex justify-center">
           <div className="">
-            <img className="max-h-full  " src={Banner} alt="" />
+            <img className="max-h-full  " src={Banner} alt="" uk-scrollspy="cls:uk-animation-scale-up; repeat: true;" />
           </div>
         </div>
         <div>
           <div className="w-full flex justify-center text-white font-bold text-3xl bg-[#0055c3] py-4">
             <span>CÂU CHUYỆN VỀ EGO FLASK</span>
           </div>
-          <div className="flex">
-            <div className="w-1/2">
+          <div className="flex" uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100; repeat: true;">
+            <div className="w-1/2" uk-scrollspy-class="uk-animation-slide-left">
               <img className="w-full" src={subBanner1} alt="" />
             </div>
-            <div className="w-1/2 mt-16 p-12 space-y-7 text-black text-justify px-16 ">
+            <div className="w-1/2 mt-16 p-12 space-y-7 text-black text-justify px-16 " uk-scrollspy-class="uk-animation-slide-right">
               <p>
                 Ngày nay, yếu tố cá nhân hóa đang ngày một phổ biến trong những
                 sản phẩm và dịch vụ, Ego Flask đã ra đời với mục tiêu mang đến
@@ -94,16 +114,16 @@ export default function Index() {
           </div>
         </div>
         <div className="w-full bg-[#0055c3] text-white flex">
-          <div className="w-1/2">
+          <div className="w-1/2" uk-scrollspy="cls:uk-animation-slide-left-medium; repeat: true;">
             <img src={subBanner2} className="w-full h-[700px] " alt="" />
           </div>
           <div className="w-1/2 text-center">
             <div className="flex  justify-center p-12 w-full justify-items-center">
-              <div className=" justify-items-center space-y-8 mt-16 text-justify    ">
-                <div className="text-white text-center font-bold text-3xl mt-[100px]">
+              <div className=" justify-items-center space-y-8 mt-16 text-justify" uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 500; repeat: true;">
+                <div className="text-white text-center font-bold text-3xl mt-[100px]" uk-scrollspy-class="uk-animation-slide-top-medium">
                   THỂ HIỆN " CHẤT RIÊNG " QUA SẢN PHẨM
                 </div>
-                <div className="flex justify-center	text-justify  mt-16  ">
+                <div className="flex justify-center	text-justify  mt-16  " uk-scrollspy-class="uk-animation-slide-bottom-medium">
                   Với EgoFlask, khách hàng không chỉ đơn thuần là người mua
                   hàng, mà họ được trở thành những người sáng tạo, những nhà
                   thiết kế tài ba. Từ việc truy cập trang web hoặc ứng dụng của
@@ -120,46 +140,25 @@ export default function Index() {
             </div>
           </div>
         </div>
-
-        <div className="w-full  my-4 ">
-          <div className="text-center text-[#0055c3] font-bold text-3xl  py-4">
+        <div className="w-full my-4">
+          <div className="text-center text-[#0055c3] font-bold text-3xl  py-4" uk-scrollspy-class="uk-animation-fade">
             Sản phẩm nổi bật
           </div>
-          <div className="flex space-x-16 p-12 text-center">
-            <div className="w-1/4 border-4 border-[#0055c3] ">
-              <div className="flex justify-center">
-                <img src={binh1} className="w-fit relative" alt="" />
+          <div className="flex space-x-16 p-12 text-center max-w-full overflow-y-hidden overflow-x-auto" uk-scrollspy="target: > div; cls:uk-animation-scale-up repeat: true; delay: 300;">
+            {_.map(products, (product, index) => (
+              <div key={index} className="w-[320px] h-[462px] border-4 border-[#0055c3] cursor-pointer">
+                <div className="flex justify-center">
+                  <img src={product.image} className="w-[185px] h-[355px] relative" alt="" />
+                </div>
+                <p className="py-5">{product.name}</p>
               </div>
-
-              <p className="py-5">Graceful</p>
-            </div>
-            
-            <div className="w-1/4 border-4 border-[#0055c3] ">
-              <div className="flex justify-center">
-                <img src={binh1} className="w-fit relative" alt="" />
-              </div>
-              <p className="py-5">Graceful</p>
-            </div>
-            
-            <div className="w-1/4 border-4 border-[#0055c3] ">
-              <div className="flex justify-center">
-                <img src={binh1} className="w-fit" alt="" />
-              </div>
-
-              <p className="py-5">Graceful</p>
-            </div>
-            
-            <div className="w-1/4 border-4 border-[#0055c3] ">
-              <div className="flex justify-center">
-                <img src={binh1} className="w-fit" alt="" />
-              </div>
-
-              <p className="py-5">Graceful</p>
-            </div>
-            
+            ))}
           </div>
-
-          <a href="/product" ><p className="text-center underline pb-9">Mua hàng ngay</p></a>
+          <div className="w-full flex items-center pb-9">
+            <Link to="/product" className="text-center underline w-full">
+              Mua hàng ngay
+            </Link>
+          </div>
         </div>
       </div>
     </main>
