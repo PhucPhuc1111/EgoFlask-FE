@@ -15,7 +15,7 @@ const ProfileUpdatePhoneNumber = () => {
            Thay đổi số điện thoại
           </p>
           <div className="flex space-x-5 p-7 ">
-          <div className="mt-4 space-y-6 text-lg font-semibold text-[#9c9797]">
+          <div className="mt-6 space-y-6 text-lg font-semibold text-[#9c9797]">
                Số điện thoại mới
             </div>
             <div className=" mt-4 ml-4 space-y-6 text-lg  text-black">

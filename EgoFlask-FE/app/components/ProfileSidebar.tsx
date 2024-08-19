@@ -17,15 +17,15 @@ export const ProfileSidebar = () => {
   return (
     <div className="">
       
-      <div className="flex justify-center p-7">
+      <div className="flex justify-center pt-7  space-x-3">
         <img className="w-20 h-20" src={profileimg} alt="Profile" />
-        <div className="flex p-7 text-black text-2xl font-bold font-['Noto Serif']">
+        <div className="flex mt-7 my-4 text-black text-xl font-semibold font-['Noto Serif']">
           A Nguyễn
         </div>
       </div>
 
    
-      <div className="my-7 space-y-12">
+      <div className="my-7 space-y-8">
         {_.map(links, (link, index) => (
           <NavLink 
             key={index} 
