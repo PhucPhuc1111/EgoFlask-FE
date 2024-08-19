@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LinksFunction } from "@remix-run/node";
 import styles from "./tailwind.css?url";
 import { Header } from "./components";
+import Footer from "./components/Footer";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles, as: "style" },
@@ -50,6 +51,7 @@ export default function App() {
           <div id="wrapper">
             <Header />
             <Outlet />
+            <Footer />
           </div>
           <ScrollRestoration />
           <Scripts />

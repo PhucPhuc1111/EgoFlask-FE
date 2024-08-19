@@ -16,8 +16,8 @@ const ProfileUpdateEmail = () => {
              Thay đổi địa chỉ email
             </p>
             <div className="flex space-x-5 p-7 ">
-            <div className="mt-4 space-y-6 text-lg font-semibold text-[#9c9797]">
-                 Địa chỉ email mới
+            <div className="mt-6 space-y-6 text-lg font-semibold text-[#9c9797]">
+            Địa chỉ email mới
               </div>
               <div className=" mt-4 ml-4 space-y-6 text-lg  text-black">
                 <input type="text" placeholder="ANguyen@gmail.com"></input>

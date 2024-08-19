@@ -4,7 +4,7 @@ const Profile = () => {
   return (
     <main className="mt-[--m-header-top] ">
       <div className="grid grid-cols-12 w-full space-x-7 pr-8">
-        <div className="col-span-2  border-[#e8e8e4] border-2 rounded-r-2xl w-full  ">
+        <div className="col-span-2  border-[#e8e8e4] border-2 rounded-r-3xl w-full  ">
         <ProfileSidebar />
         </div>
         <div className="col-span-10 border-[#0055C3] my-9 border-2 rounded-3xl px-7  ">
@@ -54,7 +54,7 @@ const Profile = () => {
                           type="radio"
                           value=""
                           name="default-radio"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2  dark:border-[#0055c3] dark:focus:ring-[#0055c3]"
+                          className=" cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2  dark:border-[#0055c3] dark:focus:ring-[#0055c3]"
                         />
                         <label htmlFor="default-radio-1" className="ml-2">
                           Nam
@@ -65,7 +65,7 @@ const Profile = () => {
                           checked
                           id="default-radio-2"
                           type="radio"
-                          value=""
+                           value=""
                           name="default-radio"
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2  dark:border-[#0055c3] dark:focus:ring-[#0055c3]"
                         />
@@ -78,7 +78,7 @@ const Profile = () => {
                           checked
                           id="default-radio-2"
                           type="radio"
-                          value=""
+                              value=""
                           name="default-radio"
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2  dark:border-[#0055c3] dark:focus:ring-[#0055c3]"
                         />
