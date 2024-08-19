@@ -5,8 +5,8 @@ import warrantyImg from "/images/warranty.png";
 
 export const SubFooter = () => {
   return (
-    <div className="w-full flex p-12   space-x-20">
-    <div className="w-1/4 space-y-7 text-black   ">
+    <div className="w-full flex p-12   space-x-20" uk-scrollspy="target: > div; repeat: true; delay: 300;">
+    <div className="w-1/4 space-y-7 text-black   " uk-scrollspy-class="uk-animation-slide-bottom-small">
       <img src={likeImg} alt="" />
       <p>Độ bền cao, giữ nhiệt tốt</p>
       <p>
@@ -15,7 +15,7 @@ export const SubFooter = () => {
         thời gian dài.
       </p>
     </div>
-    <div className="w-1/4 space-y-7 text-black   ">
+    <div className="w-1/4 space-y-7 text-black   " uk-scrollspy-class="uk-animation-slide-top-small">
       <img src={heartImg} alt="" />
       <p>Chất liệu an toàn cho sức khoẻ</p>
       <p>
@@ -23,7 +23,7 @@ export const SubFooter = () => {
         khoẻ người dùng, không chứa các thành phần độc hại.
       </p>
     </div>
-    <div className="w-1/4 space-y-7 text-black   ">
+    <div className="w-1/4 space-y-7 text-black   " uk-scrollspy-class="uk-animation-slide-bottom-small">
       <img src={lightImg} alt="" />
       <p>Tự do sáng tạo</p>
       <p>
@@ -32,7 +32,7 @@ export const SubFooter = () => {
         riêng mình.
       </p>
     </div>
-    <div className="w-1/4 space-y-7 text-black    ">
+    <div className="w-1/4 space-y-7 text-black    " uk-scrollspy-class="uk-animation-slide-top-small">
       <img src={warrantyImg} alt="" />
       <p>Bảo hành trong 30 ngày</p>
       <p>
