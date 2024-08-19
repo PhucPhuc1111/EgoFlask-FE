@@ -1,4 +1,5 @@
 import { Link } from "@remix-run/react"
+import SubFooter from "~/components/SubFooter"
 
 const verifyEmail = () => {
   return (
@@ -32,6 +33,7 @@ const verifyEmail = () => {
       
     </form>
   </div>
+  <div><SubFooter/></div>
   </main>
   )
 }

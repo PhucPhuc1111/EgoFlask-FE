@@ -1,5 +1,6 @@
 import { ProfileSidebar } from "~/components/ProfileSidebar";
 import profileimg from "../../public/images/Frame 38.png";
+import SubFooter from "~/components/SubFooter";
 const Profile = () => {
   return (
     <main className="mt-[--m-header-top] ">
@@ -122,6 +123,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      <div><SubFooter/></div>
     </main>
   );
 };
