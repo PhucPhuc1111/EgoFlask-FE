@@ -25,7 +25,7 @@ const ProfileUpdatePhoneNumber = () => {
          
      
          </div>
-         <Link to={'/verifyPhone'}> <div className="flex px-36"><button type="submit" className="h-12 w-auto px-4 border text-white bg-[#0055c3]"> Gửi mã OTP</button>
+         <Link to={'/verify/phone'}> <div className="flex px-36"><button type="submit" className="h-12 w-auto px-4 border text-white bg-[#0055c3]"> Gửi mã OTP</button>
           </div> </Link> 
 
           </div>

@@ -25,7 +25,7 @@ const ProfileUpdateEmail = () => {
            
        
            </div>
-           <Link to={'/verifyEmail'}> <div className="flex px-36 "><button type="submit" className="h-12 w-auto px-4 border text-white bg-[#0055c3]"> Gửi mã xác minh</button>
+           <Link to={'/verify/email'}> <div className="flex px-36 "><button type="submit" className="h-12 w-auto px-4 border text-white bg-[#0055c3]"> Gửi mã xác minh</button>
             </div> </Link> 
 
             </div>

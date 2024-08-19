@@ -6,6 +6,7 @@
 :root {
   --primary-color: #0055C3;
   --m-header-top: 7rem;
+  --m-footer-bottom: 7rem;
 }
 
 html,
