@@ -1,8 +1,9 @@
-import likeImg from "../../public/images/like.png";
-import lightImg from "../../public/images/light.png";
-import heartImg from "../../public/images/heart.png";
-import warrantyImg from "../../public/images/warranty.png";
-const SubFooter = () => {
+import likeImg from "/images/like.png";
+import lightImg from "/images/light.png";
+import heartImg from "/images/heart.png";
+import warrantyImg from "/images/warranty.png";
+
+export const SubFooter = () => {
   return (
     <div className="w-full flex p-12   space-x-20">
     <div className="w-1/4 space-y-7 text-black   ">
@@ -43,5 +44,3 @@ const SubFooter = () => {
   </div>
   )
 }
-
-export default SubFooter

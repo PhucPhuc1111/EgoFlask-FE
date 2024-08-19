@@ -1,6 +1,6 @@
 import { NavLink } from "@remix-run/react";
 import _ from "lodash";
-import profileimg from "../../public/images/Frame 38.png";
+import profileimg from "/images/Frame 38.png";
 
 const links = [
   {

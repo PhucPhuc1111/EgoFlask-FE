@@ -1,5 +1,5 @@
+import { SubFooter } from "~/components"
 import { ProfileSidebar } from "~/components/ProfileSidebar"
-import SubFooter from "~/components/SubFooter"
 
 const Orders = () => {
   return (

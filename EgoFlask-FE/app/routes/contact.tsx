@@ -1,11 +1,12 @@
-import SubFooter from "~/components/SubFooter";
-import Location from "../../public/images/Location.png";
-import Mail from "../../public/images/Mail.png";
-import Phone from "../../public/images/Phone.png";
-import Facebook from "../../public/images/facebook.png";
-import Instagram from "../../public/images/instagram.png";
-import Call from "../../public/images/call.png";
-import BigLogo from "../../public/images/BigLogo.png";
+import Location from "/images/Location.png";
+import Mail from "/images/Mail.png";
+import Phone from "/images/Phone.png";
+import Facebook from "/images/facebook.png";
+import Instagram from "/images/instagram.png";
+import Call from "/images/call.png";
+import BigLogo from "/images/BigLogo.png";
+import { SubFooter } from "~/components";
+
 const Contact = () => {
   return (
     <main className="mt-[--m-header-top] pl-24 ">
