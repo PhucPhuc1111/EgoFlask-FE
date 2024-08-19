@@ -10,20 +10,20 @@ const Profile = () => {
         </div>
         <div className="col-span-10 border-[#0055C3] my-9 border-2 rounded-3xl px-7  ">
           <div className="p-7">
-            <p className="text-xl font-semibold text-[#0055C3] pt-4 mt-7">
+            <p className="text-lg font-semibold text-[#0055C3] pt-4 mt-7">
               Hồ sơ của tôi
             </p>
             <div className="grid grid-cols-12 ">
               <div className="col-span-8 border-r-2 border-[#0055C3] w-full p-7 ">
                 <div className="flex">
-                  <div className="mt-4 space-y-6 text-lg font-semibold text-[#9c9797]">
+                  <div className="mt-4 space-y-6  font-semibold text-[#9c9797]">
                     <div className="">Họ và tên</div>
                     <div className="">Email</div>
                     <div className="">Số điện thoại</div>
                     <div className="">Giới tính</div>
                     <div className="">Ngày sinh</div>
                   </div>
-                  <div className=" mt-4 ml-4 space-y-6 text-lg  text-black">
+                  <div className=" mt-4 ml-4 space-y-6   text-black">
                     <div className="flex space-x-9">
                       <span className="">Nguyễn Văn A </span>
                      

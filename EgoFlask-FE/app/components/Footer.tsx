@@ -12,7 +12,7 @@ const Footer = () => {
               <div className="">
                 <div className="px-12 mt-16">
                      <img className="w-11/12 " src={BigLogo} alt="" />
-                     <div className="text-center text-lg">
+                     <div className="text-center ">
                   Refresh your vibe, express your side
                 </div>
                 </div>
@@ -25,7 +25,7 @@ const Footer = () => {
           <div className="col-span-8 px-20 ">
             <div className="w-full flex p-12 text-black      ">
               <div className="w-1/3 space-y-12 ">
-                <div className="text-xl w-[150px] pb-4  border-b-2 text-black font-semibold">Chính sách</div>
+                <div className="text-lg w-[150px] pb-4  border-b-2 text-black font-semibold">Chính sách</div>
                 <div className="space-y-3">
                   <div>
                     <a href="/chinhhsachbaomat">Chính sách bảo mật</a>
@@ -42,14 +42,14 @@ const Footer = () => {
                 </div>
               </div>
               <div className="w-1/3 space-y-12">
-              <div className="text-xl w-[150px] pb-4  border-b-2 text-black font-semibold">Liên hệ</div>
+              <div className="text-lg w-[150px] pb-4  border-b-2 text-black font-semibold">Liên hệ</div>
                 <div className="space-y-3">
                   <p>Email: egoflask@gmail.com</p>
                   <p>Phone: (+84)932.898.536</p>
                 </div>
               </div>
               <div className="w-1/3 space-y-12">
-              <div className="text-xl w-[150px] pb-4  border-b-2 text-black font-semibold">Social</div>
+              <div className="text-lg w-[150px] pb-4  border-b-2 text-black font-semibold">Social</div>
 
                 <div className="space-y-3">
                   <div>
