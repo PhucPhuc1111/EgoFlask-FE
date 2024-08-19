@@ -1,4 +1,5 @@
 import { ProfileSidebar } from "~/components/ProfileSidebar"
+import SubFooter from "~/components/SubFooter"
 
 const Orders = () => {
   return (
@@ -11,6 +12,7 @@ const Orders = () => {
         <div className="p-7">ádwsqa</div>
         </div>
         </div>
+        <div><SubFooter/></div>
   </main>
   )
 }

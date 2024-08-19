@@ -1,5 +1,6 @@
 import { Link } from "@remix-run/react"
 import { ProfileSidebar } from "~/components/ProfileSidebar"
+import SubFooter from "~/components/SubFooter"
 
 const ProfileUpdatePhoneNumber = () => {
   return (
@@ -31,6 +32,7 @@ const ProfileUpdatePhoneNumber = () => {
           </div>
         </div>
         </div>
+        <div><SubFooter/></div>
   </main>
 )
 }
