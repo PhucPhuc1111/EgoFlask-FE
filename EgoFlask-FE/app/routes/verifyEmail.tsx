@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react"
-import SubFooter from "~/components/SubFooter"
+import { SubFooter } from "~/components"
 
 const verifyEmail = () => {
   return (

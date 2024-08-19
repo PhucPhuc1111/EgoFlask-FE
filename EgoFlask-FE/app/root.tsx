@@ -10,8 +10,7 @@ import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LinksFunction } from "@remix-run/node";
 import styles from "./tailwind.css?url";
-import { Header } from "./components";
-import Footer from "./components/Footer";
+import { Footer, Header } from "./components";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles, as: "style" },

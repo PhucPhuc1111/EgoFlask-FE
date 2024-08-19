@@ -1,9 +1,9 @@
 
-import BigLogo from "../../public/images/BigLogo.png";
+import BigLogo from "/images/BigLogo.png";
 
-const Footer = () => {
+export const Footer = () => {
   return (
-    <div className="w-full">
+    <footer className="w-full">
     
       <div className="w-full border-8 border-[#0055C3] py-7">
         <div className="grid grid-cols-12">
@@ -81,8 +81,6 @@ const Footer = () => {
           </div>
 
       </div>
-    </div>
+    </footer>
   );
 };
-
-export default Footer;

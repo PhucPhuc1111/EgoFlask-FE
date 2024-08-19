@@ -1,13 +1,13 @@
 import type { MetaFunction } from "@remix-run/node";
-import Banner from "../../public/images/Banner.png";
-import subBanner1 from "../../public/images/subBanner1.png";
-import subBanner2 from "../../public/images/subBanner2.png";
-import SubFooter from "~/components/SubFooter";
-import binh1 from "../../public/images/binh1.png";
+import Banner from "/images/Banner.png";
+import subBanner1 from "/images/subBanner1.png";
+import subBanner2 from "/images/subBanner2.png";
+import binh1 from "/images/binh1.png";
+import { SubFooter } from "~/components";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "EgoFlask" },
+    { title: "Home" },
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
