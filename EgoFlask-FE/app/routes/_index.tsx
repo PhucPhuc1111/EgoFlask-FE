@@ -144,7 +144,7 @@ export default function Index() {
           <div className="text-center text-[#0055c3] font-bold text-3xl  py-4" uk-scrollspy-class="uk-animation-fade">
             Sản phẩm nổi bật
           </div>
-          <div className="flex space-x-16 p-12 text-center max-w-full overflow-y-hidden overflow-x-auto" uk-scrollspy="target: > div; cls:uk-animation-scale-up repeat: true; delay: 300;">
+          <div className="flex space-x-16 p-12 text-center max-w-full overflow-y-hidden overflow-x-auto" uk-scrollspy="target: > div; cls:uk-animation-scale-up; repeat: true; delay: 300;">
             {_.map(products, (product, index) => (
               <div key={index} className="w-[320px] h-[462px] border-4 border-[#0055c3] cursor-pointer">
                 <div className="flex justify-center">
