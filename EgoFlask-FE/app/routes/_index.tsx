@@ -67,7 +67,7 @@ export default function Index() {
         </ul> */}
         <div className="flex justify-center">
           <div className="">
-            <img className="max-h-full  " src="/images/Banner.png" alt="" uk-scrollspy="cls:uk-animation-scale-up; repeat: true;" />
+            <img className="w-[1165px] max-h-full aspect-[1165/1005]" src="/images/Banner.jpg" alt="" uk-scrollspy="cls:uk-animation-scale-up; repeat: true;" />
           </div>
         </div>
         <div>
@@ -76,7 +76,7 @@ export default function Index() {
           </div>
           <div className="flex" uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100; repeat: true;">
             <div className="w-1/2" uk-scrollspy-class="uk-animation-slide-left">
-              <img className="w-full" src='/images/subBanner1.png' alt="" />
+              <img className="w-full aspect[733/586]" src='/images/subBanner1.jpg' alt="" />
             </div>
             <div className="w-1/2 mt-16 p-12 space-y-7 text-black text-justify px-16 " uk-scrollspy-class="uk-animation-slide-right">
               <p>
@@ -112,7 +112,7 @@ export default function Index() {
         </div>
         <div className="w-full bg-[#0055c3] text-white flex">
           <div className="w-1/2" uk-scrollspy="cls:uk-animation-slide-left-medium; repeat: true;">
-            <img src='/images/subBanner2.png' className="w-full h-[700px] " alt="" />
+            <img src='/images/subBanner2.jpg' className="w-[713px] aspect-[713/729]" alt="" />
           </div>
           <div className="w-1/2 text-center">
             <div className="flex  justify-center p-12 w-full justify-items-center">

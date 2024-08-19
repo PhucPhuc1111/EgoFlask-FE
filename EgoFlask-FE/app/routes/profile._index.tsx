@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { ProfileSidebar, SubFooter } from "~/components";
 
 const Profile = () => {
@@ -29,21 +30,21 @@ const Profile = () => {
                     </div>
                     <div className="flex space-x-9">
                       <span>ng************9@gmail.com</span>
-                      <a
-                        href="/profile/email"
+                      <Link
+                        to="/profile/email"
                         className="text-[#0055c3] underline"
                       >
                         Thay đổi
-                      </a>
+                      </Link>
                     </div>
                     <div className="flex space-x-9">
                       <span>*********90</span>
-                      <a
-                        href="/profile/phoneNumber"
+                      <Link
+                        to="/profile/phone-number"
                         className="text-[#0055c3] underline"
                       >
                         Thay đổi
-                      </a>
+                      </Link>
                     </div>
 
                     
@@ -90,12 +91,12 @@ const Profile = () => {
                     
                     <div className="flex space-x-9">
                       <span>**/10/20**</span>
-                      <a
-                        href="/profile/dob"
+                      <Link
+                        to="/profile/dob"
                         className="text-[#0055c3] underline"
                       >
                         Thay đổi
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
