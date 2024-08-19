@@ -1,13 +1,8 @@
-import likeImg from "/images/like.png";
-import lightImg from "/images/light.png";
-import heartImg from "/images/heart.png";
-import warrantyImg from "/images/warranty.png";
-
 export const SubFooter = () => {
   return (
     <div className="w-full flex p-12   space-x-20" uk-scrollspy="target: > div; repeat: true; delay: 300;">
     <div className="w-1/4 space-y-7 text-black   " uk-scrollspy-class="uk-animation-slide-bottom-small">
-      <img src={likeImg} alt="" />
+      <img src='/images/like.png' alt="" />
       <p>Độ bền cao, giữ nhiệt tốt</p>
       <p>
         Với công nghệ tiên tiến và vật liệu cao cấp, sản phẩm của chúng tôi
@@ -16,7 +11,7 @@ export const SubFooter = () => {
       </p>
     </div>
     <div className="w-1/4 space-y-7 text-black   " uk-scrollspy-class="uk-animation-slide-top-small">
-      <img src={heartImg} alt="" />
+      <img src='/images/heart.png' alt="" />
       <p>Chất liệu an toàn cho sức khoẻ</p>
       <p>
         Chúng tôi cam kết sử dụng các chất liệu an toàn, thân thiện với sức
@@ -24,7 +19,7 @@ export const SubFooter = () => {
       </p>
     </div>
     <div className="w-1/4 space-y-7 text-black   " uk-scrollspy-class="uk-animation-slide-bottom-small">
-      <img src={lightImg} alt="" />
+      <img src={'/images/light.png'} alt="" />
       <p>Tự do sáng tạo</p>
       <p>
         Với tính năng Thiết kế, đây là không gian để bạn có thể thoả sức
@@ -33,7 +28,7 @@ export const SubFooter = () => {
       </p>
     </div>
     <div className="w-1/4 space-y-7 text-black    " uk-scrollspy-class="uk-animation-slide-top-small">
-      <img src={warrantyImg} alt="" />
+      <img src='/images/warranty.png' alt="" />
       <p>Bảo hành trong 30 ngày</p>
       <p>
         Bạn đã hài lòng với chiếc bình giữ nhiệt mới của mình chưa? Nếu

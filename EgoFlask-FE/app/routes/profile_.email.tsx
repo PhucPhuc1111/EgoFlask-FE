@@ -1,7 +1,5 @@
 import { Link } from "@remix-run/react"
-import { SubFooter } from "~/components"
-import { ProfileSidebar } from "~/components/ProfileSidebar"
-
+import { ProfileSidebar, SubFooter } from "~/components"
 
 const ProfileUpdateEmail = () => {
   return (

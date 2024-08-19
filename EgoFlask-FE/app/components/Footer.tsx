@@ -1,6 +1,3 @@
-
-import BigLogo from "/images/BigLogo.png";
-
 export const Footer = () => {
   return (
     <footer className="w-full">
@@ -11,7 +8,7 @@ export const Footer = () => {
             
               <div className="">
                 <div className="px-12 mt-16">
-                     <img className="w-11/12 " src={BigLogo} alt="" />
+                     <img className="w-11/12 " src='/images/BigLogo.png' alt="" />
                      <div className="text-center ">
                   Refresh your vibe, express your side
                 </div>

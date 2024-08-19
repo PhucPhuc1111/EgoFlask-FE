@@ -1,10 +1,3 @@
-import Location from "/images/Location.png";
-import Mail from "/images/Mail.png";
-import Phone from "/images/Phone.png";
-import Facebook from "/images/facebook.png";
-import Instagram from "/images/instagram.png";
-import Call from "/images/call.png";
-import BigLogo from "/images/BigLogo.png";
 import { SubFooter } from "~/components";
 
 const Contact = () => {
@@ -16,9 +9,9 @@ const Contact = () => {
           <p className="text-lg font-bold text-[#0055C3]">Hãy liên hệ ngay với chúng tôi thông qua:</p>
           <div className="flex space-x-2 mt-4">
             <div className="space-y-4">
-              <img src={Location} alt="" />
-              <img src={Mail} alt="" />
-              <img src={Phone} alt="" />
+              <img src='/images/Location.png' alt="" />
+              <img src='/images/Mail.png' alt="" />
+              <img src='/images/Phone.png' alt="" />
             </div>
             <div className="space-y-4">
               <p>ABC</p>
@@ -34,7 +27,7 @@ const Contact = () => {
            </div>
               
              <div>
-                <img className="w-full" src={Facebook} alt="" />
+                <img className="w-full" src='/images/facebook.png' alt="" />
              </div>
           </div>
           <div className=" p-2 flex justify-between border-4 rounded-2xl border-[#0055C3] text-white bg-[#0055C3]">
@@ -44,7 +37,7 @@ const Contact = () => {
            </div>
               
              <div>
-             <img className="w-full" src={Instagram} alt="" />
+             <img className="w-full" src='/images/instagram.png' alt="" />
              </div>
           </div>
           <div className=" p-2 flex justify-between border-4 rounded-2xl border-[#0055C3] text-white bg-[#0055C3]">
@@ -54,7 +47,7 @@ const Contact = () => {
            </div>
               
              <div>
-              <img className="w-full" src={Call} alt="" />
+              <img className="w-full" src='/images/call.png' alt="" />
              </div>
           </div>
           </div>
@@ -63,7 +56,7 @@ const Contact = () => {
         </div>
         <div className="w-5/12 ml-7  ">
         <div className="mt-[130px] flex justify-center  ">
-        <img className="w-full" src={BigLogo} alt="" />   
+        <img className="w-full" src='/images/BigLogo.png' alt="" />   
         </div>
        
         </div>
