@@ -45,7 +45,7 @@ export default function ProfileUpdateEmail() {
                 <div>
                   <input
                     type="text"
-                    placeholder="afagfh@gmail.com"
+                    placeholder="afag12fh@gmail.com"
                     {...register("email")}
                   />
                   
