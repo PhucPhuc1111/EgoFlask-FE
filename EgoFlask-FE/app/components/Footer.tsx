@@ -1,8 +1,10 @@
+import { Link } from "@remix-run/react";
+
 export const Footer = () => {
   return (
     <footer className="w-full">
     
-      <div className="w-full border-8 border-[#0055C3] py-7">
+      <div className="w-full border-8 border-[#0055C3] py-3">
         <div className="grid grid-cols-12">
           <div className="col-span-4 w-full ">
             
@@ -25,16 +27,16 @@ export const Footer = () => {
                 <div className="text-lg w-[150px] pb-4  border-b-2 text-black font-semibold">Chính sách</div>
                 <div className="space-y-3">
                   <div>
-                    <a href="/chinhhsachbaomat">Chính sách bảo mật</a>
+                    <Link className="text-black" to="/chinhhsachbaomat">Chính sách bảo mật</Link>
                   </div>
                   <div>
-                    <a href="/chinhhsachbaohanh">Chính sách bảo hành</a>
+                    <Link className="text-black" to="/chinhhsachbaohanh">Chính sách bảo hành</Link>
                   </div>
                   <div>
-                    <a href="/chinhhsachdoitra">Chính sách đổi trả</a>
+                    <Link className="text-black" to="/chinhhsachdoitra">Chính sách đổi trả</Link>
                   </div>
                   <div>
-                    <a href="/chinhhsachvanchuyen">Chính sách vận chuyển</a>
+                    <Link className="text-black" to="/chinhhsachvanchuyen">Chính sách vận chuyển</Link>
                   </div>
                 </div>
               </div>
@@ -50,16 +52,16 @@ export const Footer = () => {
 
                 <div className="space-y-3">
                   <div>
-                    <a href="/facebook">Facebook</a>
+                    <Link className="text-black" to="/facebook">Facebook</Link>
                   </div>
                   <div>
-                    <a href="/instagram">Instagram</a>
+                    <Link className="text-black" to="/instagram">Instagram</Link>
                   </div>
                   <div>
-                    <a href="/shopee">Shopee</a>
+                    <Link className="text-black" to="/shopee">Shopee</Link>
                   </div>
                   <div>
-                    <a href="/tiktok">Tiktok</a>
+                    <Link className="text-black" to="/tiktok">Tiktok</Link>
                   </div>
                 </div>
               </div>

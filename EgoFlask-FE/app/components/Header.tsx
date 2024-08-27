@@ -55,11 +55,8 @@ export const Header = () => {
           <div
             className="nav-act flex flex-rows gap-4"
           >
-            <IoSearch className="cursor-pointer w-6 h-6" />
-            <IoPersonOutline className="cursor-pointer w-6 h-6" 
-              onClick={() => navigate('/login')}
-            />
-            <IoCartOutline className="cursor-pointer w-6 h-6" />
+            <img className="cursor-pointer w-6 h-6" src="/icons/person.png" alt="" onClick={() => navigate('/login')}/>
+            <img className="cursor-pointer w-6 h-6" src="/icons/shopping-cart.png" alt="" />
           </div>
         </div>
       </div>

@@ -15,12 +15,12 @@ const links = [
 export const LoginNavbar = () => {
   return (
     <>
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center space-y-1">
         <h4 className="uppercase text-xl leading-6">
           CHÀO BẠN!
         </h4>
         <h4 className="uppercase text-xl leading-6">
-          BẠN ĐÃ CÓ TÀI KHOẢN CHƯA ?
+          BẠN ĐÃ CÓ TÀI KHOẢN CHƯA?
         </h4>
       </div>
       <div className="flex flex-1">

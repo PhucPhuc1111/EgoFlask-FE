@@ -31,37 +31,36 @@ export default function Register() {
 
   const onSubmit = (data: RegisterForm) => {
     console.log('data', data);
-
   }
 
   return (
     <main className="mt-[--m-header-top] xl:px-[500px] pb-[--m-footer-bottom]">
-      <div className="w-full flex flex-col items-center justify-center gap-9 pt-52 mx-auto">
+      <div className="w-full flex flex-col items-center justify-center gap-9 pt-20 mx-auto">
         <LoginNavbar />
         <form
           onSubmit={handleSubmit(onSubmit)}
           method="post"
-          className="flex flex-col gap-8 w-full max-[350px]:px-10 lg:px-36 px-24">
+          className="flex flex-col gap-8 w-[450px] max-[350px]:px-10">
           <input type="text"
             {...register('lastName')}
             placeholder="Họ"
-            className="w-full focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
           />
           {errors.lastName && <span className="text-red-500 font-bold">{errors.lastName.message}</span>}
           <input type="text"
             placeholder="Tên"
-            className="w-full focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
             {...register('firstName')}
           />
           <input type="email"
             placeholder="Email"
-            className="w-full focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
             {...register('email')}
           />
           {errors.email && <span className="text-red-500 font-bold">{errors.email.message}</span>}
           <input type="tel"
             placeholder="Số điện thoại"
-            className="w-full focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
             {...register('phone')}
           />
           {errors.phone && <span className="text-red-500 font-bold">{errors.phone.message}</span>}
@@ -69,7 +68,7 @@ export default function Register() {
             type="password"
             placeholder="Mật khẩu"
             required
-            className="w-full focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
             {...register('password')}
           />
           {errors.password && <span className="text-red-500 font-bold">{errors.password.message}</span>}
@@ -77,11 +76,11 @@ export default function Register() {
             type="password"
             placeholder="Xác nhận mật khẩu"
             required
-            className="w-full focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
             {...register('confirmPassword')}
           />
           {errors.confirmPassword && <span className="text-red-500 font-bold">{errors.confirmPassword.message}</span>}
-          <button type="submit" className="uppercase active:bg-blue-800 bg-[#0055C3] w-full py-4 rounded-lg text-white font-semibold text-xl">
+          <button type="submit" className="uppercase active:bg-blue-800 bg-[#0055C3] w-[450px] py-4 rounded-lg text-white font-semibold text-xl">
             Tạo tài khoản
           </button>
         </form>

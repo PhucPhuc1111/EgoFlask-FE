@@ -152,7 +152,7 @@ export default function Index() {
             ))}
           </div>
           <div className="w-full flex items-center pb-9">
-            <Link to="/product" className="text-center underline w-full">
+            <Link to="/product" className="text-center text-black underline w-full">
               Mua hàng ngay
             </Link>
           </div>
