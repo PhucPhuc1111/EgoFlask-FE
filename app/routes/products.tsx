@@ -5,7 +5,7 @@ const Products = () => {
     {
       id: 1,
       name: "Graceful",
-      img: "/images/products/binh1.png",
+      img: "/images/products/bottle-1.png",
       price: "100.000",
     },
     {

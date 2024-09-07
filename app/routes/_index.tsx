@@ -13,7 +13,7 @@ export const meta: MetaFunction = () => {
 const products = [
   {
     'name': 'Graceful',
-    'image': '/images/products/binh1.png',
+    'image': '/images/products/bottle-1.png',
   },
   {
     'name': 'Gracious',

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 // Hàm formatMoney để định dạng số tiền theo quy tắc của tiền Việt Nam
-const formatMoney = (amount) => {
+const formatMoney = (amount: number) => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
@@ -15,7 +15,7 @@ const Cart = () => {
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
-      img: "/images/products/binh1.png",
+      img: "/images/products/bottle-1.png",
       name: "Sản phẩm 1",
       price: 200000,
       quantity: 1,
@@ -46,7 +46,7 @@ const Cart = () => {
     setIsCartOpen(false);
   };
 
-  const handleQuantityChange = (id, delta) => {
+  const handleQuantityChange = (id: number, delta: number) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
         item.id === id
@@ -56,7 +56,7 @@ const Cart = () => {
     );
   };
 
-  const handleRemoveItem = (id) => {
+  const handleRemoveItem = (id: number) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
