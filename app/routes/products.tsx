@@ -56,7 +56,7 @@ const Products = () => {
     <main className="mt-[--m-header-top] mb-8">
       <div className="flex justify-center mb-8">
         <img
-          className="w-full max-w-4xl"
+          className="w-full max-w-6xl"
           src="/images/products/productcollection.png"
           alt="Product Collection"
         />
