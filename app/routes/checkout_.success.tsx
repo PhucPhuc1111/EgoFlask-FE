@@ -41,7 +41,7 @@ export default function CheckoutSuccess() {
                             Bình giữ nhiệt
                             <span className="font-semibold"> GRACEFUL</span>
                           </p>
-                          <p className="font-semibold text-black">x1</p>
+                          
                         </div>
                         <div className="flex space-x-4">
                           <p className="text-black">?VND</p>
@@ -49,6 +49,7 @@ export default function CheckoutSuccess() {
                           <button>Xóa</button>
                         </div>
                       </div>
+                      <p className="font-semibold text-black">x1</p>
                       <div>
                         <p className="">Dịch vụ đi kèm</p>
 

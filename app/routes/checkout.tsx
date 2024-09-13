@@ -59,7 +59,7 @@ export default function Checkout() {
   };
 
   const onSubmit = (data: CheckoutForm) => {
-    console.log("data", data);
+    console.log('data', data);
   };
 
   return (
