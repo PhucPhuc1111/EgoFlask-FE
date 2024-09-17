@@ -17,7 +17,7 @@ export const ProfileSidebar = () => {
     <div className="">
       
       <div className="flex justify-center pt-7  space-x-3">
-        <img className="w-20 h-20" src='/images/Frame 38.png' alt="Profile" />
+        <img className="w-20 h-20" src='/images/avatar.png' alt="Profile" />
         <div className="flex mt-7 my-4 text-black text-lg font-semibold font-['Noto Serif']">
           A Nguyễn
         </div>
