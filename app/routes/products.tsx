@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from "@remix-run/react";
 
 const Products = () => {
   const productList = [
@@ -82,9 +82,11 @@ const Products = () => {
                 <p className="text-black">{product.price} VND</p>
               </div>
               <div className="flex justify-center">
-                <button className="w-60 mt-4 py-2 bg-white  text-black rounded hover:bg-slate-300">
-                  Chi tiết sản phẩm
-                </button>
+                <Link to={`/products/${product.id}`}>
+                  <button className="w-60 mt-4 py-2 bg-white text-black rounded hover:bg-slate-300">
+                    Chi tiết sản phẩm
+                  </button>
+                </Link>
               </div>
             </div>
           ))}
