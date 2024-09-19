@@ -1,5 +1,9 @@
 import { useParams } from "@remix-run/react";
 import { SubFooter } from "~/components";
+import Dropdown from "~/components/Dropdown";
+import Quantity from "~/components/Quantity";
+
+
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -59,7 +63,7 @@ const ProductDetail = () => {
             />
           </div>
           <div className="w-2/3">
-            <div className="pl-10 space-y-14">
+            <div className="pl-10 space-y-8">
               <p className="text-xl text-black">
                 Bình giữ nhiệt <span className="font-semibold">Graceful</span>
               </p>
@@ -71,8 +75,15 @@ const ProductDetail = () => {
                 <p className="text-black font-semibold text-lg">
                   Đã bán: <span>2</span>
                 </p>
+               
               </div>
-              <div></div>
+              <div> <Dropdown/></div>
+              <div className="flex space-x-48">
+                <div><Quantity/></div>
+                <button className="w-48 h-12 bg-[#0055c3] rounded-lg text-white">
+                  Thêm vào giỏ hàng
+                </button>
+              </div>
             </div>
           </div>
         </div>
