@@ -104,7 +104,7 @@ const Profile = () => {
               <div className="col-span-4 ">
                 <div className="">
                   <div className="flex justify-center ">
-                    <img className="h-32 w-32" src='/images/Frame 38.png' alt="" />
+                    <img className="h-32 w-32" src='/images/avatar.png' alt="" />
                   </div>
 
                   <div className="flex justify-center mt-4">
