@@ -1,5 +1,5 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/16/solid';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
+import { IoChevronDown, IoChevronUp } from 'react-icons/io5';
 
 
 function Dropdown() {
@@ -10,7 +10,7 @@ function Dropdown() {
     setIsOpen(!isOpen);
   };
 
-  const handleLetterCheckboxChange = (e) => {
+  const handleLetterCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     setIsLetterChecked(e.target.checked);
   };
 
@@ -23,9 +23,9 @@ function Dropdown() {
       >
         Dịch vụ đi kèm
         {isOpen ? (
-          <ChevronUpIcon className="w-5 h-5 ml-2" />
+          <IoChevronUp className="w-5 h-5 ml-2" />
         ) : (
-          <ChevronDownIcon className="w-5 h-5 ml-2" />
+          <IoChevronDown className="w-5 h-5 ml-2" />
         )}
       </button>
 
