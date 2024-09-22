@@ -64,7 +64,7 @@ export const Header = () => {
               className="cursor-pointer w-6 h-6"
               src="/icons/person.png"
               alt="Person Icon"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/profile")}
             />
             <Cart />
           </div>

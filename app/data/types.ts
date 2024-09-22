@@ -3,6 +3,12 @@ export type LoginRQ = {
   password: string;
 }
 
-export type LoginRS = {
+export type User = {
+  id: number;
+  email: string;
+  role: string;
+}
+
+export type Profile = {
   token: string;
 }

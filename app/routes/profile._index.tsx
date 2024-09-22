@@ -1,5 +1,15 @@
+import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { ProfileSidebar, SubFooter } from "~/components";
+import { authenticator } from "~/services/auth.server";
+
+export function loader({ request }: LoaderFunctionArgs) {
+  let user = authenticator.isAuthenticated(request);
+  if (!user) {
+    return redirect("/login");
+  }
+  return json({}, { status: 200 });
+}
 
 const Profile = () => {
   return (
