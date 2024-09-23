@@ -1,16 +1,4 @@
 import { NavLink } from "@remix-run/react"
-import _ from "lodash"
-
-const links = [
-  {
-    'to': '/register',
-    'label': 'KHÔNG, TÔI LÀ NGƯỜI MỚI'
-  },
-  {
-    'to': '/login',
-    'label': 'TÔI ĐÃ CÓ TÀI KHOẢN'
-  },
-]
 
 export const LoginNavbar = () => {
   return (
@@ -24,14 +12,18 @@ export const LoginNavbar = () => {
         </h4>
       </div>
       <div className="flex flex-1">
-        {_.map(links, (link, index) => (
-          <NavLink key={index} to={link.to}
-            className={({ isActive }) =>
-              `${isActive ? 'bg-[#0055C3] text-white hover:text-white' : 'text-[#0055C3]'} hover:no-underline flex items-center justify-center border-[1px] border-[#0055C3] px-3 py-4 rounded-md uppercase h-14`}
-          >
-            {link.label}
-          </NavLink>
-        ))}
+        <NavLink to='/register'
+          className={({ isActive }) =>
+            `${isActive ? 'bg-[#0055C3] text-white hover:text-white' : 'text-[#0055C3]'} hover:no-underline flex items-center justify-center border-b-[1px] border-t-[1px] border-l-[1px] border-[#0055C3] px-3 py-4 rounded-l-md uppercase h-14`}
+        >
+          KHÔNG, TÔI LÀ NGƯỜI MỚI
+        </NavLink>
+        <NavLink to='/login'
+          className={({ isActive }) =>
+            `${isActive ? 'bg-[#0055C3] text-white hover:text-white' : 'text-[#0055C3]'} hover:no-underline flex items-center justify-center border-b-[1px] border-t-[1px] border-l-[1px] border-[#0055C3] px-3 py-4 rounded-r-md uppercase h-14`}
+        >
+          TÔI ĐÃ CÓ TÀI KHOẢN
+        </NavLink>
       </div>
     </>
   )
