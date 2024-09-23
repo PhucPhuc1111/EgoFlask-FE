@@ -1,6 +1,8 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "@remix-run/react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 import { InferType, number, object, ref, string } from "yup";
 import { LoginNavbar } from "~/components";
 import { registerAccount } from "~/data/user";
@@ -31,6 +33,8 @@ export default function Register() {
     mode: 'onChange',
   })
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   const onSubmit = async (data: RegisterForm) => {
     try {
@@ -80,21 +84,35 @@ export default function Register() {
             {...register('phone')}
           />
           {errors.phone && <span className="text-red-500 font-bold">{errors.phone.message}</span>}
-          <input
-            type="password"
-            placeholder="Mật khẩu"
-            required
-            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
-            {...register('password')}
-          />
+          <div className="relative w-full">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Mật khẩu"
+              required
+              className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
+              {...register('password')}
+            />
+            {showPassword ? (
+              <IoEyeOff onClick={() => setShowPassword(!showPassword)} className='transition-opacity duration-300 ease-in-out opacity-100 absolute right-3 top-0 mt-3 cursor-pointer size-6 text-[#465166] hover:text-black' />
+            ) : (
+              <IoEye onClick={() => setShowPassword(!showPassword)} className='transition-opacity duration-300 ease-in-out opacity-100 absolute right-3 top-0 mt-3 cursor-pointer size-6 text-[#465166] hover:text-black' />
+            )}
+          </div>
           {errors.password && <span className="text-red-500 font-bold">{errors.password.message}</span>}
-          <input
-            type="password"
-            placeholder="Xác nhận mật khẩu"
-            required
-            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
-            {...register('confirmPassword')}
-          />
+          <div className="relative w-full">
+            <input
+              type={showConfirmPassword ? 'text' : 'password'}
+              placeholder="Xác nhận mật khẩu"
+              required
+              className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
+              {...register('confirmPassword')}
+            />
+            {showConfirmPassword ? (
+              <IoEyeOff onClick={() => setShowConfirmPassword(!showConfirmPassword)} className='transition-opacity duration-300 ease-in-out opacity-100 absolute right-3 top-0 mt-3 cursor-pointer size-6 text-[#465166] hover:text-black' />
+            ) : (
+              <IoEye onClick={() => setShowConfirmPassword(!showConfirmPassword)} className='transition-opacity duration-300 ease-in-out opacity-100 absolute right-3 top-0 mt-3 cursor-pointer size-6 text-[#465166] hover:text-black' />
+            )}
+          </div>
           {errors.confirmPassword && <span className="text-red-500 font-bold">{errors.confirmPassword.message}</span>}
           <button type="submit" disabled={isSubmitting} className="flex items-center justify-center uppercase active:bg-blue-800 hover:bg-blue-900 disabled:bg-blue-900 bg-[#0055C3] w-[450px] py-4 rounded-lg text-white font-semibold text-xl">
             {isSubmitting && <img src="/icons/loading.svg" alt="" className="w-10 h-10" />}

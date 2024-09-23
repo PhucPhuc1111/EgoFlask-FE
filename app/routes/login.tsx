@@ -2,7 +2,8 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { ActionFunctionArgs, json } from "@remix-run/node"
 import { Form, Link, useLocation, useNavigate } from "@remix-run/react"
 import { useQueryClient } from "@tanstack/react-query"
-import { FormEvent, useEffect } from "react"
+import { FormEvent, useEffect, useState } from "react"
+import { IoEye, IoEyeOff } from "react-icons/io5"
 import { AuthorizationError } from "remix-auth"
 import { useRemixForm } from "remix-hook-form"
 import { InferType, object, string } from "yup"
@@ -45,6 +46,7 @@ export default function Login() {
   const location = useLocation()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   useEffect(() => {
     if (location.search == '?success') {
@@ -77,12 +79,19 @@ export default function Login() {
             placeholder="Email"
             className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
           />
-          <input
-            type="password"
-            {...register('password')}
-            placeholder="Mật khẩu"
-            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
-          />
+          <div className="relative w-full">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              {...register('password')}
+              placeholder="Mật khẩu"
+              className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
+            />
+            {showPassword ? (
+              <IoEyeOff onClick={() => setShowPassword(!showPassword)} className='transition-opacity duration-300 ease-in-out opacity-100 absolute right-3 top-0 mt-3 cursor-pointer size-6 text-[#465166] hover:text-black' />
+            ) : (
+              <IoEye onClick={() => setShowPassword(!showPassword)} className='transition-opacity duration-300 ease-in-out opacity-100 absolute right-3 top-0 mt-3 cursor-pointer size-6 text-[#465166] hover:text-black' />
+            )}
+          </div>
           {errors.password && <span className="text-red-500 font-bold text-sm">{errors.password.message}</span>}
           <button type="submit" disabled={isSubmitting} className="flex items-center justify-center uppercase active:bg-blue-800 hover:bg-blue-900 disabled:bg-blue-900 bg-[#0055C3] w-[450px] py-4 rounded-lg text-white font-semibold text-xl">
             {isSubmitting && <img src="/icons/loading.svg" alt="" className="w-10 h-10" />}
