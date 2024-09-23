@@ -59,24 +59,24 @@ export default function Register() {
           <input type="text"
             {...register('lastName')}
             placeholder="Họ"
-            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
           />
           {errors.lastName && <span className="text-red-500 font-bold">{errors.lastName.message}</span>}
           <input type="text"
             placeholder="Tên"
-            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
             {...register('firstName')}
           />
           <input type="email"
             placeholder="Email"
-            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
             {...register('email')}
           />
           {errors.email && <span className="text-red-500 font-bold">{errors.email.message}</span>}
           <input type="tel"
             placeholder="Số điện thoại"
             inputMode="tel"
-            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
             {...register('phone')}
           />
           {errors.phone && <span className="text-red-500 font-bold">{errors.phone.message}</span>}
@@ -84,7 +84,7 @@ export default function Register() {
             type="password"
             placeholder="Mật khẩu"
             required
-            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
             {...register('password')}
           />
           {errors.password && <span className="text-red-500 font-bold">{errors.password.message}</span>}
@@ -92,7 +92,7 @@ export default function Register() {
             type="password"
             placeholder="Xác nhận mật khẩu"
             required
-            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
+            className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
             {...register('confirmPassword')}
           />
           {errors.confirmPassword && <span className="text-red-500 font-bold">{errors.confirmPassword.message}</span>}

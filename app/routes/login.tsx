@@ -20,7 +20,7 @@ export async function action({ request }: ActionFunctionArgs) {
     if (error instanceof Response) return error;
     if (error instanceof AuthorizationError) {
       console.log('error login', cause?.message);
-      
+
       return json({ errors: { password: { message: cause?.message } } })
     }
     return json({ errors: { password: { message: error.message } } })
@@ -38,7 +38,7 @@ export type LoginFormData = InferType<typeof loginSchema>
 const resolver = yupResolver(loginSchema)
 
 export default function Login() {
-  const { handleSubmit, formState: { errors }, register, setValue, setError } = useRemixForm<LoginFormData>({
+  const { handleSubmit, formState: { errors, isSubmitting }, register, setValue, setError } = useRemixForm<LoginFormData>({
     mode: 'onSubmit',
     resolver,
   })
@@ -84,10 +84,11 @@ export default function Login() {
             className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
           />
           {errors.password && <span className="text-red-500 font-bold text-sm">{errors.password.message}</span>}
-          <button
-            type="submit"
-            className="uppercase active:bg-blue-800 hover:bg-blue-700 bg-[#0055C3] w-[450px] py-4 rounded-lg text-white font-semibold text-xl">
-            Đăng nhập
+          <button type="submit" disabled={isSubmitting} className="flex items-center justify-center uppercase active:bg-blue-800 hover:bg-blue-900 disabled:bg-blue-900 bg-[#0055C3] w-[450px] py-4 rounded-lg text-white font-semibold text-xl">
+            {isSubmitting && <img src="/icons/loading.svg" alt="" className="w-10 h-10" />}
+            <span>
+              Đăng nhập
+            </span>
           </button>
         </Form>
         <Link to={'/forgot-password'} className="text-[#0055C3] text-base uppercase font-semibold hover:no-underline">
