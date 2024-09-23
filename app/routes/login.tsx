@@ -28,7 +28,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 let loginSchema = object({
-  email: string().trim().required("Username is a required field"),
+  email: string().trim().required("Email is a required field"),
   password: string().trim().required("Password is a required field"),
   loginType: string().trim().required(),
 })
