@@ -20,7 +20,7 @@ export const LoginNavbar = () => {
         </NavLink>
         <NavLink to='/login'
           className={({ isActive }) =>
-            `${isActive ? 'bg-[#0055C3] text-white hover:text-white' : 'text-[#0055C3]'} hover:no-underline flex items-center justify-center border-b-[1px] border-t-[1px] border-l-[1px] border-[#0055C3] px-3 py-4 rounded-r-md uppercase h-14`}
+            `${isActive ? 'bg-[#0055C3] text-white hover:text-white' : 'text-[#0055C3]'} hover:no-underline flex items-center justify-center border-b-[1px] border-t-[1px] border-r-[1px] border-[#0055C3] px-3 py-4 rounded-r-md uppercase h-14`}
         >
           TÔI ĐÃ CÓ TÀI KHOẢN
         </NavLink>

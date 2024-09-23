@@ -2,6 +2,7 @@ import { RegisterForm } from "~/routes/register";
 import request, { BASE_URL } from "./request";
 import { Profile, User } from "./types";
 import { useQuery } from "@tanstack/react-query";
+import { ForgotPasswordForm } from "~/routes/forgot-password.$slug";
 
 export async function registerAccount(user: RegisterForm) {
   return await request.post(`${BASE_URL}/api/Account/signup`, {
@@ -34,4 +35,27 @@ export const useGetProfile = () => {
     queryKey: ['profile'],
     queryFn: getProfile,
   })
+}
+
+export async function forgotPassword(email: string) {
+  return await request.post(`${BASE_URL}/api/Account/forgot-password`, {
+    email,
+    verifiedUrl: `${window.location.origin}/forgot-password/{token}`,
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+
+export async function forgotPasswordReset(body: ForgotPasswordForm, token: string) {
+  return await request.post(`${BASE_URL}/api/Account/reset-password`, {
+    email: body.email,
+    password: body.password,
+    token,
+  }, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 }
