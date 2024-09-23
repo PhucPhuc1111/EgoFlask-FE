@@ -1,10 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "@remix-run/react";
+import _ from "lodash";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { IoEye, IoEyeOff } from "react-icons/io5";
+import { IoCheckmarkCircle, IoCloseCircle, IoEye, IoEyeOff } from "react-icons/io5";
 import { InferType, number, object, ref, string } from "yup";
 import { LoginNavbar } from "~/components";
+import { criteria } from "~/components/utils";
 import { registerAccount } from "~/data/user";
 
 let schema = object({
@@ -28,13 +30,14 @@ const resolver = yupResolver(schema)
 export type RegisterForm = InferType<typeof schema>
 
 export default function Register() {
-  const { register, formState: { errors, isSubmitting }, handleSubmit, setError } = useForm<RegisterForm>({
+  const { register, formState: { errors, isSubmitting }, handleSubmit, setError, watch } = useForm<RegisterForm>({
     resolver,
     mode: 'onChange',
   })
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const password = watch('password', '');
 
   const onSubmit = async (data: RegisterForm) => {
     try {
@@ -54,12 +57,12 @@ export default function Register() {
 
   return (
     <main className="mt-[--m-header-top] xl:px-[500px] pb-[--m-footer-bottom]">
-      <div className="w-full flex flex-col items-center justify-center gap-9 pt-20 mx-auto">
+      <div className="w-full flex flex-col items-center justify-center gap-2 pt-20 mx-auto">
         <LoginNavbar />
         <form
           onSubmit={handleSubmit(onSubmit)}
           method="post"
-          className="flex flex-col gap-8 w-[450px] max-[350px]:px-10">
+          className="flex flex-col gap-8 w-[450px] max-[350px]:px-10 mt-8">
           <input type="text"
             {...register('lastName')}
             placeholder="Họ"
@@ -98,7 +101,30 @@ export default function Register() {
               <IoEye onClick={() => setShowPassword(!showPassword)} className='transition-opacity duration-300 ease-in-out opacity-100 absolute right-3 top-0 mt-3 cursor-pointer size-6 text-[#465166] hover:text-black' />
             )}
           </div>
-          {errors.password && <span className="text-red-500 font-bold">{errors.password.message}</span>}
+          {/* {errors.password && <span className="text-red-500 font-bold">{errors.password.message}</span>} */}
+          <div>
+            {_.map(criteria, (criterion, index) => {
+              return (
+                <>
+                  {criterion.test(password) ? (
+                    <div className="flex items-center gap-2">
+                      <IoCheckmarkCircle className="w-5 h-5 text-green-500" />
+                      <p key={index} className={`text-green-500 font-bold`}>
+                        {criterion.label}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <IoCloseCircle className="w-5 h-5 text-red-500" />
+                      <p key={index} className={`text-red-500 font-bold`}>
+                        {criterion.label}
+                      </p>
+                    </div>
+                  )}
+                </>
+              )
+            })}
+          </div>
           <div className="relative w-full">
             <input
               type={showConfirmPassword ? 'text' : 'password'}

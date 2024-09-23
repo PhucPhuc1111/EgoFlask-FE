@@ -1,10 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { Link, useLoaderData, useNavigate } from "@remix-run/react";
+import _ from "lodash";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { IoEye, IoEyeOff } from "react-icons/io5";
+import { IoCheckmarkCircle, IoCloseCircle, IoEye, IoEyeOff } from "react-icons/io5";
 import { InferType, object, ref, string } from "yup";
+import { criteria } from "~/components/utils";
 import { forgotPasswordReset } from "~/data";
 
 export function loader({ params, request }: LoaderFunctionArgs) {
@@ -32,7 +34,7 @@ export type ForgotPasswordForm = InferType<typeof loginSchema>
 const resolver = yupResolver(loginSchema)
 
 export default function ForgotPasswordSlug() {
-  const { handleSubmit, formState: { errors, isSubmitting }, register, setValue, setError } = useForm<ForgotPasswordForm>({
+  const { handleSubmit, formState: { errors, isSubmitting }, register, setValue, setError, watch } = useForm<ForgotPasswordForm>({
     mode: 'onChange',
     resolver,
   })
@@ -40,9 +42,9 @@ export default function ForgotPasswordSlug() {
   const { email, slug } = useLoaderData<typeof loader>();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const password = watch('password', '');
 
   if (email) setValue('email', email);
-
   const onSubmit = async (data: ForgotPasswordForm) => {
     try {
       let response = await forgotPasswordReset(data, slug || '');
@@ -71,7 +73,6 @@ export default function ForgotPasswordSlug() {
             <input
               type={showPassword ? 'text' : 'password'}
               placeholder="Mật khẩu"
-              required
               className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
               {...register('password')}
             />
@@ -81,12 +82,11 @@ export default function ForgotPasswordSlug() {
               <IoEye onClick={() => setShowPassword(!showPassword)} className='transition-opacity duration-300 ease-in-out opacity-100 absolute right-3 top-0 mt-3 cursor-pointer size-6 text-[#465166] hover:text-black' />
             )}
           </div>
-          {errors.password && <span className="text-red-500 font-bold">{errors.password.message}</span>}
+          {/* {errors.password && <span className="text-red-500 font-bold">{errors.password.message}</span>} */}
           <div className="relative w-full">
             <input
               type={showConfirmPassword ? 'text' : 'password'}
               placeholder="Xác nhận mật khẩu"
-              required
               className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0] transition duration-200 ease-in"
               {...register('confirmPassword')}
             />
@@ -97,6 +97,29 @@ export default function ForgotPasswordSlug() {
             )}
           </div>
           {errors.confirmPassword && <span className="text-red-500 font-bold">{errors.confirmPassword.message}</span>}
+          <div>
+            {_.map(criteria, (criterion, index) => {
+              return (
+                <>
+                  {criterion.test(password) ? (
+                    <div className="flex items-center gap-2">
+                      <IoCheckmarkCircle className="w-5 h-5 text-green-500" />
+                      <p key={index} className={`text-green-500 font-bold`}>
+                        {criterion.label}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <IoCloseCircle className="w-5 h-5 text-red-500" />
+                      <p key={index} className={`text-red-500 font-bold`}>
+                        {criterion.label}
+                      </p>
+                    </div>
+                  )}
+                </>
+              )
+            })}
+          </div>
           <button type="submit" disabled={isSubmitting} className="flex items-center justify-center uppercase active:bg-blue-800 hover:bg-blue-900 disabled:bg-blue-900 bg-[#0055C3] w-[450px] py-4 rounded-lg text-white font-semibold text-xl">
             {isSubmitting && <img src="/icons/loading.svg" alt="" className="w-10 h-10" />}
             <span>
