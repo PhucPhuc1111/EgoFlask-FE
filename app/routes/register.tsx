@@ -1,7 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "@remix-run/react";
 import { useForm } from "react-hook-form";
 import { InferType, number, object, ref, string } from "yup";
 import { LoginNavbar } from "~/components";
+import { registerAccount } from "~/data/user";
 
 let schema = object({
   firstName: string().required(),
@@ -21,16 +23,29 @@ let schema = object({
 
 const resolver = yupResolver(schema)
 
-type RegisterForm = InferType<typeof schema>
+export type RegisterForm = InferType<typeof schema>
 
 export default function Register() {
-  const { register, formState: { errors }, handleSubmit } = useForm<RegisterForm>({
+  const { register, formState: { errors, isSubmitting }, handleSubmit, setError } = useForm<RegisterForm>({
     resolver,
     mode: 'onChange',
   })
+  const navigate = useNavigate();
 
-  const onSubmit = (data: RegisterForm) => {
-    console.log('data', data);
+  const onSubmit = async (data: RegisterForm) => {
+    try {
+      let response = await registerAccount(data);
+      if (response) {
+        navigate('/login');
+      }
+    } catch (error: any) {
+      console.log('error', error);
+      if (error.response.status == 409) {
+        setError('email', {
+          message: error.response.data
+        })
+      }
+    }
   }
 
   return (
@@ -60,6 +75,7 @@ export default function Register() {
           {errors.email && <span className="text-red-500 font-bold">{errors.email.message}</span>}
           <input type="tel"
             placeholder="Số điện thoại"
+            inputMode="tel"
             className="w-[450px] focus:ring-0 border-0 border-b-2 border-[#E6E6E0]"
             {...register('phone')}
           />
@@ -80,8 +96,11 @@ export default function Register() {
             {...register('confirmPassword')}
           />
           {errors.confirmPassword && <span className="text-red-500 font-bold">{errors.confirmPassword.message}</span>}
-          <button type="submit" className="uppercase active:bg-blue-800 bg-[#0055C3] w-[450px] py-4 rounded-lg text-white font-semibold text-xl">
-            Tạo tài khoản
+          <button type="submit" disabled={isSubmitting} className="flex items-center justify-center uppercase active:bg-blue-800 hover:bg-blue-900 disabled:bg-blue-900 bg-[#0055C3] w-[450px] py-4 rounded-lg text-white font-semibold text-xl">
+            {isSubmitting && <img src="/icons/loading.svg" alt="" className="w-10 h-10" />}
+            <span>
+              Tạo tài khoản
+            </span>
           </button>
         </form>
       </div>

@@ -3,8 +3,8 @@ import { Link } from "@remix-run/react";
 import { ProfileSidebar, SubFooter } from "~/components";
 import { authenticator } from "~/services/auth.server";
 
-export function loader({ request }: LoaderFunctionArgs) {
-  let user = authenticator.isAuthenticated(request);
+export async function loader({ request }: LoaderFunctionArgs) {
+  let user = await authenticator.isAuthenticated(request);
   if (!user) {
     return redirect("/login");
   }
