@@ -18,7 +18,7 @@ export async function registerAccount(user: RegisterForm) {
 }
 
 export function getMe(token: string): Promise<User> {
-  return request.get(`${BASE_URL}/me`, {
+  return request.get(`${BASE_URL}/api/Account/whoami`, {
     headers: {
       'Content-Type': 'application/json' ,
       'Authorization': `Bearer ${token}`,

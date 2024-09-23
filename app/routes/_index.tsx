@@ -1,7 +1,9 @@
 import type { MetaFunction } from "@remix-run/node";
 import { SubFooter } from "~/components";
 import _ from "lodash";
-import { Link } from "@remix-run/react";
+import { Link, useLocation } from "@remix-run/react";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const meta: MetaFunction = () => {
   return [
@@ -30,6 +32,18 @@ const products = [
 ]
 
 export default function Index() {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const logout = searchParams.get("logout");
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (logout) {
+      queryClient.invalidateQueries({
+        queryKey: ['profile']
+      })
+    }
+  }, [location.search]);
   return (
     <main className="mt-[--m-header-top]">
       <div className="mx-auto">
