@@ -63,22 +63,20 @@ export const Header = () => {
             />
           </div>
           <div className="nav-act flex flex-rows gap-[20px] relative uk-inline">
-            <button className="uk-button uk-button-default border-none ring-0">
-              <img
-                className="cursor-pointer w-6 h-6"
-                src="/icons/person.png"
-                alt="Person Icon"
-                onClick={() => navigate("/profile")}
-              />
-              {user && (
-                <div uk-dropdown="">
-                  <Link to={'/logout?redirectTo=/?logout=true'} className="flex items-center justify-center gap-2 text-red-500 hover:bg-red-500 hover:text-white rounded-md p-3">
-                    <IoLogOut className="w-5 h-5 cursor-pointer text-inherit" />
-                    <span className="text-xs">Đăng xuất</span>
-                  </Link>
-                </div>
-              )}
-            </button>
+            <img
+              className="cursor-pointer w-6 h-6"
+              src="/icons/person.png"
+              alt="Person Icon"
+              onClick={() => navigate("/profile")}
+            />
+            {user && (
+              <div uk-dropdown="">
+                <Link to={'/logout?redirectTo=/?logout=true'} className="flex items-center justify-center gap-2 text-red-500 hover:bg-red-500 hover:text-white rounded-md p-3">
+                  <IoLogOut className="w-5 h-5 cursor-pointer text-inherit" />
+                  <span className="text-xs">Đăng xuất</span>
+                </Link>
+              </div>
+            )}
             <Cart />
           </div>
         </div>
