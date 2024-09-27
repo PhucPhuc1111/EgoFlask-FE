@@ -10,6 +10,7 @@ export async function registerAccount(user: RegisterForm) {
     email: user.email,
     phoneNumber: user.phone,
     password: user.password,
+    verifiedUrl: `${window.location.origin}/verify-register/{token}`
   }, {
     headers: {
       "Content-Type": "application/json",
