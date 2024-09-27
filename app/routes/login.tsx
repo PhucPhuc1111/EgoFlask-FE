@@ -32,6 +32,7 @@ let loginSchema = object({
   email: string().trim().required("Email is a required field"),
   password: string().trim().required("Password is a required field"),
   loginType: string().trim().required(),
+  verifyUrl: string().trim(),
 })
 
 export type LoginFormData = InferType<typeof loginSchema>
@@ -57,6 +58,7 @@ export default function Login() {
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setValue('verifyUrl', `${window.location.origin}/verify-register/{token}`)
     handleSubmit(e)
   }
   return (

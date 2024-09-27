@@ -25,7 +25,7 @@ export default function ForgotPassword() {
       console.log('response', response);
 
       if (response) {
-        navigate(`/forgot-password-success?message=${response}`);
+        navigate(`/forgot-password-success?message=${encodeURIComponent(response)}`);
       }
     } catch (error: any) {
       console.log('error', error);
