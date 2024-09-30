@@ -12,3 +12,11 @@ export type User = {
 export type Profile = {
   token: string;
 }
+
+export type Component = {
+  componentId: string;
+  name: string;
+  color: string;
+  imageUrl: string
+  status: string
+}
