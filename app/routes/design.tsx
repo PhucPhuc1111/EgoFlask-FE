@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { IoAddCircleSharp, IoArrowBackCircle, IoArrowForwardCircle } from "react-icons/io5";
 import { SubFooter } from "~/components";
+import {Model} from "~/components";
 
 const options = [
   {
@@ -26,27 +27,27 @@ const options = [
 const productList = [
   {
     name: "Graceful",
-    img: "/images/design/bottle-1.png",
+    img: "/images/design/top/36",
   },
   {
     name: "Gracious",
-    img: "/images/design/bottle-2.png",
+    img: "/images/design/body/bottle-2.png",
   },
   {
     name: "Creative",
-    img: "/images/design/bottle-3.png",
+    img: "/images/design/body/bottle-3.png",
   },
   {
     name: "Dynamic",
-    img: "/images/design/bottle-4.png",
+    img: "/images/design/body/bottle-4.png",
   },
   {
     name: "Rational",
-    img: "/images/design/bottle-5.png",
+    img: "/images/design/body/bottle-5.png",
   },
   {
     name: "Dependable",
-    img: "/images/design/bottle-6.png",
+    img: "/images/design/body/bottle-6.png",
   },
 ];
 
