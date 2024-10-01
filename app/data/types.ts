@@ -13,10 +13,12 @@ export type Profile = {
   token: string;
 }
 
-export type Component = {
+export type BottleComponent = {
   componentId: string;
   name: string;
   color: string;
-  imageUrl: string
-  status: string
+  imageUrl: string;
+  createAt: string;
+  status: string;
+  products: any[]; // Adjust the type of products if you have a more specific structure
 }

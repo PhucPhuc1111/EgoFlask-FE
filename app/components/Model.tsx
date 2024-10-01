@@ -1,9 +1,9 @@
 import React from 'react';
 
 interface ModelProps {
-  topImage: string;   
-  bodyImage: string; 
-  strapImage: string;   
+  topImage?: string;   
+  bodyImage?: string; 
+  strapImage?: string;   
   width: string;       
 }
 

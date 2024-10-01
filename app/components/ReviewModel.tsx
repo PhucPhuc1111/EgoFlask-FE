@@ -1,11 +1,11 @@
 import React from "react";
-import { Component } from "~/data/types";
+import { BottleComponent } from "~/data/types";
 import { Model } from "./Model";
 
 interface ReviewModalProps {
-  top: Component | null;
-  body: Component | null;
-  strap: Component | null;
+  top: BottleComponent | null;
+  body: BottleComponent | null;
+  strap: BottleComponent | null;
   onClose: () => void;
   isOpen: boolean;
 }

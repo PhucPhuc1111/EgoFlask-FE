@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { IoAddCircleSharp, IoArrowBackCircle, IoArrowForwardCircle } from "react-icons/io5";
 import { SubFooter } from "~/components";
 import request, { BASE_URL } from "~/data/request";
-import { Component } from "~/data/types";
+import { BottleComponent } from "~/data/types";
 import { ReviewModal } from "~/components";
+import { useGetComponentList } from "~/data/design";
 
 const options = [
   {
@@ -22,33 +23,18 @@ const options = [
 ];
 
 export default function Design() {
-  const [componentList, setComponentList] = useState<Component[]>([]);
   const [active, setActive] = useState("body"); // hợp nhất search và activeOption
-  const [top, setTop] = useState<Component | null>(null); // lưu component được chọn cho top
-  const [body, setBody] = useState<Component | null>(null); // lưu component được chọn cho body
-  const [strap, setStrap] = useState<Component | null>(null); // lưu component được chọn cho strap
+  const [top, setTop] = useState<BottleComponent | null>(null); // lưu component được chọn cho top
+  const [body, setBody] = useState<BottleComponent | null>(null); // lưu component được chọn cho body
+  const [strap, setStrap] = useState<BottleComponent | null>(null); // lưu component được chọn cho strap
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // state để điều khiển mở/đóng modal
-
-  useEffect(() => {
-    const fetchComponentList = async () => {
-      try {
-        const data = await request.get(`${BASE_URL}/api/component?search=${active}`);
-        setComponentList(data);
-      } catch (error) {
-        console.log("Error fetching component list:", error);
-      }
-    };
-
-    if (active) {
-      fetchComponentList();
-    }
-  }, [active]);
+  const componentList = useGetComponentList(active);
 
   const handleOptionClick = (value: string) => {
     setActive(value); // cập nhật active khi người dùng chọn component
   };
 
-  const handleColorSelect = (optionValue: string, component: Component) => {
+  const handleColorSelect = (optionValue: string, component: BottleComponent) => {
     if (optionValue === "top") {
       setTop(component);
     } else if (optionValue === "body") {
@@ -104,7 +90,7 @@ export default function Design() {
                   </div>
                   {active === option.value && (
                     <div className="grid grid-cols-8 mt-2">
-                      {componentList.map((component, idx) => (
+                      {_.map(componentList.data, (component, idx) => (
                         <div
                           key={idx}
                           className={`w-8 h-8 cursor-pointer rounded-full ${
@@ -134,7 +120,7 @@ export default function Design() {
               <div className="uk-position-relative">
                 <div className="uk-slider-container">
                   <div className="uk-slider-items uk-child-width-1-5 uk-grid">
-                    {_.map(componentList, (component, index) => (
+                    {_.map(componentList.data, (component, index) => (
                       <div
                         key={index}
                         className={`uk-position-relative cursor-pointer ${
