@@ -2,10 +2,9 @@ import _ from "lodash";
 import { useEffect, useState } from "react";
 import { IoAddCircleSharp, IoArrowBackCircle, IoArrowForwardCircle } from "react-icons/io5";
 import { SubFooter } from "~/components";
-import request, { BASE_URL } from "~/data/request";
 import { BottleComponent } from "~/data/types";
 import { ReviewModal } from "~/components";
-import { useGetComponentList } from "~/data/design";
+import { useGetComponentList } from "~/data";
 
 const options = [
   {
