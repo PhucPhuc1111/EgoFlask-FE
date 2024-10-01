@@ -4,6 +4,7 @@ import { IoAddCircleSharp, IoArrowBackCircle, IoArrowForwardCircle } from "react
 import { SubFooter } from "~/components";
 import request, { BASE_URL } from "~/data/request";
 import { Component } from "~/data/types";
+import { ReviewModal } from "~/components";
 
 const options = [
   {
@@ -22,42 +23,69 @@ const options = [
 
 export default function Design() {
   const [componentList, setComponentList] = useState<Component[]>([]);
-  const [search, setSearch] = useState("body");
-  const [activeComponentIndex, setActiveComponentIndex] = useState<number>(2); 
-  const [selectedColors, setSelectedColors] = useState<{ [key: string]: string }>({
-    body: "",
-    top: "",
-    strap: "",
-  }); 
-  const [activeOption, setActiveOption] = useState("body"); 
+  const [active, setActive] = useState("body"); // hợp nhất search và activeOption
+  const [top, setTop] = useState<Component | null>(null); // lưu component được chọn cho top
+  const [body, setBody] = useState<Component | null>(null); // lưu component được chọn cho body
+  const [strap, setStrap] = useState<Component | null>(null); // lưu component được chọn cho strap
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // state để điều khiển mở/đóng modal
 
   useEffect(() => {
     const fetchComponentList = async () => {
       try {
-        const data = await request.get(`${BASE_URL}/api/component?search=${search}`);
+        const data = await request.get(`${BASE_URL}/api/component?search=${active}`);
         setComponentList(data);
       } catch (error) {
         console.log("Error fetching component list:", error);
       }
     };
 
-    if (activeOption) {
+    if (active) {
       fetchComponentList();
     }
-  }, [search, activeOption]);
+  }, [active]);
 
   const handleOptionClick = (value: string) => {
-    setSearch(value);
-    setActiveOption(value); 
+    setActive(value); // cập nhật active khi người dùng chọn component
   };
 
+  const handleColorSelect = (optionValue: string, component: Component) => {
+    if (optionValue === "top") {
+      setTop(component);
+    } else if (optionValue === "body") {
+      setBody(component);
+    } else if (optionValue === "strap") {
+      setStrap(component);
+    }
+  };
 
-  const handleColorSelect = (optionValue: string, color: string) => {
-    setSelectedColors((prev) => ({
-      ...prev,
-      [optionValue]: color,
-    }));
-    setActiveComponentIndex(componentList.findIndex((comp) => comp.color === color)); 
+  const handleReview = () => {
+    // Mở ReviewModal khi người dùng click nút Review
+    setIsReviewModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsReviewModalOpen(false); // Đóng modal khi người dùng click Đóng
+  };
+
+  const handleReset = () => {
+    setTop(null);
+    setBody(null);
+    setStrap(null);
+  };
+
+  // Hàm xử lý thêm vào giỏ hàng
+  const handleAddToCart = () => {
+    if (!top || !body) {
+      if (!top && !body) {
+        alert("Xin lỗi, vui lòng chọn cả nắp bình và thân bình.");
+      } else if (!top) {
+        alert("Xin lỗi, vui lòng chọn nắp bình.");
+      } else if (!body) {
+        alert("Xin lỗi, vui lòng chọn thân bình.");
+      }
+    } else {
+      alert("Thêm vào giỏ hàng thành công!");
+    }
   };
 
   return (
@@ -74,16 +102,20 @@ export default function Design() {
                     <IoAddCircleSharp className="w-6 h-6 text-[#0055C3]" />
                     <span className="text-base text-black">{option.name}</span>
                   </div>
-                  {activeOption === option.value && (
+                  {active === option.value && (
                     <div className="grid grid-cols-8 mt-2">
                       {componentList.map((component, idx) => (
                         <div
                           key={idx}
                           className={`w-8 h-8 cursor-pointer rounded-full ${
-                            selectedColors[option.value] === component.color ? "border-2 border-black" : ""
+                            (option.value === "top" && top?.color === component.color) ||
+                            (option.value === "body" && body?.color === component.color) ||
+                            (option.value === "strap" && strap?.color === component.color)
+                              ? "border-2 border-black"
+                              : ""
                           }`}
                           style={{ backgroundColor: component.color }}
-                          onClick={() => handleColorSelect(option.value, component.color)} 
+                          onClick={() => handleColorSelect(option.value, component)} // cập nhật component khi người dùng chọn
                         />
                       ))}
                     </div>
@@ -106,9 +138,13 @@ export default function Design() {
                       <div
                         key={index}
                         className={`uk-position-relative cursor-pointer ${
-                          index === activeComponentIndex ? "opacity-100" : "opacity-30"
+                          (top && top.imageUrl === component.imageUrl) ||
+                          (body && body.imageUrl === component.imageUrl) ||
+                          (strap && strap.imageUrl === component.imageUrl)
+                            ? "opacity-100"
+                            : "opacity-30"
                         }`}
-                        onClick={() => setActiveComponentIndex(index)} 
+                        onClick={() => handleColorSelect(active, component)} // vẫn có thể thay đổi khi chọn qua slider
                       >
                         <img src={component.imageUrl} alt={component.name} className="object-cover h-[500px]" />
                       </div>
@@ -134,6 +170,36 @@ export default function Design() {
             </div>
           </div>
         </div>
+
+        
+        <div className="flex justify-end mt-8 gap-10">
+          <button 
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition" 
+            onClick={handleReview}
+          >
+            Review sản phẩm
+          </button>
+          <button 
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition" 
+            onClick={handleReset}
+          >
+            Reset
+          </button>
+          <button 
+            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition" 
+            onClick={handleAddToCart}
+          >
+            Thêm vào giỏ hàng
+          </button>
+        </div>
+
+        <ReviewModal
+          top={top}
+          body={body}
+          strap={strap}
+          onClose={handleCloseModal}
+          isOpen={isReviewModalOpen}
+        />
         <SubFooter />
       </div>
     </main>

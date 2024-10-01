@@ -4,3 +4,4 @@ export * from './ProfileSidebar';
 export * from './SubFooter';
 export * from './Footer';
 export * from './Model';
+export * from './ReviewModel';
