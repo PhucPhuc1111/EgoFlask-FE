@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IoAddCircleSharp, IoArrowBackCircle, IoArrowForwardCircle } from "react-icons/io5";
 import { SubFooter } from "~/components";
 import { BottleComponent } from "~/data/types";
@@ -27,7 +27,12 @@ export default function Design() {
   const [body, setBody] = useState<BottleComponent | null>(null); // lưu component được chọn cho body
   const [strap, setStrap] = useState<BottleComponent | null>(null); // lưu component được chọn cho strap
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // state để điều khiển mở/đóng modal
-  const componentList = useGetComponentList(active);
+  const component = useGetComponentList(active);
+  const componentList = useMemo(() => {
+    return _(component.data)
+      .orderBy(it => it.name, "asc")
+      .value();
+  }, [component.data]);
 
   const handleOptionClick = (value: string) => {
     setActive(value); // cập nhật active khi người dùng chọn component
@@ -89,7 +94,7 @@ export default function Design() {
                   </div>
                   {active === option.value && (
                     <div className="grid grid-cols-8 mt-2">
-                      {_.map(componentList.data, (component, idx) => (
+                      {_.map(componentList, (component, idx) => (
                         <div
                           key={idx}
                           className={`w-8 h-8 cursor-pointer rounded-full ${
@@ -119,7 +124,7 @@ export default function Design() {
               <div className="uk-position-relative">
                 <div className="uk-slider-container">
                   <div className="uk-slider-items uk-child-width-1-5 uk-grid">
-                    {_.map(componentList.data, (component, index) => (
+                    {_.map(componentList, (component, index) => (
                       <div
                         key={index}
                         className={`uk-position-relative cursor-pointer ${
