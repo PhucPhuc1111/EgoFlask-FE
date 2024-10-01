@@ -49,7 +49,7 @@ export default function Register() {
       console.log('error', error);
       if (error.response.status == 409) {
         setError('email', {
-          message: error.response.data
+          message: error.response.data.message
         })
       }
     }
