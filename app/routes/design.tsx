@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { useEffect, useMemo, useState } from "react";
-import { IoAddCircleSharp, IoArrowBackCircle, IoArrowForwardCircle } from "react-icons/io5";
+import { IoAddCircleSharp, IoArrowBackCircle, IoArrowForwardCircle, IoColorFillOutline  } from "react-icons/io5";
 import { SubFooter } from "~/components";
 import { BottleComponent } from "~/data/types";
 import { ReviewModal } from "~/components";
@@ -26,6 +26,8 @@ export default function Design() {
   const [top, setTop] = useState<BottleComponent | null>(null); // lưu component được chọn cho top
   const [body, setBody] = useState<BottleComponent | null>(null); // lưu component được chọn cho body
   const [strap, setStrap] = useState<BottleComponent | null>(null); // lưu component được chọn cho strap
+  const [engrave, setEngrave] = useState<string>(""); // Biến để lưu nội dung khắc
+  const [engravePosition, setEngravePosition] = useState<string>(""); 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // state để điều khiển mở/đóng modal
   const component = useGetComponentList(active);
   const componentList = useMemo(() => {
@@ -37,6 +39,17 @@ export default function Design() {
   const handleOptionClick = (value: string) => {
     setActive(value); // cập nhật active khi người dùng chọn component
   };
+
+  const handleEngraveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEngrave(event.target.value);
+  };
+
+  const handleEngravePositionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEngravePosition(event.target.value);
+  };
+  
+
+  
 
   const handleColorSelect = (optionValue: string, component: BottleComponent) => {
     if (optionValue === "top") {
@@ -84,12 +97,11 @@ export default function Design() {
         <div className="flex flex-1 w-full items-center justify-center">
           <div className="border-[3px] border-[#0055C3] rounded-xl w-[700px] flex flex-col items-center justify-center gap-4 py-6 px-10 mr-14">
             <img src="/images/BigLogo.png" alt="Logo" className="aspect-[157/45] w-[157px] h-[45px]" />
-            <div className="border-2 border-[#E6E6E0] w-full px-20" />
             <div className="self-start cursor-pointer flex flex-col gap-3 w-full">
               {_.map(options, (option, index) => (
                 <div key={index} className="flex flex-col w-full">
                   <div className="flex items-center gap-2 cursor-pointer" onClick={() => handleOptionClick(option.value)}>
-                    <IoAddCircleSharp className="w-6 h-6 text-[#0055C3]" />
+                    <IoColorFillOutline className="w-6 h-6 text-[#0055C3]" />
                     <span className="text-base text-black">{option.name}</span>
                   </div>
                   {active === option.value && (
@@ -110,9 +122,69 @@ export default function Design() {
                       ))}
                     </div>
                   )}
-                  {index !== options.length - 1 && <div className="border-2 border-[#E6E6E0] w-full px-20" />}
+                  {index !== options.length - 1 && <div />}
                 </div>
               ))}
+                <div className="w-full border-b-2 border-[#E6E6E0] pb-4">
+                  <div className="flex items-center gap-2 cursor-pointer">
+                    <IoAddCircleSharp className="w-6 h-6 text-[#0055C3]" />
+                    <span className="text-base text-black">Khắc laser</span>
+                    <span className="ml-auto text-sm text-black">+ ? VND</span>
+                  </div>
+                </div>
+
+                <div className="py-2">
+                  <span className="text-base text-black">Vị trí khắc:</span>
+                  <div className="ml-4 flex flex-col gap-2 text-sm text-black">
+                    <label>
+                      <input
+                        type="radio"
+                        name="vi-tri-khac"
+                        className="mr-2"
+                        value="top"
+                        onChange={handleEngravePositionChange} 
+                      /> Ở trên
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="vi-tri-khac"
+                        className="mr-2"
+                        value="middle"
+                        onChange={handleEngravePositionChange} 
+                      /> Ở giữa
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="vi-tri-khac"
+                        className="mr-2"
+                        value="bottom"
+                        onChange={handleEngravePositionChange}
+                      /> Ở dưới
+                    </label>
+                  </div>
+                </div>
+
+                <div className="py-2">
+                  <label className="text-sm text-black">Nhập nội dung (tối đa 8 ký tự):</label>
+                  <input
+                    type="text"
+                    className="w-full mt-1 border border-[#E6E6E0] p-2"
+                    maxLength="8"
+                    value={engrave}
+                    onChange={handleEngraveChange} // cập nhật nội dung khắc
+                  />
+                </div>
+
+
+                <div className="border-b-2 border-[#E6E6E0] w-full py-2">
+                  <div className="flex items-center gap-2 cursor-pointer">
+                    <input type="radio" name="option" className="mr-2" />
+                    <span className="text-base text-black">Gói quà</span>
+                  </div>
+                </div>
+
             </div>
           </div>
 
@@ -134,7 +206,7 @@ export default function Design() {
                             ? "opacity-100"
                             : "opacity-30"
                         }`}
-                        onClick={() => handleColorSelect(active, component)} // vẫn có thể thay đổi khi chọn qua slider
+                        onClick={() => handleColorSelect(active, component)} 
                       >
                         <img src={component.imageUrl} alt={component.name} className="object-cover h-[500px]" />
                       </div>
@@ -187,6 +259,8 @@ export default function Design() {
           top={top}
           body={body}
           strap={strap}
+          engrave={engrave}
+          engravePosition={engravePosition}
           onClose={handleCloseModal}
           isOpen={isReviewModalOpen}
         />

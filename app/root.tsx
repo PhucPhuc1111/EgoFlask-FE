@@ -15,11 +15,12 @@ import { Footer, Header } from "./components";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles, as: "style" },
   { rel: "stylesheet", href: "/css/tailwind1.css?v=1" },
-  { rel: 'stylesheet', href: '/css/uikit.css?v=1' },
-  { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap' },
-  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-  { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
-  { rel: 'icon', href: '/images/SquareLogo.png' },
+  { rel: "stylesheet", href: "/css/uikit.css?v=1" },
+  { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" },
+  { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" }, // Montserrat added here
+  { rel: "preconnect", href: "https://fonts.googleapis.com" },
+  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+  { rel: "icon", href: "/images/SquareLogo.png" },
 ];
 
 export default function App() {
