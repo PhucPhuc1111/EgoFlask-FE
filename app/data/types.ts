@@ -7,6 +7,10 @@ export type User = {
   id: number;
   email: string;
   role: string;
+  name: string;
+  gender: string;
+  birthday: string;
+  phoneNumber: string;
 }
 
 export type Profile = {

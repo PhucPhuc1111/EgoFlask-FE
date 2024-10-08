@@ -20,7 +20,7 @@ export const AdminHeader = () => {
           <div className="flex flex-row justify-start items-center space-x-8 w-full">
             <img src="/images/avatar.png" alt="avatar" className="w-[51px] h-[51px]" />
             <span className="text-black font-semibold text-base">
-              Admin 1
+              {profile.data?.detail.name}
             </span>
           </div>
           <div className="flex items-center justify-center -translate-x-1/2 w-full">
