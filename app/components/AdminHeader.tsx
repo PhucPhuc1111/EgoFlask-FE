@@ -1,4 +1,4 @@
-import { NavLink, useMatches, useNavigate } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import _ from "lodash";
 import { useGetProfile } from "~/data";
 
@@ -6,10 +6,6 @@ export const AdminHeader = () => {
   const navigate = useNavigate();
   const profile = useGetProfile();
   const user = profile.data?.detail.id;
-  const matches = useMatches();
-  const last = (_.last(matches) as any)?.handle;
-
-  if (!last?.adminHeader) return;
 
   return (
     <header className="absolute top-0 w-full z-10 bg-white pb-2">

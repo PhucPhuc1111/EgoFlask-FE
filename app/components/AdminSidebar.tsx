@@ -1,4 +1,4 @@
-import { Link, NavLink, useMatches, useNavigate } from "@remix-run/react";
+import { Link, NavLink, useNavigate } from "@remix-run/react";
 import _ from "lodash";
 import { useGetProfile } from "~/data";
 
@@ -10,10 +10,7 @@ export const AdminSidebar = ({ className }: AdminSidebarProps) => {
   const navigate = useNavigate();
   const profile = useGetProfile();
   const user = profile.data?.detail.id;
-  const matches = useMatches();
-  const last = (_.last(matches) as any)?.handle;
 
-  if (!last?.adminHeader) return;
   const navBar = [
     {
       title: "Dashboard",
@@ -36,10 +33,9 @@ export const AdminSidebar = ({ className }: AdminSidebarProps) => {
       link: "/admin/category",
     },
   ];
-  if (!last?.adminSidebar) return;
   return (
     <div className={`${className}`}>
-      <nav className="flex flex-col items-start justify-center translate-y-1/2 space-y-8">
+      <nav className="flex flex-col items-start justify-center h-full translate-y-1/2 space-y-8">
         {_.map(navBar, (item, index) => (
           <NavLink key={index} to={item.link}
             className={({ isActive }) =>
