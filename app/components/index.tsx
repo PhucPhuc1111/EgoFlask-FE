@@ -5,3 +5,5 @@ export * from './SubFooter';
 export * from './Footer';
 export * from './Model';
 export * from './ReviewModel';
+export * from './AdminHeader';
+export * from './AdminSidebar';

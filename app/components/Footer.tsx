@@ -1,6 +1,11 @@
-import { Link } from "@remix-run/react";
+import { Link, useMatches } from "@remix-run/react";
+import _ from "lodash";
 
 export const Footer = () => {
+  const matches = useMatches();
+  const last = (_.last(matches) as any)?.handle;  
+
+  if (last?.hideFooter) return;
   return (
     <footer className="w-full">
     

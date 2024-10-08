@@ -1,7 +1,4 @@
-// src/components/Header.js
-
-import React from "react";
-import { Link, NavLink, useNavigate } from "@remix-run/react";
+import { Link, NavLink, useMatches, useNavigate } from "@remix-run/react";
 import _ from "lodash";
 import Cart from "./Cart"; // Import Cart component
 import { IoLogOut } from "react-icons/io5";
@@ -11,6 +8,8 @@ export const Header = () => {
   const navigate = useNavigate();
   const profile = useGetProfile();
   const user = profile.data?.detail.id;
+  const matches = useMatches();
+  const last = (_.last(matches) as any)?.handle;  
 
   const navBar = [
     {
@@ -30,6 +29,8 @@ export const Header = () => {
       link: "/contact",
     },
   ];
+  
+  if (last?.hideHeader) return;
 
   return (
     <header className="absolute top-0 w-full">
