@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useGetProfile, getAllAccount } from "~/data";
+import { useGetProfile, getAllAccount, Account } from "~/data";
 import { Link } from "@remix-run/react";
 import { format } from "date-fns";
+
+
 
 export const handle = {
   hideHeader: true,
@@ -10,13 +12,13 @@ export const handle = {
 
 export default function AdminCustomer() {
   const { data: profile, isLoading, isError } = useGetProfile();
-  const [customerList, setCustomerList] = useState([]);
+  const [customerList, setCustomerList] = useState<Account[]>([]); 
 
   useEffect(() => {
     const fetchAccounts = async () => {
       if (profile?.user?.token) {
         try {
-          console.log("Token:", profile.user.token); 
+          console.log("Token:", profile.user.token);
           const accounts = await getAllAccount(profile.user.token, 1, 10);
           setCustomerList(accounts);
         } catch (error) {
@@ -26,25 +28,23 @@ export default function AdminCustomer() {
         console.warn("No token available.");
       }
     };
-  
+
     if (!isLoading && !isError) {
       fetchAccounts();
     }
   }, [profile, isLoading, isError]);
-  
 
   if (isLoading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   if (isError) {
-    return <div>Error loading profile data.</div>; 
+    return <div>Error loading profile data.</div>;
   }
 
-  // Hàm định dạng ngày bằng date-fns
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return format(date, "HH:mm dd/MM/yyyy"); // Định dạng hh:mm dd/MM/yyyy
+    return format(date, "HH:mm dd/MM/yyyy");
   };
 
   return (
