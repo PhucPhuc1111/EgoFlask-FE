@@ -16,7 +16,24 @@ export type User = {
 export type Profile = {
   token: string;
 }
-
+export type Account = {
+   token: string;
+  accountId:number;
+  name: string;
+  password: string;
+  avatar: string;
+  gender:string
+  dob:string;
+  email:string;
+  roleId: number
+  address:string;
+  phoneNumber:string;
+  createAt:string;
+  status:string;
+  orders:[];
+  productStocks:[];
+  role:string;
+}
 export type BottleComponent = {
   componentId: string;
   name: string;
