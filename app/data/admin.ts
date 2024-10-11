@@ -8,3 +8,10 @@ export async function getAllAccount(token: string, pageIndex: number, pageSize: 
       },
     });
   }
+export async function getAccountById(token: string, accountId:number): Promise<Account>{
+  return await request.get(`${BASE_URL}/api/Account/${accountId}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+}
