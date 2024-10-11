@@ -17,7 +17,7 @@ export type Profile = {
   token: string;
 }
 export type Account = {
-   token: string;
+ 
   accountId:number;
   name: string;
   password: string;

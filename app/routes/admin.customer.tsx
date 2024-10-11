@@ -14,19 +14,19 @@ export default function AdminCustomer() {
   const [currentPage, setCurrentPage] = useState(1);
   const accountsPerPage = 10;
   const totalPages = 50;
-  const [loading, setLoading] = useState(false); // Trạng thái loading
+  const [loading, setLoading] = useState(false); 
 
   useEffect(() => {
     const fetchAccounts = async () => {
       if (profile?.user?.token) {
-        setLoading(true); // Bắt đầu loading
+        setLoading(true);
         try {
           const accounts = await getAllAccount(profile.user.token, currentPage, accountsPerPage);
           setCustomerList(accounts);
         } catch (error) {
           console.error("Failed to fetch accounts:", error);
         } finally {
-          setLoading(false); // Kết thúc loading
+          setLoading(false);
         }
       } else {
         console.warn("No token available.");
@@ -118,12 +118,12 @@ export default function AdminCustomer() {
         <td className="border-2 border-[#0055C3]">{customer.email}</td>
         <td className="border-2 border-[#0055C3]">{formatDate(customer.createAt)}</td>
         <td className="border-2 border-[#0055C3]">
-          <Link to={`/admin/customer/${customer.accountId}`}>
-            <button className="border rounded-md w-24 h-8 bg-[#0055C3] text-white hover:bg-white hover:text-[#0055C3]">
-              Chi tiết
-            </button>
-          </Link>
-        </td>
+  <Link to={`/admin/customer/${customer.accountId}`}>
+    <button className="border rounded-md w-24 h-8 bg-[#0055C3] text-white hover:bg-white hover:text-[#0055C3]">
+      Chi tiết
+    </button>
+  </Link>
+</td>
       </tr>
     ))
   )}
