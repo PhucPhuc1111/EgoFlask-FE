@@ -2,7 +2,7 @@ import React from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, LinearScale, CategoryScale, BarElement, Tooltip, Legend } from 'chart.js';
 
-// Đăng ký các thành phần của Chart.js
+
 ChartJS.register(
   LinearScale,
   CategoryScale,
@@ -44,7 +44,7 @@ const IncomeBarChart: React.FC = () => {
           39000, // November
           42000, // December
         ],
-        backgroundColor: "#0055c3", // Màu nền của cột
+        backgroundColor: "#0055c3", 
       },
     ],
   };
@@ -55,8 +55,8 @@ const IncomeBarChart: React.FC = () => {
       y: {
         beginAtZero: true,
         ticks: {
-          stepSize: 20000, // Cách nhau 20 đơn vị
-          callback: (value: number) => `${value / 1000}M`, // Định dạng cho trục y
+          stepSize: 20000, 
+          callback: (value: number) => `${value / 1000}M`,
         },
       },
     },

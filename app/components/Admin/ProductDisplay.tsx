@@ -2,13 +2,13 @@ import React, { useState } from "react";
 
 interface ProductData {
   product: number;
-  lastPeriod: number; // Đổi tên thuộc tính này thành lastPeriod
+  lastPeriod: number; 
 }
 
 const productData: { [key: string]: ProductData & { lastPeriod: number } } = {
-  "Tháng này": { product: 204351, lastPeriod: 97525931 }, // lastPeriod là tháng trước
-  "Năm này": { product: 1205478392, lastPeriod: 1152259311 }, // lastPeriod là năm trước
-  "Ngày này": { product: 25478392, lastPeriod: 25725931 }, // lastPeriod là hôm qua
+  "Tháng này": { product: 204351, lastPeriod: 97525931 }, 
+  "Năm này": { product: 1205478392, lastPeriod: 1152259311 }, 
+  "Ngày này": { product: 25478392, lastPeriod: 25725931 }, 
 };
 
 const ProductDisplay: React.FC = () => {
@@ -39,10 +39,10 @@ const ProductDisplay: React.FC = () => {
       </div>
       <div className="text-black">
         {selectedTimeframe === "Tháng này"
-          ? `Tháng trước: ${productData["Tháng này"].lastPeriod.toLocaleString()} đ`
+          ? `Tháng trước: ${productData["Tháng này"].lastPeriod.toLocaleString()} `
           : selectedTimeframe === "Năm này"
-          ? `Năm trước: ${productData["Năm này"].lastPeriod.toLocaleString()} đ`
-          : `Hôm qua: ${productData["Ngày này"].lastPeriod.toLocaleString()} đ`}
+          ? `Năm trước: ${productData["Năm này"].lastPeriod.toLocaleString()} `
+          : `Hôm qua: ${productData["Ngày này"].lastPeriod.toLocaleString()} `}
       </div>
     </div>
   );

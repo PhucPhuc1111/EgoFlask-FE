@@ -3,10 +3,10 @@ import { useParams } from "@remix-run/react";
 import { Account, getAccountById, useGetProfile } from "~/data";
 
 export default function AdminCustomerDetail() {
-  const { customerId } = useParams(); // Lấy customerId từ URL
-  const [customerDetail, setCustomerDetail] = useState<Account | null>(null); // Khởi tạo là null
+  const { customerId } = useParams(); 
+  const [customerDetail, setCustomerDetail] = useState<Account | null>(null); 
   const [loading, setLoading] = useState(false);
-  const { data: profile, isLoading: profileLoading, isError } = useGetProfile(); // Lấy thông tin profile
+  const { data: profile, isLoading: profileLoading, isError } = useGetProfile(); 
 
   useEffect(() => {
     const fetchCustomerDetail = async () => {
@@ -22,7 +22,7 @@ export default function AdminCustomerDetail() {
 
       setLoading(true);
       try {
-        const account = await getAccountById(profile.user.token, Number(customerId)); // Gọi API lấy chi tiết
+        const account = await getAccountById(profile.user.token, Number(customerId));
         setCustomerDetail(account); 
         console.error("Error fetching customer detail:", isError);
       } finally {
@@ -61,9 +61,9 @@ export default function AdminCustomerDetail() {
                 <div>{customerDetail.name}</div>
                 <div>{customerDetail.email}</div>
                 <div>{customerDetail.phoneNumber}</div>
-                <div>{customerDetail.gender || "Chưa cập nhật"}</div> {/* Xử lý giá trị null */}
-                <div>{new Date(customerDetail.dob).toLocaleDateString()}</div> {/* Chuyển đổi định dạng ngày */}
-                <div>{customerDetail.address || "Chưa cập nhật"}</div> {/* Xử lý giá trị null */}
+                <div>{customerDetail.gender || "Chưa cập nhật"}</div> 
+                <div>{new Date(customerDetail.dob).toLocaleDateString()}</div> 
+                <div>{customerDetail.address || "Chưa cập nhật"}</div> 
               </div>
             </div>
           </div>
