@@ -43,3 +43,14 @@ export type BottleComponent = {
   status: string;
   products: any[]; // Adjust the type of products if you have a more specific structure
 }
+
+export type Stock = {
+  stockId: string;
+  productId: string;
+  quantity: number;
+  stockDate: string;
+  createdBy: number;
+  notes: string;
+  createdByNavigation?: any; // Adjust the type if you have a more specific structure
+  product?: any; // Adjust the type if you have a more specific structure
+};

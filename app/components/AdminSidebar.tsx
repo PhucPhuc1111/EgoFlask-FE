@@ -26,7 +26,7 @@ export const AdminSidebar = ({ className }: AdminSidebarProps) => {
     },
     {
       title: "Kho hàng",
-      link: "/admin/inventory",
+      link: "/admin/stock",
     },
     {
       title: "Danh mục sản phẩm",
