@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "@remix-run/react";
 import { Account, getAccountById, useGetProfile } from "~/data";
-import ClipLoader from "react-spinners/ClipLoader";
-
 
 export default function AdminCustomerDetail() {
   const { customerId } = useParams(); // Lấy customerId từ URL
@@ -36,10 +34,6 @@ export default function AdminCustomerDetail() {
       fetchCustomerDetail(); 
     }
   }, [customerId, profile, profileLoading, isError]);
-
-  if (loading || profileLoading) {
-<ClipLoader color="#0055C3" loading={loading} size={50} />
-  }
 
   if (!customerDetail) {
     return <p>Không tìm thấy chi tiết tài khoản</p>;

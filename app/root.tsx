@@ -36,17 +36,15 @@ export default function App() {
         },
         queryCache: new QueryCache({
           onError: (error: any) => {
+            console.log('error', error?.response?.status);
+
             if (error?.response?.status === 401) {
-              redirectLogin()
+              window.location.href = '/login'; // Redirect to login or any route
             }
           },
         }),
       }),
   );
-
-  const redirectLogin = _.throttle(() => {
-    redirect('/login')
-  }, 100)
 
   return (
     <html lang="vi">
