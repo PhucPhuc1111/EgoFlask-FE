@@ -2,13 +2,13 @@ import React, { useState } from "react";
 
 interface IncomeData {
   income: number;
-  lastPeriod: number; // Đổi tên thuộc tính này thành lastPeriod
+  lastPeriod: number; 
 }
 
 const incomeData: { [key: string]: IncomeData & { lastPeriod: number } } = {
-  "Tháng này": { income: 100478392, lastPeriod: 97525931 }, // lastPeriod là tháng trước
-  "Năm này": { income: 1205478392, lastPeriod: 1152259311 }, // lastPeriod là năm trước
-  "Ngày này": { income: 25478392, lastPeriod: 25725931 }, // lastPeriod là hôm qua
+  "Tháng này": { income: 100478392, lastPeriod: 97525931 },
+  "Năm này": { income: 1205478392, lastPeriod: 1152259311 }, 
+  "Ngày này": { income: 25478392, lastPeriod: 25725931 },
 };
 
 const IncomeDisplay: React.FC = () => {
