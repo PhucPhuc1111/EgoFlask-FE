@@ -7,10 +7,12 @@ import {
 } from "@remix-run/react";
 import "./tailwind.css";
 import { useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LinksFunction } from "@remix-run/node";
 import styles from "./tailwind.css?url";
 import { Footer, Header } from "./components";
+import { redirect } from "@remix-run/react";
+import _ from "lodash";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles, as: "style" },
@@ -32,8 +34,19 @@ export default function App() {
             staleTime: 60 * 1000,
           },
         },
-      })
+        queryCache: new QueryCache({
+          onError: (error: any) => {
+            if (error?.response?.status === 401) {
+              redirectLogin()
+            }
+          },
+        }),
+      }),
   );
+
+  const redirectLogin = _.throttle(() => {
+    redirect('/login')
+  }, 100)
 
   return (
     <html lang="vi">
