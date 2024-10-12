@@ -2,17 +2,17 @@ import React, { useState } from "react";
 
 interface WebsiteData {
   website: number;
-  lastPeriod: number; // Đổi tên thuộc tính này thành lastPeriod
+  lastPeriod: number; 
 }
 
 const websiteData: { [key: string]: WebsiteData & { lastPeriod: number } } = {
-  "Tháng này": { website: 89320, lastPeriod: 97525931 }, // lastPeriod là tháng trước
-  "Năm này": { website: 1205478392, lastPeriod: 1152259311 }, // lastPeriod là năm trước
-  "Ngày này": { website: 25478392, lastPeriod: 25725931 }, // lastPeriod là hôm qua
+  "Tháng này": { website: 89320, lastPeriod: 97525931 }, 
+  "Năm này": { website: 1205478392, lastPeriod: 1152259311 }, 
+  "Ngày này": { website: 25478392, lastPeriod: 25725931 }, 
 };
 
 interface WebsiteDisplayProps {
-  onWebsiteDataChange: (data: number) => void; // Callback function
+  onWebsiteDataChange: (data: number) => void; 
 }
 
 const WebsiteDisplay: React.FC<WebsiteDisplayProps> = ({ onWebsiteDataChange }) => {
@@ -20,7 +20,7 @@ const WebsiteDisplay: React.FC<WebsiteDisplayProps> = ({ onWebsiteDataChange }) 
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedTimeframe(e.target.value);
-    onWebsiteDataChange(websiteData[e.target.value].website); // Gọi callback với dữ liệu mới
+    onWebsiteDataChange(websiteData[e.target.value].website);
   };
 
   return (
@@ -44,10 +44,10 @@ const WebsiteDisplay: React.FC<WebsiteDisplayProps> = ({ onWebsiteDataChange }) 
       </div>
       <div className="text-black">
         {selectedTimeframe === "Tháng này"
-          ? `Tháng trước: ${websiteData["Tháng này"].lastPeriod.toLocaleString()} đ`
+          ? `Tháng trước: ${websiteData["Tháng này"].lastPeriod.toLocaleString()} `
           : selectedTimeframe === "Năm này"
-          ? `Năm trước: ${websiteData["Năm này"].lastPeriod.toLocaleString()} đ`
-          : `Hôm qua: ${websiteData["Ngày này"].lastPeriod.toLocaleString()} đ`}
+          ? `Năm trước: ${websiteData["Năm này"].lastPeriod.toLocaleString()} `
+          : `Hôm qua: ${websiteData["Ngày này"].lastPeriod.toLocaleString()} `}
       </div>
     </div>
   );

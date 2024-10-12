@@ -10,7 +10,7 @@ import {
   Legend,
 } from "chart.js";
 
-// Đăng ký các thành phần của Chart.js
+
 ChartJS.register(
   LinearScale,
   CategoryScale,
@@ -21,7 +21,7 @@ ChartJS.register(
 );
 
 interface WebsiteVisitsChartProps {
-  websiteData: number; // Nhận dữ liệu từ props
+  websiteData: number; 
 }
 
 const WebsiteVisitsChart: React.FC<WebsiteVisitsChartProps> = ({ websiteData }) => {
@@ -44,7 +44,7 @@ const WebsiteVisitsChart: React.FC<WebsiteVisitsChartProps> = ({ websiteData }) 
       {
         label: "Website Visits",
         data: [
-          websiteData, // Thay thế dữ liệu cứng bằng dữ liệu từ props
+          websiteData,
           30000, // February
           25000, // March
           40000, // April
@@ -61,7 +61,7 @@ const WebsiteVisitsChart: React.FC<WebsiteVisitsChartProps> = ({ websiteData }) 
         backgroundColor: "#104e9e",
         borderColor: "#0055C3",
         tension: 0.1,
-        pointRadius: 4, // Kích thước điểm
+        pointRadius: 4, 
       },
     ],
   };
@@ -73,7 +73,7 @@ const WebsiteVisitsChart: React.FC<WebsiteVisitsChartProps> = ({ websiteData }) 
         beginAtZero: true,
         ticks: {
           stepSize: 20000,
-          callback: (value: number) => `${value / 1000}K`, // Định dạng cho trục y
+          callback: (value: number) => `${value / 1000}K`, 
         },
       },
     },

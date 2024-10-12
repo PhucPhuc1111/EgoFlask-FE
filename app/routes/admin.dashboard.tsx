@@ -1,4 +1,5 @@
 import { useState } from "react";
+import CustomerDisplay from "~/components/Admin/CustomerDisplay";
 import IncomeBarChart from "~/components/Admin/IncomeBarChart";
 import IncomeDisplay from "~/components/Admin/IncomeDisplay";
 import OrderDisplay from "~/components/Admin/OderDisplay,";
@@ -39,6 +40,9 @@ export default function AdminDashboard() {
             </div>
             <div className="p-2">
               <ProductDisplay />
+            </div>
+            <div className="p-2">
+              <CustomerDisplay />
             </div>
           </div>
           </div>
