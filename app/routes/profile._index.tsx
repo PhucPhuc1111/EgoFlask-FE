@@ -1,6 +1,8 @@
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
+import { useMemo } from "react";
 import { ProfileSidebar, SubFooter } from "~/components";
+import { useGetProfile } from "~/data";
 import { authenticator } from "~/services/auth.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -12,6 +14,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 const Profile = () => {
+  const profile = useGetProfile();
+
+  const gender = useMemo(() => {
+    return profile.data?.detail.gender.toLowerCase();
+  }, [profile.data]);
+  
   return (
     <main className="mt-[--m-header-top] ">
       <div className="grid grid-cols-12 w-full space-x-7 pr-8">
@@ -35,11 +43,11 @@ const Profile = () => {
                   </div>
                   <div className=" mt-4 ml-4 space-y-6   text-black">
                     <div className="flex space-x-9">
-                      <span className="">Nguyễn Văn A </span>
+                      <span className="">{[profile.data?.detail.name]}</span>
                      
                     </div>
                     <div className="flex space-x-9">
-                      <span>ng************9@gmail.com</span>
+                      <span>{profile.data?.detail.email || ""}</span>
                       <Link
                         to="/profile/email"
                         className="text-[#0055c3] underline"
@@ -48,7 +56,7 @@ const Profile = () => {
                       </Link>
                     </div>
                     <div className="flex space-x-9">
-                      <span>*********90</span>
+                      <span>{profile.data?.detail.phoneNumber}</span>
                       <Link
                         to="/profile/phone-number"
                         className="text-[#0055c3] underline"
@@ -65,6 +73,7 @@ const Profile = () => {
                           type="radio"
                           value=""
                           name="default-radio"
+                          checked={gender === "male"}
                           className=" cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2  dark:border-[#0055c3] dark:focus:ring-[#0055c3]"
                         />
                         <label htmlFor="default-radio-1" className="ml-2">
@@ -73,11 +82,11 @@ const Profile = () => {
                       </div>
                       <div className="flex items-center">
                         <input
-                          checked
                           id="default-radio-2"
                           type="radio"
-                           value=""
+                          value=""
                           name="default-radio"
+                          checked={gender === "female"}
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2  dark:border-[#0055c3] dark:focus:ring-[#0055c3]"
                         />
                         <label htmlFor="default-radio-2" className="ml-2">
@@ -86,7 +95,7 @@ const Profile = () => {
                       </div>
                       <div className="flex items-center">
                         <input
-                          checked
+                          checked={!gender}
                           id="default-radio-2"
                           type="radio"
                               value=""
@@ -100,7 +109,7 @@ const Profile = () => {
                     </div>
                     
                     <div className="flex space-x-9">
-                      <span>**/10/20**</span>
+                      <span>{profile.data?.detail.birthday}</span>
                       <Link
                         to="/profile/dob"
                         className="text-[#0055c3] underline"
