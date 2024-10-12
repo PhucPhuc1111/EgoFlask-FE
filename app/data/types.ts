@@ -54,3 +54,16 @@ export type Stock = {
   createdByNavigation?: any; // Adjust the type if you have a more specific structure
   product?: any; // Adjust the type if you have a more specific structure
 };
+
+export type Order = {
+  orderId: string;
+  accountId: number;
+  supplierId: number;
+  totalAmount: number;
+  discountAmount?: number | null;
+  finalAmount: number;
+  status: "PENDING" | "DELIVERING" | "COMPLETED";
+  createdAt: string;
+  updatedAt: string;
+  couponId?: string | null;
+};

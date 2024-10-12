@@ -38,10 +38,7 @@ export default function AdminStock() {
 
   const searchOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let search = e.target.value.trim();
-    // setSearchValue(search);
     debouncedSetSearchValue(search);
-    console.log('Search: ', search);
-
   }
 
   const stockData = useMemo(() => {
