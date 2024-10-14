@@ -68,7 +68,13 @@ export const Header = () => {
               className="cursor-pointer w-6 h-6"
               src="/icons/person.png"
               alt="Person Icon"
-              onClick={() => navigate("/profile")}
+              onClick={() => {
+                if (user) {
+                  navigate("/profile");
+                } else {
+                  navigate("/login");
+                }
+              }}
             />
             {user && (
               <div uk-dropdown="">

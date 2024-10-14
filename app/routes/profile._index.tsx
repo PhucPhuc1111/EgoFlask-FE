@@ -17,7 +17,7 @@ const Profile = () => {
   const profile = useGetProfile();
 
   const gender = useMemo(() => {
-    return profile.data?.detail.gender.toLowerCase();
+    return profile.data?.detail?.gender?.toLowerCase();
   }, [profile.data]);
   
   return (
