@@ -67,3 +67,8 @@ export type Order = {
   updatedAt: string;
   couponId?: string | null;
 };
+
+export type ApproveOrder = {
+  supplierId: number;
+  orderId: string;
+}

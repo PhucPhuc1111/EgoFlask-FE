@@ -1,9 +1,11 @@
-import { Image, Pagination, PaginationProps } from "antd";
+import { useQueryClient } from "@tanstack/react-query";
+import { Image, Modal, Pagination, PaginationProps } from "antd";
 import _ from "lodash";
 import { useCallback, useMemo, useState } from "react";
-import { IoSearchOutline } from "react-icons/io5"
-import { useGetProfile } from "~/data";
-import { useGetAllOrder } from "~/data/order";
+import { useForm } from "react-hook-form";
+import { IoCheckmarkCircleOutline, IoSearchOutline } from "react-icons/io5"
+import { ApproveOrder, useGetProfile } from "~/data";
+import { approveOrder, useGetAllOrder } from "~/data/order";
 
 export const handle = {
   hideHeader: true,
@@ -16,6 +18,11 @@ export default function AdminOrder() {
   const [pageSize, setPageSize] = useState<number>(10);
   const profile = useGetProfile();
   const order = useGetAllOrder(profile.data?.user?.token || '');
+  const [open, setOpen] = useState<boolean>(false);
+  const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+  const [modalText, setModalText] = useState<string>('Content of the modal');
+  const queryClient = useQueryClient();
+  const { setValue, getValues } = useForm<ApproveOrder>();
 
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
     setCurrentPage(current);
@@ -100,7 +107,7 @@ export default function AdminOrder() {
   const ProfileCard = ({ email, name }: { name: string, email: string }) => {
     return (
       <div className="flex items-center justify-center gap-2">
-        <Image src="/images/avatar.png" alt="avatar" width={32} height={32} className="w-8 h-8 self-start"/>
+        <Image src="/images/avatar.png" alt="avatar" width={32} height={32} className="w-8 h-8 self-start" />
         <div className="flex flex-col items-start gap-1">
           <span>
             {name}
@@ -112,6 +119,43 @@ export default function AdminOrder() {
       </div>
     )
   }
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleOk = async () => {
+    setConfirmLoading(true);
+    let data: ApproveOrder = {
+      supplierId: profile.data?.detail.id || 0,
+      orderId: getValues('orderId'),
+    }
+    try {
+      let response = await approveOrder(profile.data?.user?.token || '', data);
+      if (response) {
+        setModalText('Duyệt đơn hàng thành công');
+        queryClient.invalidateQueries({
+          queryKey: ['order']
+        })
+        setTimeout(() => {
+          setOpen(false);
+          setConfirmLoading(false);
+        }, 1000);
+      }
+    } catch (error) {
+      setConfirmLoading(false);
+    } finally {
+      setConfirmLoading(false);
+      setOpen(false);
+      queryClient.invalidateQueries({
+        queryKey: ['order']
+      })
+    }
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
 
   return (
     <main className="flex-1 pt-32 pb-10 h-full max-h-screen overflow-auto pl-8">
@@ -135,9 +179,15 @@ export default function AdminOrder() {
               <th className="border border-white w-1/3">Sản phẩm</th>
               <th className="border border-white">Địa chỉ nhận hàng</th>
               <th className="border border-white">Tình trạng</th>
+              <th className="border border-white">Duyệt đơn</th>
             </tr>
           </thead>
           <tbody>
+            {_.isEmpty(filteredOrder) && (
+              <tr className="text-center">
+                <td colSpan={6}>Không có đơn hàng cần duyệt</td>
+              </tr>
+            )}
             {_.map(filteredOrder, (item, index) => (
               <tr key={index} className="text-center">
                 <td className="border-2 border-[#0055C3] border-opacity-70">{item.orderId}</td>
@@ -157,6 +207,18 @@ export default function AdminOrder() {
                     <option selected={item.status === "COMPLETED"} value="COMPLETED">Đã giao hàng</option>
                   </select>
                 </td>
+                <td className="border-2 border-[#0055C3] border-opacity-70">
+                  <div className="flex items-center justify-center">
+                    <IoCheckmarkCircleOutline className="w-6 h-6 cursor-pointer hover:text-green-400" 
+                      onClick={() => {
+                        setModalText(`Đơn hàng ${item.orderId} cần được duyệt bởi nhà cung cấp (Supplier). \n
+                          Bạn có chắc chắn muốn duyệt đơn này không?`);
+                        setValue('orderId', item.orderId);
+                        showModal();
+                      }}
+                    />
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -171,6 +233,16 @@ export default function AdminOrder() {
           total={500}
         />
       </div>
+      <Modal
+        title="Duyệt đơn hàng"
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+        centered
+      >
+        <p>{modalText}</p>
+      </Modal>
     </main>
   )
 }
