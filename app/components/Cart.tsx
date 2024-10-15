@@ -21,7 +21,7 @@ interface CartItem {
 }
 
 interface CartProps {
-  token: string; 
+  // token: string; 
 }
 
 const Cart: React.FC<CartProps> = () => {
@@ -33,7 +33,7 @@ const Cart: React.FC<CartProps> = () => {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await getOrdersInCart(token);
+        const response = await getOrdersInCart(token || '');
         const items = response.map((item: any) => {
           const { orderDetailId, productImageURL, productName, unitPrice, quantity } = item;
           let topImage = '';

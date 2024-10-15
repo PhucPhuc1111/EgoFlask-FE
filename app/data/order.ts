@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { ApproveOrder, Order } from "./types";
+import { AddToCartRQ, ApproveOrder, Order } from "./types";
 
 export async function getAllOrder(token: string): Promise<Order[]> {
   return await request.get(`${BASE_URL}/api/Order`, {
@@ -19,10 +19,44 @@ export async function approveOrder(token: string, body: ApproveOrder): Promise<a
   });
 }
 
+export async function addToCart(token: string, body: AddToCartRQ): Promise<any> {
+  return request.post(`${BASE_URL}/api/Order/add-to-cart`, body, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+}
+
+export async function removeFromCart(token: string, orderDetailId: string) {
+  return request.deleteWithOptions(`${BASE_URL}/api/Order/remove-from-cart/${orderDetailId}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+}
+
+export async function getInCart(token: string): Promise<any> {
+  return request.get(`${BASE_URL}/api/Order/in-cart`, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+}
+
 export const useGetAllOrder = (token: string, config?: UseQueryOptions<Order[]>) => {
   return useQuery({
     queryKey: ["order"],
     queryFn: () => getAllOrder(token),
+    enabled: !!token,
+    ...config,
+  });
+}
+
+export const useGetInCart = (token: string, config?: UseQueryOptions<any>) => {
+  return useQuery({
+    queryKey: ["in-cart"],
+    queryFn: () => getInCart(token),
     enabled: !!token,
     ...config,
   });

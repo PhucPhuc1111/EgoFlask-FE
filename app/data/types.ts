@@ -72,3 +72,25 @@ export type ApproveOrder = {
   supplierId: number;
   orderId: string;
 }
+
+export type AddToCartRQ = {
+  productId: string;
+  quantity: number;
+}
+
+export type Product = {
+  productId: string;
+  productKey: string | null;
+  name: string;
+  isBestSeller: boolean | null;
+  imageUrl: string;
+  description: string;
+  guides: string;
+  price: number;
+  inventory: number;
+  sold: number;
+  engrave: string;
+  isCustom: boolean;
+  createAt: string;
+  status: "ACTIVE" | "INACTIVE";
+};

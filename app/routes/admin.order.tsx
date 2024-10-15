@@ -4,8 +4,7 @@ import _ from "lodash";
 import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoCheckmarkCircleOutline, IoSearchOutline } from "react-icons/io5"
-import { ApproveOrder, useGetProfile } from "~/data";
-import { approveOrder, useGetAllOrder } from "~/data/order";
+import { approveOrder, ApproveOrder, useGetAllOrder, useGetProfile } from "~/data";
 
 export const handle = {
   hideHeader: true,
