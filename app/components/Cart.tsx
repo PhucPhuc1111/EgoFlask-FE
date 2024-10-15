@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { getOrdersInCart, useGetProfile } from "~/data";
+import React, { useState, useEffect, useMemo } from "react";
+import { getOrdersInCart, removeFromCart, useGetInCart, useGetProfile } from "~/data";
 import { Model } from "./Model";
+import _ from "lodash";
+import { useQueryClient } from "@tanstack/react-query";
+import { formatMoney } from "./utils";
 
-const formatMoney = (amount: number) => {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-    minimumFractionDigits: 0,
-  }).format(amount);
-};
-
-interface CartItem {
-  id: string; 
-  topImage: string; 
-  bodyImage: string; 
-  strapImage: string; 
+export interface CartItem {
+  id: string;
+  topImage: string;
+  bodyImage: string;
+  strapImage: string;
   name: string;
   price: number;
   quantity: number;
+  orderDetailId: string;
+  productImageURL: string;
+  productName: string;
+  unitPrice: number;
 }
 
 interface CartProps {
@@ -25,61 +24,92 @@ interface CartProps {
 }
 
 const Cart: React.FC<CartProps> = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  // const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const profile = useGetProfile();
   const token = profile.data?.user?.token;
+  const getInCart = useGetInCart(token || '');
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const response = await getOrdersInCart(token || '');
-        const items = response.map((item: any) => {
-          const { orderDetailId, productImageURL, productName, unitPrice, quantity } = item;
-          let topImage = '';
-          let bodyImage = '';
-          let strapImage = '';
-    
-          if (productImageURL) {
-            const images = splitProductImageURLs(productImageURL);
-            topImage = images.top;
-            bodyImage = images.body;
-            strapImage = images.strap;
-          }
-    
-          return {
-            id: orderDetailId,
-            topImage,
-            bodyImage,
-            strapImage,
-            name: productName,
-            price: unitPrice,
-            quantity,
-          };
-        });
-        setCartItems(items);
-      } catch (error) {
-        console.error("Failed to fetch cart items:", error);
+  const cartItems = useMemo(() => {
+    if (!getInCart.data) {
+      return [];
+    }
+    return _.map(getInCart.data, (item) => {
+      const { orderDetailId, productImageURL, productName, unitPrice, quantity } = item;
+      let topImage = '';
+      let bodyImage = '';
+      let strapImage = '';
+
+      if (productImageURL) {
+        const images = splitProductImageURLs(productImageURL);
+        topImage = images.top;
+        bodyImage = images.body;
+        strapImage = images.strap;
       }
-    };
-    
-    fetchCartItems();
-  }, [token]); 
+
+      return {
+        id: orderDetailId,
+        topImage,
+        bodyImage,
+        strapImage,
+        name: productName,
+        price: unitPrice,
+        quantity,
+      };
+    })
+  }, [getInCart.data]);
+
+  // useEffect(() => {
+  //   const fetchCartItems = async () => {
+  //     try {
+  //       const response = await getOrdersInCart(token || '');
+  //       const items = response.map((item: any) => {
+  //         const { orderDetailId, productImageURL, productName, unitPrice, quantity } = item;
+  //         let topImage = '';
+  //         let bodyImage = '';
+  //         let strapImage = '';
+
+  //         if (productImageURL) {
+  //           const images = splitProductImageURLs(productImageURL);
+  //           topImage = images.top;
+  //           bodyImage = images.body;
+  //           strapImage = images.strap;
+  //         }
+
+  //         return {
+  //           id: orderDetailId,
+  //           topImage,
+  //           bodyImage,
+  //           strapImage,
+  //           name: productName,
+  //           price: unitPrice,
+  //           quantity,
+  //         };
+  //       });
+  //       setCartItems(items);
+  //     } catch (error) {
+  //       console.error("Failed to fetch cart items:", error);
+  //     }
+  //   };
+
+  //   fetchCartItems();
+  // }, [token]);
 
   function splitProductImageURLs(productImageURL: string): { top: string; body: string; strap: string } {
     const parts = productImageURL.split(',');
     if (parts.length !== 3) {
       // If not exactly 3 parts, consider it as a full image
       return {
-        top: productImageURL.trim(),  
-        body: '',  
-        strap: ''   
+        top: productImageURL.trim(),
+        body: '',
+        strap: ''
       };
     }
     return {
-      top: parts[0].trim(),   
-      body: parts[1].trim(),  
-      strap: parts[2].trim()   
+      top: parts[0].trim(),
+      body: parts[1].trim(),
+      strap: parts[2].trim()
     };
   }
 
@@ -92,17 +122,22 @@ const Cart: React.FC<CartProps> = () => {
   };
 
   const handleQuantityChange = (id: string, delta: number) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
-    );
+    // setCartItems((prevItems) =>
+    //   prevItems.map((item) =>
+    //     item.id === id
+    //       ? { ...item, quantity: Math.max(1, item.quantity + delta) }
+    //       : item
+    //   )
+    // );
   };
 
-  const handleRemoveItem = (id: string) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  const handleRemoveItem = async (id: string) => {
+    let response = await removeFromCart(token || '', id);
+    if (response) {
+      queryClient.invalidateQueries({
+        queryKey: ['in-cart']
+      })
+    }
   };
 
   const calculateTotalPrice = () => {
@@ -151,11 +186,11 @@ const Cart: React.FC<CartProps> = () => {
                   className="flex justify-between items-center mb-4"
                 >
                   {item.bodyImage && item.strapImage ? (
-                    <Model 
-                      topImage={item.topImage} 
-                      bodyImage={item.bodyImage} 
-                      strapImage={item.strapImage} 
-                      width="100px" 
+                    <Model
+                      topImage={item.topImage}
+                      bodyImage={item.bodyImage}
+                      strapImage={item.strapImage}
+                      width="100px"
                     />
                   ) : (
                     <img src={item.topImage} alt={item.name} width="100px" />

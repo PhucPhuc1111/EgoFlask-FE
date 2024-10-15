@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { SubFooter } from "~/components";
 import Dropdown from "~/components/Dropdown";
 import Quantity from "~/components/Quantity";
+import { formatMoney } from "~/components/utils";
 import { getProductById, Product } from "~/data";
 
 type LoaderData = {
@@ -56,7 +57,7 @@ const ProductDetail = () => {
 
               <div className="flex space-x-56">
                 <p className="text-lg font-semibold text-black">
-                  Giá: {product.price.toLocaleString()} VND
+                  Giá: {formatMoney(product.price)} VND
                 </p>
                 <p className="text-black font-semibold text-lg">
                   Đã bán: <span>{product.sold}</span>

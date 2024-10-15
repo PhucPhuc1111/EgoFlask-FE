@@ -94,3 +94,12 @@ export type Product = {
   createAt: string;
   status: "ACTIVE" | "INACTIVE";
 };
+
+export type Customization = {
+  topComponentId: string;
+  bodyComponentId: string;
+  strapComponentId?: string | null;
+  engrave?: string | null;
+  engravePosition?: string | null;
+  isGift: boolean;
+};

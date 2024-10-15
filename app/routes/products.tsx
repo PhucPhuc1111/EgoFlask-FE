@@ -1,6 +1,7 @@
 import { Link } from "@remix-run/react";
 import _ from "lodash";
 import { useMemo } from "react";
+import { formatMoney } from "~/components/utils";
 import { useGetAllProducts } from "~/data";
 
 const Products = () => {
@@ -90,7 +91,7 @@ const Products = () => {
                 <p className="font-semibold text-black p-0 m-0">
                   {product.name}
                 </p>
-                <p className="text-black">{product.price.toLocaleString()} VND</p>
+                <p className="text-black">{formatMoney(product.price)} VND</p>
               </div>
               <div className="flex justify-center">
                 <Link to={`/products/${product.productId}`}>
