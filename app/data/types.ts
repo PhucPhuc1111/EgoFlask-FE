@@ -103,3 +103,13 @@ export type Customization = {
   engravePosition?: string | null;
   isGift: boolean;
 };
+
+export type CartRS = {
+  orderDetailId: string;
+  productId: string;
+  productName: string;
+  productImageURL: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+};

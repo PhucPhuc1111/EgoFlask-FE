@@ -1,7 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { AddToCartRQ, ApproveOrder, Order } from "./types";
-import { CartItem } from "~/components/Cart";
+import { AddToCartRQ, ApproveOrder, CartRS, Order } from "./types";
 
 export async function getAllOrder(token: string): Promise<Order[]> {
   return await request.get(`${BASE_URL}/api/Order`, {
@@ -37,7 +36,7 @@ export async function removeFromCart(token: string, orderDetailId: string) {
   })
 }
 
-export async function getInCart(token: string): Promise<CartItem[]> {
+export async function getInCart(token: string): Promise<CartRS[]> {
   return request.get(`${BASE_URL}/api/Order/incart`, {
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -54,7 +53,7 @@ export const useGetAllOrder = (token: string, config?: UseQueryOptions<Order[]>)
   });
 }
 
-export const useGetInCart = (token: string, config?: UseQueryOptions<CartItem[]>) => {
+export const useGetInCart = (token: string, config?: UseQueryOptions<CartRS[]>) => {
   return useQuery({
     queryKey: ["in-cart"],
     queryFn: () => getInCart(token),

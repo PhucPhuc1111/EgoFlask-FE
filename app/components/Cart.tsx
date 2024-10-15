@@ -13,10 +13,6 @@ export interface CartItem {
   name: string;
   price: number;
   quantity: number;
-  orderDetailId: string;
-  productImageURL: string;
-  productName: string;
-  unitPrice: number;
 }
 
 interface CartProps {
@@ -56,6 +52,7 @@ const Cart: React.FC<CartProps> = () => {
         name: productName,
         price: unitPrice,
         quantity,
+        orderDetailId,
       };
     })
   }, [getInCart.data]);
@@ -219,7 +216,7 @@ const Cart: React.FC<CartProps> = () => {
                       </button>
                       <button
                         className="ml-auto bg-red-500 text-white px-2 py-1 rounded"
-                        onClick={() => handleRemoveItem(item.id)}
+                        onClick={() => handleRemoveItem(item.orderDetailId)}
                       >
                         Xóa
                       </button>
