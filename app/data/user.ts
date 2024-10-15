@@ -37,7 +37,6 @@ export const useGetProfile = () => {
     queryFn: getProfile,
   })
 }
-
 export async function forgotPassword(email: string) {
   return await request.post(`${BASE_URL}/api/Account/forgot-password`, {
     email,
@@ -57,6 +56,15 @@ export async function forgotPasswordReset(body: ForgotPasswordForm, token: strin
   }, {
     headers: {
       "Content-Type": "application/json",
+    },
+  });
+}
+
+export async function getOrdersInCart(token: string) {
+  return await request.get(`${BASE_URL}/api/Order/incart`, {
+    headers: {
+      "Content-Type": "application/json",
+      'Authorization': `Bearer ${token}`,
     },
   });
 }

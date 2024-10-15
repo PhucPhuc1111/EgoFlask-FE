@@ -23,20 +23,27 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
 }) => {
   if (!isOpen) return null;
 
+  const handleClickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg p-6 min-h-[650px] min-w-[500px] relative">
-        <h2 className="flex justify-center text-lg font-bold mb-4">Xem trước thiết kế</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" onClick={handleClickOutside}>
+      <div className="bg-white rounded-lg p-6 min-h-[550px] min-w-[500px] relative">
+        <h2 className="flex justify-center text-lg font-bold mb-4">
+          Xem trước thiết kế
+        </h2>
 
-        <Model topImage={top?.imageUrl} bodyImage={body?.imageUrl} strapImage={strap?.imageUrl} engrave={engrave} engravePosition={engravePosition} width="500px" />
-
-
-        <button
-          className="absolute bottom-2 right-2 px-4 py-2 bg-blue-500 text-white rounded-lg"
-          onClick={onClose}
-        >
-          Đóng
-        </button>
+        <Model
+          topImage={top?.imageUrl}
+          bodyImage={body?.imageUrl}
+          strapImage={strap?.imageUrl}
+          engrave={engrave}
+          engravePosition={engravePosition}
+          width="500px"
+        />
       </div>
     </div>
   );

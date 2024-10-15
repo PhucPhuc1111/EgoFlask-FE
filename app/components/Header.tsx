@@ -84,7 +84,7 @@ export const Header = () => {
                 </Link>
               </div>
             )}
-            <Cart />
+            <Cart/>
           </div>
         </div>
       </div>

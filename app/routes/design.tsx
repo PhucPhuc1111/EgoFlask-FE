@@ -5,6 +5,7 @@ import { SubFooter } from "~/components";
 import { BottleComponent } from "~/data/types";
 import { ReviewModal } from "~/components";
 import { useGetComponentList } from "~/data";
+import { useGetProfile } from "~/data";
 
 const options = [
   {
@@ -18,7 +19,7 @@ const options = [
   {
     name: "Quai bình",
     value: "strap",
-  },
+  }
 ];
 
 export default function Design() {
@@ -29,6 +30,7 @@ export default function Design() {
   const [engrave, setEngrave] = useState<string>(""); // Biến để lưu nội dung khắc
   const [engravePosition, setEngravePosition] = useState<string>(""); 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // state để điều khiển mở/đóng modal
+  const [isGift, setisGift] = useState(false);
   const component = useGetComponentList(active);
   const componentList = useMemo(() => {
     return _(component.data)
@@ -36,8 +38,10 @@ export default function Design() {
       .value();
   }, [component.data]);
 
+  const profile = useGetProfile();
+
   const handleOptionClick = (value: string) => {
-    setActive(value); // cập nhật active khi người dùng chọn component
+    setActive(value); 
   };
 
   const handleEngraveChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,9 +51,6 @@ export default function Design() {
   const handleEngravePositionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEngravePosition(event.target.value);
   };
-  
-
-  
 
   const handleColorSelect = (optionValue: string, component: BottleComponent) => {
     if (optionValue === "top") {
@@ -62,22 +63,22 @@ export default function Design() {
   };
 
   const handleReview = () => {
-    // Mở ReviewModal khi người dùng click nút Review
     setIsReviewModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsReviewModalOpen(false); // Đóng modal khi người dùng click Đóng
+    setIsReviewModalOpen(false);
   };
 
   const handleReset = () => {
     setTop(null);
     setBody(null);
     setStrap(null);
+    setEngrave("");
+    setEngravePosition("");
   };
 
-  // Hàm xử lý thêm vào giỏ hàng
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!top || !body) {
       if (!top && !body) {
         alert("Xin lỗi, vui lòng chọn cả nắp bình và thân bình.");
@@ -87,9 +88,59 @@ export default function Design() {
         alert("Xin lỗi, vui lòng chọn thân bình.");
       }
     } else {
-      alert("Thêm vào giỏ hàng thành công!");
+      try {
+        const response = await fetch('https://egoflask-be.azurewebsites.net/api/CustomProduct', {
+          method: 'POST',
+          headers: {
+            'Accept': '*/*',
+            'Content-Type': 'application/json-patch+json',
+          },
+          body: JSON.stringify({
+            topComponentId: top.componentId,
+            bodyComponentId: body.componentId,
+            strapComponentId: strap ? strap.componentId : null,
+            engrave: engrave ? engrave : null,
+            engravePosition: engravePosition ? engravePosition : null,
+            isGift: isGift
+          }),
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to add product to cart');
+        }
+  
+        const data = await response.json();
+        console.log('Product added to custom product:', data);
+  
+        const addToCartResponse = await fetch('https://egoflask-be.azurewebsites.net/api/Order/add-to-cart', {
+          method: 'POST',
+          headers: {
+            'Accept': '*/*',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${profile.data?.user?.token}`,
+          },
+          body: JSON.stringify({
+            productId: data.productId, 
+            quantity: 1 
+          }),
+        });
+  
+        if (!addToCartResponse.ok) {
+          throw new Error('Failed to add to cart');
+        }
+  
+        const cartData = await addToCartResponse.json();
+        console.log('Product added to cart:', cartData);
+        alert("Thêm vào giỏ hàng thành công");
+  
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Đã xảy ra lỗi khi thêm vào giỏ hàng. Vui lòng thử lại sau.");
+      }
     }
   };
+  
+
 
   return (
     <main className="lg:mt-[--m-header-top] xl:px-8 pb-[--m-footer-bottom]">
@@ -129,7 +180,7 @@ export default function Design() {
                   <div className="flex items-center gap-2 cursor-pointer">
                     <IoAddCircleSharp className="w-6 h-6 text-[#0055C3]" />
                     <span className="text-base text-black">Khắc laser</span>
-                    <span className="ml-auto text-sm text-black">+ ? VND</span>
+                    <span className="ml-auto text-sm text-black">+ 50.000 VND</span>
                   </div>
                 </div>
 
@@ -173,14 +224,14 @@ export default function Design() {
                     className="w-full mt-1 border border-[#E6E6E0] p-2"
                     maxLength="8"
                     value={engrave}
-                    onChange={handleEngraveChange} // cập nhật nội dung khắc
+                    onChange={handleEngraveChange}
                   />
                 </div>
 
 
                 <div className="border-b-2 border-[#E6E6E0] w-full py-2">
                   <div className="flex items-center gap-2 cursor-pointer">
-                    <input type="radio" name="option" className="mr-2" />
+                    <input type="radio" name="option" className="mr-2"  onChange={() => setisGift(true)}/>
                     <span className="text-base text-black">Gói quà</span>
                   </div>
                 </div>

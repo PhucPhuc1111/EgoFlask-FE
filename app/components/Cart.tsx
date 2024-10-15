@@ -1,8 +1,7 @@
-// src/components/Cart.js
+import React, { useState, useEffect } from "react";
+import { getOrdersInCart, useGetProfile } from "~/data";
+import { Model } from "./Model";
 
-import React, { useState } from "react";
-
-// Hàm formatMoney để định dạng số tiền theo quy tắc của tiền Việt Nam
 const formatMoney = (amount: number) => {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -11,32 +10,78 @@ const formatMoney = (amount: number) => {
   }).format(amount);
 };
 
-const Cart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      img: "/images/products/bottle-1.png",
-      name: "Sản phẩm 1",
-      price: 200000,
-      quantity: 1,
-    },
-    {
-      id: 2,
-      img: "/images/products/bottle-2.png",
-      name: "Sản phẩm 2",
-      price: 150000,
-      quantity: 2,
-    },
-    {
-      id: 3,
-      img: "/images/products/bottle-3.png",
-      name: "Sản phẩm 3",
-      price: 300000,
-      quantity: 1,
-    },
-  ]);
+interface CartItem {
+  id: string; 
+  topImage: string; 
+  bodyImage: string; 
+  strapImage: string; 
+  name: string;
+  price: number;
+  quantity: number;
+}
 
+interface CartProps {
+  token: string; 
+}
+
+const Cart: React.FC<CartProps> = () => {
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const profile = useGetProfile();
+  const token = profile.data?.user?.token;
+
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await getOrdersInCart(token);
+        const items = response.map((item: any) => {
+          const { orderDetailId, productImageURL, productName, unitPrice, quantity } = item;
+          let topImage = '';
+          let bodyImage = '';
+          let strapImage = '';
+    
+          if (productImageURL) {
+            const images = splitProductImageURLs(productImageURL);
+            topImage = images.top;
+            bodyImage = images.body;
+            strapImage = images.strap;
+          }
+    
+          return {
+            id: orderDetailId,
+            topImage,
+            bodyImage,
+            strapImage,
+            name: productName,
+            price: unitPrice,
+            quantity,
+          };
+        });
+        setCartItems(items);
+      } catch (error) {
+        console.error("Failed to fetch cart items:", error);
+      }
+    };
+    
+    fetchCartItems();
+  }, [token]); 
+
+  function splitProductImageURLs(productImageURL: string): { top: string; body: string; strap: string } {
+    const parts = productImageURL.split(',');
+    if (parts.length !== 3) {
+      // If not exactly 3 parts, consider it as a full image
+      return {
+        top: productImageURL.trim(),  
+        body: '',  
+        strap: ''   
+      };
+    }
+    return {
+      top: parts[0].trim(),   
+      body: parts[1].trim(),  
+      strap: parts[2].trim()   
+    };
+  }
 
   const handleCartClick = () => {
     setIsCartOpen((prevState) => !prevState);
@@ -46,7 +91,7 @@ const Cart = () => {
     setIsCartOpen(false);
   };
 
-  const handleQuantityChange = (id: number, delta: number) => {
+  const handleQuantityChange = (id: string, delta: number) => {
     setCartItems((prevItems) =>
       prevItems.map((item) =>
         item.id === id
@@ -56,7 +101,7 @@ const Cart = () => {
     );
   };
 
-  const handleRemoveItem = (id: number) => {
+  const handleRemoveItem = (id: string) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
@@ -105,11 +150,16 @@ const Cart = () => {
                   key={item.id}
                   className="flex justify-between items-center mb-4"
                 >
-                  <img
-                    src={item.img}
-                    alt={item.name}
-                    className="w-[74px] h-[142px]"
-                  />
+                  {item.bodyImage && item.strapImage ? (
+                    <Model 
+                      topImage={item.topImage} 
+                      bodyImage={item.bodyImage} 
+                      strapImage={item.strapImage} 
+                      width="100px" 
+                    />
+                  ) : (
+                    <img src={item.topImage} alt={item.name} width="100px" />
+                  )}
                   <div className="flex flex-col flex-1 ml-4">
                     <div className="flex justify-between items-center w-full">
                       <p className="font-light">
