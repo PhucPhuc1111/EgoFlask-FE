@@ -5,57 +5,7 @@ import { formatMoney } from "~/components/utils";
 import { useGetAllProducts } from "~/data";
 
 const Products = () => {
-  // const productList = [
-  //   {
-  //     id: 1,
-  //     name: "Graceful",
-  //     img: "/images/products/bottle-1.png",
-  //     price: "100.000",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Gracious",
-  //     img: "/images/products/bottle-2.png",
-  //     price: "150.000",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Creative",
-  //     img: "/images/products/bottle-3.png",
-  //     price: "200.000",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Dynamic",
-  //     img: "/images/products/bottle-4.png",
-  //     price: "250.000",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Rational",
-  //     img: "/images/products/bottle-5.png",
-  //     price: "300.000",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Dependable",
-  //     img: "/images/products/bottle-6.png",
-  //     price: "350.000",
-  //   },
-  //   {
-  //     id: 7,
-  //     name: "Optimistic",
-  //     img: "/images/products/bottle-7.png",
-  //     price: "400.000",
-  //   },
-  //   {
-  //     id: 8,
-  //     name: "Elegant",
-  //     img: "/images/products/bottle-8.png",
-  //     price: "450.000",
-  //   },
-  // ];
-
+ 
   const products = useGetAllProducts(1, 10, "");
 
   const productList = useMemo(() => {
