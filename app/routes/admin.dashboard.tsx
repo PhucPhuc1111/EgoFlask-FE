@@ -4,9 +4,10 @@ import IncomeBarChart from "~/components/Admin/IncomeBarChart";
 import IncomeDisplay from "~/components/Admin/IncomeDisplay";
 import OrderDisplay from "~/components/Admin/OderDisplay,";
 import ProductDisplay from "~/components/Admin/ProductDisplay";
-import UserDisplay from "~/components/Admin/UserDisplay";
+import UserDisplay from "~/components/Admin/CommissionDisplay";
 import WebsiteDisplay from "~/components/Admin/WebsiteDisplay";
 import WebsiteVisitsChart from "~/components/Admin/WebsiteVisitsChart";
+import CommissionDisplay from "~/components/Admin/CommissionDisplay";
 
 export const handle = {
   hideHeader: true,
@@ -36,7 +37,7 @@ export default function AdminDashboard() {
 
           <div>
           <div className="p-2">
-              <UserDisplay />
+              <CommissionDisplay />
             </div>
             <div className="p-2">
               <ProductDisplay />
