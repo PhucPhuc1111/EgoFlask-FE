@@ -6,8 +6,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 let schema = object({
   name: string().required("Vui lòng chọn tên"),
   imageUrl: string().required(),
-  description: string().required("Vui lòng chọn mô tả"),
-  guides: string().required("Vui lòng nhập hướng dẫn sử dụng"),
+  description: string(),
+  guides: string(),
   price: number().required(),
   inventory: number().required("Vui lòng nhập số lượng"),
   engrave: string(),
@@ -24,16 +24,7 @@ const handleUpload = (info: any) => {
     console.log("File uploaded successfully:", info.file);
   }
 };
-const handleUploadDescription = (info: any) => {
-  if (info.file.status === "done") {
-    console.log("File uploaded successfully:", info.file);
-  }
-};
-const handleUploadGuide = (info: any) => {
-  if (info.file.status === "done") {
-    console.log("File uploaded successfully:", info.file);
-  }
-};
+
 const AddProductModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -97,24 +88,7 @@ const AddProductModal = () => {
                 </div>
               </div>
 
-              <p>Mô tả</p>
-
-              <Upload
-                accept="image/*"
-                beforeUpload={() => false}
-                onChange={handleUploadDescription}
-              >
-                <Button className="bg-[#0055C3] text-white ">Chọn ảnh</Button>
-              </Upload>
-              <p>Hướng dẫn bảo quản</p>
-
-              <Upload
-                accept="image/*"
-                beforeUpload={() => false}
-                onChange={handleUploadGuide}
-              >
-                <Button className="bg-[#0055C3] text-white">Chọn ảnh</Button>
-              </Upload>
+             
             </div>
           </div>
           <div className="w-1/4 p-4">

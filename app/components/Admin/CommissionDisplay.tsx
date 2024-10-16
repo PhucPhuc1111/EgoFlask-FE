@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 
-interface UserData {
-  user: number;
+interface CommissionData {
+  commission: number;
   lastPeriod: number; 
 }
 
-const userData: { [key: string]: UserData & { lastPeriod: number } } = {
-  "Tháng này": { user: 153826, lastPeriod: 100784 }, 
-  "Năm này": { user: 1205478392, lastPeriod: 1152259311 },
-  "Ngày này": { user: 25478392, lastPeriod: 25725931 }, 
+const commissionData: { [key: string]: CommissionData & { lastPeriod: number } } = {
+  "Tháng này": { commission: 153826, lastPeriod: 100784 }, 
+  "Năm này": { commission: 1205478392, lastPeriod: 1152259311 },
+  "Ngày này": { commission: 25478392, lastPeriod: 25725931 }, 
 };
 
-const UserDisplay: React.FC = () => {
+const CommissionDisplay: React.FC = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState<string>("Tháng này");
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -21,7 +21,7 @@ const UserDisplay: React.FC = () => {
   return (
     <div className="p-4 font-sans border-2 rounded-2xl bg-[#f7f7f7] space-y-3 w-72 h-40 ">
       <div className="flex items-center justify-between ">
-        <div className=" text-black font-semibold">Người dùng</div>
+        <div className=" text-black font-semibold">Hoa hồng nhận được</div>
         <select
           value={selectedTimeframe}
           onChange={handleChange}
@@ -35,17 +35,17 @@ const UserDisplay: React.FC = () => {
       </div>
 
       <div className="text-3xl text-blue-600 font-bold">
-        {userData[selectedTimeframe].user.toLocaleString()}
+        {commissionData[selectedTimeframe].commission.toLocaleString()}
       </div>
       <div className="text-black">
         {selectedTimeframe === "Tháng này"
-          ? `Tháng trước: ${userData["Tháng này"].lastPeriod.toLocaleString()} `
+          ? `Tháng trước: ${commissionData["Tháng này"].lastPeriod.toLocaleString()} % `
           : selectedTimeframe === "Năm này"
-          ? `Năm trước: ${userData["Năm này"].lastPeriod.toLocaleString()} `
-          : `Hôm qua: ${userData["Ngày này"].lastPeriod.toLocaleString()} `}
+          ? `Năm trước: ${commissionData["Năm này"].lastPeriod.toLocaleString()} % `
+          : `Hôm qua: ${commissionData["Ngày này"].lastPeriod.toLocaleString()} % `}
       </div>
     </div>
   );
 };
 
-export default UserDisplay;
+export default CommissionDisplay;

@@ -10,16 +10,7 @@ const UpdateProductModal = () => {
         console.log("File uploaded successfully:", info.file);
       }
     };
-    const handleUploadDescription = (info: any) => {
-      if (info.file.status === "done") {
-        console.log("File uploaded successfully:", info.file);
-      }
-    };
-    const handleUploadGuide = (info: any) => {
-      if (info.file.status === "done") {
-        console.log("File uploaded successfully:", info.file);
-      }
-    };
+ 
     const showModal = () => {
       setIsModalOpen(true);
     };
@@ -75,24 +66,7 @@ const UpdateProductModal = () => {
                 </div>
               </div>
 
-              <p>Mô tả</p>
-
-              <Upload
-                accept="image/*"
-                beforeUpload={() => false}
-                onChange={handleUploadDescription}
-              >
-                <Button className="bg-[#0055C3] text-white ">Chọn ảnh</Button>
-              </Upload>
-              <p>Hướng dẫn bảo quản</p>
-
-              <Upload
-                accept="image/*"
-                beforeUpload={() => false}
-                onChange={handleUploadGuide}
-              >
-                <Button className="bg-[#0055C3] text-white">Chọn ảnh</Button>
-              </Upload>
+             
             </div>
           </div>
           <div className="w-1/4 p-4">

@@ -113,22 +113,15 @@ export default function AdminCategory() {
                       />
                     </div>
                   </td>
-                  <td className="border-2 border-[#0055C3] p-6 ">
+                  <td className="border-2 border-[#0055C3] px-3">
                     <div className="flex justify-center bg-[#dbdbcf] w-full">
-                      <Image
-                        src={product.description}
-                        
-                        
-                      />
+                    <Image src="/images/description.png" alt="" />
+                     
                     </div>
                   </td>
-                  <td className="border-2 border-[#0055C3] p-6 ">
+                  <td className="border-2 border-[#0055C3] px-3 ">
                     <div className="flex justify-center bg-[#dbdbcf] w-full">
-                      <Image
-                        src={product.guides}
-                        
-                        
-                      />
+                      <Image src="/images/description.png" alt="" />
                     </div>
                   </td>
                   <td className="border-2 border-[#0055C3] p-6">
