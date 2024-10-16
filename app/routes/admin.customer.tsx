@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useGetProfile, Account, useGetAllAccount } from "~/data";
+import React, { useMemo, useState } from "react";
+import { useGetProfile, useGetAllAccount } from "~/data";
 import { Link } from "@remix-run/react";
 import { format } from "date-fns";
 import { Pagination, PaginationProps } from 'antd';
 import _ from "lodash";
+import { IoSearchOutline } from "react-icons/io5";
 
 export const handle = {
   hideHeader: true,
@@ -12,93 +13,41 @@ export const handle = {
 
 export default function AdminCustomer() {
   const { data: profile, isLoading: profileLoading, isError } = useGetProfile();
-  // const [customerList, setCustomerList] = useState<Account[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(10);
+  const [searchTerm, setSearchTerm] = useState(""); 
   const [loading, setLoading] = useState(false);
+  
   const accounts = useGetAllAccount(profile?.user?.token || "", currentPage, pageSize);
+
 
   const accountData = useMemo(() => {
     if (!accounts.data) return [];
+    
+    
     return _(accounts.data)
       .orderBy(it => it.createAt, 'desc')
+      .filter(customer => 
+        customer.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        customer.email.toLowerCase().includes(searchTerm.toLowerCase())
+      )
       .value();
-  }, [accounts.data, pageSize, currentPage]);
+  }, [accounts.data, pageSize, currentPage, searchTerm]); 
 
-  // useEffect(() => {
-  //   const fetchAccounts = async () => {
-  //     if (profile?.user?.token) {
-  //       setLoading(true);
-  //       try {
-  //         const accounts = await getAllAccount(profile.user.token, currentPage, accountsPerPage);
-  //         setCustomerList(accounts);
-  //       } catch (error) {
-  //         console.error("Failed to fetch accounts:", error);
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     } else {
-  //       console.warn("No token available.");
-  //     }
-  //   };
-
-  //   if (!profileLoading && !isError) {
-  //     fetchAccounts();
-  //   }
-  // }, [profile, profileLoading, isError, currentPage]);
-
-  // const handlePageChange = (newPage: number) => {
-  //   if (newPage > 0 && newPage <= totalPages) {
-  //     setCurrentPage(newPage);
-  //   }
-  // };
-
-  // const renderPageNumbers = () => {
-  //   const pageNumbers = [];
-  //   const startPage = Math.max(1, currentPage - 2);
-  //   const endPage = Math.min(totalPages, currentPage + 2);
-
-  //   if (startPage > 1) {
-  //     pageNumbers.push(1);
-  //     if (startPage > 2) pageNumbers.push("...");
-  //   }
-
-  //   for (let i = startPage; i <= endPage; i++) {
-  //     pageNumbers.push(i);
-  //   }
-
-  //   if (endPage < totalPages) {
-  //     if (endPage < totalPages - 1) pageNumbers.push("...");
-  //     pageNumbers.push(totalPages);
-  //   }
-
-  //   return pageNumbers.map((number, index) => (
-  //     <button
-  //       key={index}
-  //       onClick={() => handlePageChange(number)}
-  //       className={`mx-1 px-2 py-1 w-8 h-8 border rounded-full ${currentPage === number ? "bg-[#0055C3] text-white" : "text-[#0055C3]"}`}
-  //       disabled={typeof number === "string"}
-  //     >
-  //       {number}
-  //     </button>
-  //   ));
-  // };
-
-  // if (profileLoading) {
-  //   return <div> <ClipLoader color="#0055C3" loading={loading} size={50} />
-  //       <p className="text-[#0055C3]">Loading...</p></div>;
-  // }
-
-
+ 
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
     setCurrentPage(current);
     setPageSize(pageSize);
   };
 
   const onChange: PaginationProps['onChange'] = (pageNumber, pageSize) => {
-    console.log('Page: ', pageNumber);
     setCurrentPage(pageNumber);
     setPageSize(pageSize);
+  };
+
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value); 
   };
 
   if (isError) {
@@ -107,7 +56,24 @@ export default function AdminCustomer() {
 
   return (
     <main className="flex-1 pt-32 pb-10 h-full max-h-screen overflow-auto px-8">
-      <div className="my-9">
+      <div className="flex flex-row items-center justify-between">
+        <div>
+          {accounts.data?.length.toLocaleString() || 0} khách hàng
+        </div>
+        <div className="relative">
+          <IoSearchOutline className="absolute top-4 left-2 w-6 h-6" />
+          <input 
+            type="search" 
+            className="rounded-md w-[463px] h-[57px] placeholder:pl-0 pl-10" 
+            placeholder="Tìm kiếm" 
+            name="Search"
+            value={searchTerm} 
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
+      
+      <div className="my-2">
         <table className="w-full border-2">
           <thead className="bg-[#0055C3] text-white text-center border-2">
             <tr>
@@ -122,7 +88,6 @@ export default function AdminCustomer() {
             {loading ? (
               <tr>
                 <td colSpan={5} className="text-center py-3">
-                  {/* <ClipLoader color="#0055C3" loading={loading} size={50} /> */}
                   <p className="text-[#0055C3]">Loading...</p>
                 </td>
               </tr>
@@ -146,16 +111,6 @@ export default function AdminCustomer() {
           </tbody>
         </table>
 
-        {/* Phân trang */}
-        {/* <div className="flex justify-center mt-4">
-          <button className="text-[#0055C3]" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-            &lt;
-          </button>
-          {renderPageNumbers()}
-          <button className="text-[#0055C3]" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-            &gt;
-          </button>
-        </div> */}
         <Pagination
           className="mt-4"
           align="center"
@@ -163,7 +118,7 @@ export default function AdminCustomer() {
           onChange={onChange}
           onShowSizeChange={onShowSizeChange}
           defaultCurrent={currentPage}
-          total={500}
+          total={500} 
         />
       </div>
     </main>
