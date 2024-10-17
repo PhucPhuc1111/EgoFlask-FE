@@ -24,59 +24,57 @@ const Contact = () => {
               <p>(+84)932.898.536</p>
             </div>
           </div>
-         
+
           <div className="p-4 space-y-3 w-[400px]">
             <div className="space-y-4">
 
-           
-       <div className="w-full">
-       <Link to="https://www.facebook.com/profile.php?id=61566267320324">
-      
-          <div className=" p-2 flex justify-between border-4 rounded-2xl border-[#0055C3] text-white bg-[#0055C3]">
-           
-             <div>
-                <p>Nhắn tin qua </p>
-                <p className="font-semibold">Fanpage</p>
-              </div>
-              
-              <div>
-                <img className="w-12" src="/images/facebook.png" alt="" />
-              </div>
-            </div>
-            </Link>
-           </div>
-           <div className="w-full">
-       <Link to="https://www.instagram.com/egoflaskvietnam/" >
-            <div className=" p-2 flex justify-between border-4 rounded-2xl border-[#0055C3] text-white bg-[#0055C3]">
-            
-              <div>
-                <p>Nhắn tin qua </p>
-                <p className="font-semibold">Instagram</p>
-              </div>
-            
-              <div>
-              
-                <img className="w-12" src="/images/instagram.png" alt="" />
-              </div>
-            </div>
-            </Link>
-    </div>
-            <div>
 
-            
-            <div className=" p-2 flex justify-between border-4 rounded-2xl border-[#0055C3] text-white bg-[#0055C3]">
-              <div>
-                <p>Hoặc gọi đến số Hotline</p>
-                <p className="font-semibold">(+84)932.898.537</p>
-              </div>
+              <div className="w-full">
+                <Link target="_blank" to="https://www.facebook.com/profile.php?id=61566267320324">
 
-              <div>
-                <img className="w-12" src="/images/call.png" alt="" />
+                  <div className=" p-2 flex justify-between border-4 rounded-2xl border-[#0055C3] text-white bg-[#0055C3]">
+
+                    <div>
+                      <p>Nhắn tin qua </p>
+                      <p className="font-semibold">Fanpage</p>
+                    </div>
+
+                    <div>
+                      <img className="w-12" src="/images/facebook.png" alt="" />
+                    </div>
+                  </div>
+                </Link>
               </div>
-            </div>
+              <div className="w-full">
+                <Link target="_blank" to="https://www.instagram.com/egoflaskvietnam/" >
+                  <div className=" p-2 flex justify-between border-4 rounded-2xl border-[#0055C3] text-white bg-[#0055C3]">
+
+                    <div>
+                      <p>Nhắn tin qua </p>
+                      <p className="font-semibold">Instagram</p>
+                    </div>
+
+                    <div>
+
+                      <img className="w-12" src="/images/instagram.png" alt="" />
+                    </div>
+                  </div>
+                </Link>
+              </div>
+              <div>
+                <div className=" p-2 flex justify-between border-4 rounded-2xl border-[#0055C3] text-white bg-[#0055C3]">
+                  <div>
+                    <p>Hoặc gọi đến số Hotline</p>
+                    <p className="font-semibold">(+84)932.898.537</p>
+                  </div>
+
+                  <div>
+                    <img className="w-12" src="/images/call.png" alt="" />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-           </div>
         </div>
         <div className="w-5/12 ml-7  ">
           <div className="mt-[130px] flex justify-center  ">

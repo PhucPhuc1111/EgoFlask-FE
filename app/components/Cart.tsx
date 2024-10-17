@@ -141,7 +141,7 @@ const Cart: React.FC<CartProps> = () => {
   const { itemTotal, total, shippingFee } = calculateTotalPrice();
 
   return (
-    <div className="relative">
+    <div className="relative z-[9999]">
       <img
         className="cursor-pointer w-6 h-6"
         src="/icons/shopping-cart.png"
