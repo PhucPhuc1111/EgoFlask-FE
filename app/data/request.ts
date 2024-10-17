@@ -1,6 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
 
 export const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || ''
+export const GOOGLE_CLIENT_SECRET = import.meta.env.VITE_GOOGLE_CLIENT_SECRET || ''
+export const GOOGLE_REDIRECT_URI = import.meta.env.VITE_GOOGLE_REDIRECT_URI || ''
 
 export function setTokenHeader(token: string) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;

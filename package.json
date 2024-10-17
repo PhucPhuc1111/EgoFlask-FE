@@ -29,6 +29,7 @@
     "react-icons": "^5.2.1",
     "remix-auth": "^3.7.0",
     "remix-auth-form": "^1.5.0",
+    "remix-auth-google": "^2.0.0",
     "remix-hook-form": "^5.0.4",
     "yup": "^1.4.0"
   },

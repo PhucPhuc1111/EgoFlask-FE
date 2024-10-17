@@ -3,7 +3,7 @@ import { ActionFunctionArgs, json } from "@remix-run/node"
 import { Form, Link, useLocation, useNavigate } from "@remix-run/react"
 import { useQueryClient } from "@tanstack/react-query"
 import { FormEvent, useEffect, useState } from "react"
-import { IoEye, IoEyeOff } from "react-icons/io5"
+import { IoEye, IoEyeOff, IoLogoGoogle } from "react-icons/io5"
 import { AuthorizationError } from "remix-auth"
 import { useRemixForm } from "remix-hook-form"
 import { InferType, object, string } from "yup"
@@ -102,6 +102,15 @@ export default function Login() {
             </span>
           </button>
         </Form>
+        <p className="text-[#393334] text-base">
+          Hoặc đăng nhập bằng
+        </p>
+        <Link to={'/google'} className="bg-red-500 text-white hover:no-underline hover:text-white hover:bg-red-600 flex items-center justify-center gap-2 p-4 rounded-md">
+          <IoLogoGoogle />
+          <span>
+            Đăng nhập bằng Google
+          </span>
+        </Link>
         <Link to={'/forgot-password'} className="text-[#0055C3] text-base uppercase font-semibold hover:no-underline">
           Quên mật khẩu?
         </Link>
