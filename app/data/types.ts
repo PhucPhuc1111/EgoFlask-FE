@@ -11,6 +11,7 @@ export type User = {
   gender: string;
   birthday: string;
   phoneNumber: string;
+  address?: string;
 }
 
 export type Profile = {
@@ -115,7 +116,131 @@ export type CartRS = {
 };
 
 export type CheckoutRQ = {
-  paymentMethod: 'CashOnDelivery' | 'VNPay' | 'PayOS';
+  paymentMethod: string;
   returnUrl: string;
   cancelUrl: string;
 }
+
+export type PaymentUrl = {
+  bin: string;
+  accountNumber: string;
+  amount: number;
+  description: string;
+  orderCode: number;
+  currency: string;
+  paymentLinkId: string;
+  status: string;
+  expiredAt?: string | null;
+  checkoutUrl: string;
+  qrCode: string;
+};
+
+export type PaymentResponse = {
+  status: string;
+  url: PaymentUrl;
+  message: string;
+};
+
+export type WhiteListClient = {
+  From: any[];
+  To: any[];
+  Return: any[];
+};
+
+export type WhiteListDistrict = {
+  From: any | null;
+  To: any | null;
+};
+
+export type District = {
+  DistrictID: number;
+  ProvinceID: number;
+  DistrictName: string;
+  Type: number;
+  SupportType: number;
+  NameExtension: string[];
+  CanUpdateCOD: boolean;
+  Status: number;
+  PickType: number;
+  DeliverType: number;
+  WhiteListClient: WhiteListClient;
+  WhiteListDistrict: WhiteListDistrict;
+  ReasonCode: string;
+  ReasonMessage: string;
+  OnDates: any | null;
+  CreatedIP: string;
+  CreatedEmployee: number;
+  CreatedSource: string;
+  CreatedDate: string;
+  UpdatedIP: string;
+  UpdatedEmployee: number;
+  UpdatedSource: string;
+  UpdatedDate: string;
+};
+
+export type DistrictResponse = {
+  code: number;
+  message: string;
+  data: District[];
+};
+
+export type WhiteListWard = {
+  From: any | null;
+  To: any | null;
+};
+
+export type Ward = {
+  WardCode: string;
+  DistrictID: number;
+  WardName: string;
+  NameExtension: string[];
+  IsEnable: number;
+  CanUpdateCOD: boolean;
+  UpdatedBy: number;
+  CreatedAt: string;
+  UpdatedAt: string;
+  SupportType: number;
+  PickType: number;
+  DeliverType: number;
+  WhiteListClient: WhiteListClient;
+  WhiteListWard: WhiteListWard;
+  Status: number;
+  ReasonCode: string;
+  ReasonMessage: string;
+  OnDates: any | null;
+  UpdatedEmployee: number;
+  UpdatedDate: string;
+};
+
+export type WardResponse = {
+  code: number;
+  message: string;
+  data: Ward[];
+};
+
+export type Province = {
+  ProvinceID: number;
+  ProvinceName: string;
+  CountryID: number;
+  Code: string;
+  NameExtension: string[];
+  IsEnable: number;
+  RegionID: number;
+  RegionCPN: number;
+  UpdatedBy: number;
+  CreatedAt: string;
+  UpdatedAt: string;
+  AreaID: number;
+  CanUpdateCOD: boolean;
+  Status: number;
+  UpdatedIP: string;
+  UpdatedEmployee: number;
+  UpdatedSource: string;
+  UpdatedDate: string;
+};
+
+export type ProvinceResponse = {
+  code: number;
+  message: string;
+  data: Province[];
+};

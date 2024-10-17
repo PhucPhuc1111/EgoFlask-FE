@@ -3,12 +3,12 @@ import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { boolean, InferType, object, string } from "yup";
 import { Model } from "~/components";
 import { formatMoney, splitProductImageURLs } from "~/components/utils";
-import { removeFromCart, useGetInCart, useGetProfile } from "~/data";
+import { checkout, removeFromCart, useGetDistricts, useGetInCart, useGetProfile, useGetProvinces, useGetWards } from "~/data";
 import { authenticator } from "~/services/auth.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -23,29 +23,41 @@ const schema = object({
   name: string().required("Tên là bắt buộc"),
   phone: string().required("Số điện thoại là bắt buộc"),
   email: string().email("Email không hợp lệ").required("Email là bắt buộc"),
-  city: string().required("Thành phố là bắt buộc"),
+  province: string().required("Thành phố là bắt buộc"),
   district: string().required("Quận là bắt buộc"),
   ward: string().required("Phường là bắt buộc"),
   street: string().required("Địa chỉ là bắt buộc"),
   deliveryToDifferentAddress: boolean(),
-  receiverName: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
-    deliveryToDifferentAddress ? schema.required("Họ và tên người nhận là bắt buộc") : schema
-  ),
-  receiverPhone: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
-    deliveryToDifferentAddress ? schema.required("Số điện thoại người nhận là bắt buộc") : schema
-  ),
-  receiverCity: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
-    deliveryToDifferentAddress ? schema.required("Thành phố là bắt buộc") : schema
-  ),
-  receiverDistrict: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
-    deliveryToDifferentAddress ? schema.required("Quận là bắt buộc") : schema
-  ),
-  receiverWard: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
-    deliveryToDifferentAddress ? schema.required("Phường là bắt buộc") : schema
-  ),
-  receiverStreet: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
-    deliveryToDifferentAddress ? schema.required("Địa chỉ là bắt buộc") : schema
-  ),
+  receiverName: string().when("deliveryToDifferentAddress", {
+    is: true,
+    then: schema => schema.required("Họ và tên người nhận là bắt buộc"),
+    otherwise: schema => schema.notRequired()
+  }),
+  receiverPhone: string().when("deliveryToDifferentAddress", {
+    is: true,
+    then: schema => schema.required("Số điện thoại người nhận là bắt buộc"),
+    otherwise: schema => schema.notRequired()
+  }),
+  receiverProvince: string().when("deliveryToDifferentAddress", {
+    is: true,
+    then: schema => schema.required("Thành phố là bắt buộc"),
+    otherwise: schema => schema.notRequired()
+  }),
+  receiverDistrict: string().when("deliveryToDifferentAddress", {
+    is: true,
+    then: schema => schema.required("Quận là bắt buộc"),
+    otherwise: schema => schema.notRequired()
+  }),
+  receiverWard: string().when("deliveryToDifferentAddress", {
+    is: true,
+    then: schema => schema.required("Phường là bắt buộc"),
+    otherwise: schema => schema.notRequired()
+  }),
+  receiverStreet: string().when("deliveryToDifferentAddress", {
+    is: true,
+    then: schema => schema.required("Địa chỉ là bắt buộc"),
+    otherwise: schema => schema.notRequired()
+  }),
   paymentMethod: string().required("Phương thức thanh toán là bắt buộc"),
 });
 
@@ -53,19 +65,82 @@ const schema = object({
 const resolver = yupResolver(schema);
 type CheckoutForm = InferType<typeof schema>;
 
+// const defaultAddress = {
+//   name: "Nguyễn Văn A",
+//   phone: "(+84)234.567.890",
+//   email: "nguyena123456789@gmail.com",
+//   province: "HCM",
+//   district: "Quận 1",
+//   ward: "Phường 1",
+//   street: "1/2/3/4/5 Đường ABC",
+// };
+
+const paymentMethods = [
+  {
+    value: "CashOnDelivery",
+    label: "Thanh toán khi nhận hàng",
+  },
+  // {
+  //   value: "VNPay",
+  //   label: "Thanh toán qua VNPay",
+  // },
+  {
+    value: "PayOS",
+    label: "Thanh toán qua PayOS",
+  }
+];
+
 export default function Checkout() {
+  const profile = useGetProfile();
+  const getInCart = useGetInCart(profile.data?.user?.token || '');
+  const queryClient = useQueryClient();
+  const splitAddress = useMemo(() => {
+    return _.split(profile.data?.detail.address || '', ', ')
+  }, [profile.data?.detail.address]);
+
   const {
     register,
     formState: { errors },
     handleSubmit,
     watch,
+    setValue,
   } = useForm<CheckoutForm>({
     resolver,
     mode: "onChange",
+    // defaultValues: {
+    //   name: profile.data?.detail.name,
+    //   phone: profile.data?.detail.phoneNumber,
+    //   email: profile.data?.detail.email,
+    //   province: splitAddress[3] || '',
+    //   district: splitAddress[2] || '',
+    //   ward: splitAddress[1] || '',
+    //   street: splitAddress[0] || '',
+    // },
   });
-  const profile = useGetProfile();
-  const getInCart = useGetInCart(profile.data?.user?.token || '');
-  const queryClient = useQueryClient();
+
+  const provinces = useGetProvinces();
+  const districts = useGetDistricts();
+  const districtId = watch('receiverDistrict');
+  const wards = useGetWards(Number(districtId));
+  const provinceId = watch('receiverProvince');
+
+  const mapProvinces = useMemo(() => {
+    return _.mapKeys(provinces.data?.data, it => it.ProvinceID)
+  }, [provinces.data?.data]);
+
+  const mapDistricts = useMemo(() => {
+    return _.mapKeys(districts.data?.data, it => it.DistrictID)
+  }, [districts.data?.data]);
+
+  const mapWards = useMemo(() => {
+    return _.mapKeys(wards.data?.data, it => it.WardCode)
+  }, [districts.data?.data, wards.data?.data]);
+
+  const filterDistrictsByProviceId = useMemo(() => {
+    return _(districts.data?.data)
+      .filter(it => it.ProvinceID === Number(provinceId))
+      .value()
+  }, [watch('receiverProvince'), districts.data?.data]);
 
   const cartItems = useMemo(() => {
     if (!getInCart.data) {
@@ -127,19 +202,32 @@ export default function Checkout() {
 
   const isDifferentAddress = watch("deliveryToDifferentAddress", false);
 
-  const defaultAddress = {
-    name: "Nguyễn Văn A",
-    phone: "(+84)234.567.890",
-    email: "nguyena123456789@gmail.com",
-    city: "HCM",
-    district: "Quận 1",
-    ward: "Phường 1",
-    street: "1/2/3/4/5 Đường ABC",
+  const onSubmit = async (data: CheckoutForm) => {
+    console.log('data', data);
+    try {
+      let response = await checkout(profile.data?.user?.token || '', {
+        returnUrl: `${window.location.origin}/checkout-process`,
+        cancelUrl: `${window.location.origin}/checkout-cancel`,
+        paymentMethod: data.paymentMethod,
+      });
+
+      if (response.url.checkoutUrl) {
+        window.location.href = response.url.checkoutUrl;
+      }
+    } catch (error: any) {
+      alert(error?.message);
+    }
   };
 
-  const onSubmit = (data: CheckoutForm) => {
-    console.log('data', data);
-  };
+  useEffect(() => {
+    setValue('name', profile.data?.detail.name || "");
+    setValue('phone', profile.data?.detail.phoneNumber || "");
+    setValue('email', profile.data?.detail.email || "");
+    setValue('province', splitAddress[3] || "");
+    setValue('district', splitAddress[2] || "");
+    setValue('ward', splitAddress[1] || "");
+    setValue('street', splitAddress[0] || "");
+  }, [profile.data?.detail])
 
   return (
     <main className="mt-[--m-header-top]">
@@ -154,7 +242,7 @@ export default function Checkout() {
                 <div className="flex p-4">
                   <img
                     className="w-20 h-20"
-                    src="/images/Frame 38.png"
+                    src="/images/avatar.png"
                     alt="Profile"
                   />
                   <div className="p-4">
@@ -196,21 +284,21 @@ export default function Checkout() {
 
                   <div className="flex space-x-3">
                     <select
-                      defaultValue={defaultAddress.city}
+                      defaultValue={splitAddress[3]}
                       disabled
                       className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7]"
                     >
-                      <option value="HCM">Thành phố Hồ Chí Minh</option>
+                      <option value={splitAddress[3]}>{splitAddress[3]}</option>
                       <option value="HN">Hà Nội</option>
                       <option value="DN">Đà Nẵng</option>
                     </select>
 
                     <select
-                      defaultValue={defaultAddress.district}
+                      defaultValue={splitAddress[2]}
                       disabled
                       className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7]"
                     >
-                      <option value="Quận 1">Quận 1</option>
+                      <option value={splitAddress[2]}>{splitAddress[2]}</option>
                       <option value="Quận 2">Quận 2</option>
                       <option value="Quận 3">Quận 3</option>
                     </select>
@@ -218,18 +306,17 @@ export default function Checkout() {
 
                   <div className="flex space-x-3">
                     <select
-                      defaultValue={defaultAddress.ward}
+                      defaultValue={splitAddress[1]}
                       disabled
                       className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7]"
                     >
-                      <option value="Phường 1">Phường 1</option>
-                      <option value="Phường 2">Phường 2</option>
-                      <option value="Phường 3">Phường 3</option>
+                      <option value={splitAddress[1]}>{splitAddress[1]}</option>
                     </select>
 
                     <input
                       type="text"
-                      defaultValue={defaultAddress.street}
+                      {...register('street')}
+                      defaultValue={splitAddress[0]}
                       disabled
                       className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7]"
                     />
@@ -273,28 +360,29 @@ export default function Checkout() {
 
                       <div className="flex space-x-3">
                         <select
-                          {...register("receiverCity")}
+                          {...register("receiverProvince")}
                           className="w-full rounded-md border-[#dbdbcf]"
                         >
                           <option value="">Chọn thành phố</option>
-                          <option value="HCM">Thành phố Hồ Chí Minh</option>
-                          <option value="HN">Hà Nội</option>
-                          <option value="DN">Đà Nẵng</option>
+                          {_.map(provinces.data?.data, (province, index) => (
+                            <option key={index} value={province.ProvinceID}>{province.ProvinceName}</option>
+                          ))}
                         </select>
-                        {errors.receiverCity && (
+                        {errors.receiverProvince && (
                           <p className="text-red-500">
-                            {errors.receiverCity.message}
+                            {errors.receiverProvince.message}
                           </p>
                         )}
 
                         <select
                           {...register("receiverDistrict")}
+                          disabled={!watch('receiverProvince')}
                           className="w-full rounded-md border-[#dbdbcf]"
                         >
                           <option value="">Chọn quận</option>
-                          <option value="Quận 1">Quận 1</option>
-                          <option value="Quận 2">Quận 2</option>
-                          <option value="Quận 3">Quận 3</option>
+                          {_.map(filterDistrictsByProviceId, (district, index) => (
+                            <option key={index} value={district.DistrictID}>{district.DistrictName}</option>
+                          ))}
                         </select>
                         {errors.receiverDistrict && (
                           <p className="text-red-500">
@@ -306,12 +394,13 @@ export default function Checkout() {
                       <div className="flex space-x-3">
                         <select
                           {...register("receiverWard")}
+                          disabled={!watch('receiverDistrict')}
                           className="w-full rounded-md border-[#dbdbcf]"
                         >
                           <option value="">Chọn phường</option>
-                          <option value="Phường 1">Phường 1</option>
-                          <option value="Phường 2">Phường 2</option>
-                          <option value="Phường 3">Phường 3</option>
+                          {_.map(wards.data?.data, (ward, index) => (
+                            <option key={index} value={ward.WardCode}>{ward.WardName}</option>
+                          ))}
                         </select>
                         {errors.receiverWard && (
                           <p className="text-red-500">
@@ -321,7 +410,7 @@ export default function Checkout() {
 
                         <input
                           type="text"
-                          placeholder="1/2/3/4/5 Đường ABC"
+                          placeholder="123 Đường Nguyễn Huệ"
                           {...register("receiverStreet")}
                           className="w-full rounded-md border-[#dbdbcf]"
                         />
@@ -340,44 +429,44 @@ export default function Checkout() {
                   Phương thức thanh toán
                 </span>
                 <div className="space-y-4">
-                  <div className="flex items-center ">
+                  {_.map(paymentMethods, (method, index) => (
+                    <div key={index} className="flex items-center ">
+                      <input
+                        id="default-radio-1"
+                        type="radio"
+                        value={method.value}
+                        {...register("paymentMethod")}
+                        className=" cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2  dark:border-[#0055c3] dark:focus:ring-[#0055c3]"
+                      />
+                      <label htmlFor="default-radio-1" className="ml-2">
+                        {method.label}
+                      </label>
+                    </div>
+                  ))}
+                  {/* <div className="flex items-center">
                     <input
-                      id="default-radio-1"
-                      type="radio"
-                      value=""
-                      name="default-radio"
-                      className=" cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2  dark:border-[#0055c3] dark:focus:ring-[#0055c3]"
-                    />
-                    <label htmlFor="default-radio-1" className="ml-2">
-                      Thanh toán khi nhận hàng
-                    </label>
-                  </div>
-                  <div className="flex items-center">
-                    <input
-                      checked
                       id="default-radio-2"
                       type="radio"
                       value=""
-                      name="default-radio"
+                      {...register("paymentMethod")}
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2  dark:border-[#0055c3] dark:focus:ring-[#0055c3]"
                     />
                     <label htmlFor="default-radio-2" className="ml-2">
                       Chuyển khoản ngân hàng
                     </label>
-                  </div>
-                  <div className="flex items-center">
+                  </div> */}
+                  {/* <div className="flex items-center">
                     <input
-                      checked
                       id="default-radio-2"
                       type="radio"
-                      value=""
-                      name="default-radio"
+                      value="PayOS"
+                      {...register("paymentMethod")}
                       className="w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2  dark:border-[#0055c3] dark:focus:ring-[#0055c3]"
                     />
                     <label htmlFor="default-radio-2" className="ml-2">
-                      Thanh toán qua Momo
+                      Thanh toán qua PayOS
                     </label>
-                  </div>
+                  </div> */}
                   <div className="flex items-center space-x-2 ">
                     <input required type="checkbox" name="" id="" className="rounded-sm"></input>
                     <p>

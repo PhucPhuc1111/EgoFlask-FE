@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import request, { BASE_URL } from "./request";
-import { AddToCartRQ, ApproveOrder, CartRS, CheckoutRQ, Order } from "./types";
+import request, { BASE_URL, GHN_API_TOKEN, GHN_API_URL } from "./request";
+import { AddToCartRQ, ApproveOrder, CartRS, CheckoutRQ, DistrictResponse, Order, PaymentResponse, ProvinceResponse, WardResponse } from "./types";
 
 export async function getAllOrder(token: string): Promise<Order[]> {
   return await request.get(`${BASE_URL}/api/Order`, {
@@ -44,12 +44,69 @@ export async function getInCart(token: string): Promise<CartRS[]> {
   })
 }
 
-export async function checkout(token: string, body: CheckoutRQ): Promise<any> {
-  return request.post(`${BASE_URL}/api/Order/payment`, body, {
+export async function checkout(token: string, body: CheckoutRQ): Promise<PaymentResponse> {
+  return request.post(`${BASE_URL}/api/Order/payment?paymentmethod=${body.paymentMethod}&returnUrl=${body.returnUrl}&cancelUrl=${body.cancelUrl}`, undefined, {
     headers: {
       "Authorization": `Bearer ${token}`,
+      'Content-Type': 'application/json',
     },
   });
+}
+
+export async function getDistricts(): Promise<DistrictResponse> {
+  return request.get(`${GHN_API_URL}/district`, {
+    headers: {
+      'token': GHN_API_TOKEN,
+    }
+  });
+}
+
+export async function getWards(districtId: number): Promise<WardResponse> {
+  return request.get(`${GHN_API_URL}/ward?district_id=${districtId}`, {
+    headers: {
+      'token': GHN_API_TOKEN,
+    }
+  });
+}
+
+export async function getProvinces(): Promise<ProvinceResponse> {
+  return request.get(`${GHN_API_URL}/province`, {
+    headers: {
+      'token': GHN_API_TOKEN,
+    }
+  });
+}
+
+export const useGetProvinces = (
+  config?: UseQueryOptions<ProvinceResponse>
+) => {
+  return useQuery({
+    queryKey: ['provinces'],
+    queryFn: getProvinces,
+    ...config,
+  })
+}
+
+export const useGetDistricts = (
+  config?: UseQueryOptions<DistrictResponse>
+) => {
+  return useQuery({
+    queryKey: ['districts'],
+    queryFn: getDistricts,
+    ...config,
+  })
+}
+
+export const useGetWards = (
+  districtId: number,
+  config?: UseQueryOptions<WardResponse>
+) => {
+  return useQuery({
+    queryKey: ['wards', districtId],
+    queryFn: () => getWards(districtId),
+    enabled: !!districtId,
+    ...config,
+  })
 }
 
 export const useGetAllOrder = (token: string, config?: UseQueryOptions<Order[]>) => {

@@ -39,7 +39,7 @@ export default function App() {
             console.log('error', error?.response?.status);
 
             if (error?.response?.status === 401) {
-              // window.location.href = '/login'; // Redirect to login or any route
+              window.location.href = '/logout'; // Redirect to login or any route
             }
           },
         }),
