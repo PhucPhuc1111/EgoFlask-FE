@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
@@ -8,6 +9,15 @@ import { boolean, InferType, object, string } from "yup";
 import { Model } from "~/components";
 import { formatMoney, splitProductImageURLs } from "~/components/utils";
 import { removeFromCart, useGetInCart, useGetProfile } from "~/data";
+import { authenticator } from "~/services/auth.server";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  let user = await authenticator.isAuthenticated(request);
+  if (!user) {
+    return redirect("/login");
+  }
+  return json({}, { status: 200 });
+}
 
 const schema = object({
   name: string().required("Tên là bắt buộc"),
