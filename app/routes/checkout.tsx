@@ -1,36 +1,44 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Link } from "@remix-run/react";
+import { useQueryClient } from "@tanstack/react-query";
+import _ from "lodash";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { boolean, InferType, object, string } from "yup";
+import { Model } from "~/components";
+import { formatMoney, splitProductImageURLs } from "~/components/utils";
+import { removeFromCart, useGetInCart, useGetProfile } from "~/data";
 
 const schema = object({
-    name: string().required("Tên là bắt buộc"),
-    phone: string().required("Số điện thoại là bắt buộc"),
-    email: string().email("Email không hợp lệ").required("Email là bắt buộc"),
-    city: string().required("Thành phố là bắt buộc"),
-    district: string().required("Quận là bắt buộc"),
-    ward: string().required("Phường là bắt buộc"),
-    street: string().required("Địa chỉ là bắt buộc"),
-    deliveryToDifferentAddress: boolean(),
-    receiverName: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) => 
-      deliveryToDifferentAddress ? schema.required("Họ và tên người nhận là bắt buộc") : schema
-    ),
-    receiverPhone: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) => 
-      deliveryToDifferentAddress ? schema.required("Số điện thoại người nhận là bắt buộc") : schema
-    ),
-    receiverCity: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) => 
-      deliveryToDifferentAddress ? schema.required("Thành phố là bắt buộc") : schema
-    ),
-    receiverDistrict: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) => 
-      deliveryToDifferentAddress ? schema.required("Quận là bắt buộc") : schema
-    ),
-    receiverWard: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) => 
-      deliveryToDifferentAddress ? schema.required("Phường là bắt buộc") : schema
-    ),
-    receiverStreet: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) => 
-      deliveryToDifferentAddress ? schema.required("Địa chỉ là bắt buộc") : schema
-    ),
-  });
-  
+  name: string().required("Tên là bắt buộc"),
+  phone: string().required("Số điện thoại là bắt buộc"),
+  email: string().email("Email không hợp lệ").required("Email là bắt buộc"),
+  city: string().required("Thành phố là bắt buộc"),
+  district: string().required("Quận là bắt buộc"),
+  ward: string().required("Phường là bắt buộc"),
+  street: string().required("Địa chỉ là bắt buộc"),
+  deliveryToDifferentAddress: boolean(),
+  receiverName: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
+    deliveryToDifferentAddress ? schema.required("Họ và tên người nhận là bắt buộc") : schema
+  ),
+  receiverPhone: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
+    deliveryToDifferentAddress ? schema.required("Số điện thoại người nhận là bắt buộc") : schema
+  ),
+  receiverCity: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
+    deliveryToDifferentAddress ? schema.required("Thành phố là bắt buộc") : schema
+  ),
+  receiverDistrict: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
+    deliveryToDifferentAddress ? schema.required("Quận là bắt buộc") : schema
+  ),
+  receiverWard: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
+    deliveryToDifferentAddress ? schema.required("Phường là bắt buộc") : schema
+  ),
+  receiverStreet: string().when("deliveryToDifferentAddress", (deliveryToDifferentAddress, schema) =>
+    deliveryToDifferentAddress ? schema.required("Địa chỉ là bắt buộc") : schema
+  ),
+  paymentMethod: string().required("Phương thức thanh toán là bắt buộc"),
+});
+
 
 const resolver = yupResolver(schema);
 type CheckoutForm = InferType<typeof schema>;
@@ -45,6 +53,67 @@ export default function Checkout() {
     resolver,
     mode: "onChange",
   });
+  const profile = useGetProfile();
+  const getInCart = useGetInCart(profile.data?.user?.token || '');
+  const queryClient = useQueryClient();
+
+  const cartItems = useMemo(() => {
+    if (!getInCart.data) {
+      return [];
+    }
+    return _.map(getInCart.data, (item) => {
+      const { orderDetailId, productImageURL, productName, unitPrice, quantity } = item;
+      let topImage = '';
+      let bodyImage = '';
+      let strapImage = '';
+
+      if (productImageURL) {
+        const images = splitProductImageURLs(productImageURL);
+        topImage = images.top;
+        bodyImage = images.body;
+        strapImage = images.strap;
+      }
+
+      return {
+        id: orderDetailId,
+        topImage,
+        bodyImage,
+        strapImage,
+        name: productName,
+        price: unitPrice,
+        quantity,
+        orderDetailId,
+      };
+    })
+  }, [getInCart.data]);
+
+  const calculateTotalPrice = () => {
+    const itemTotal = cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+    const shippingFee = itemTotal >= 1000000 ? 0 : 20000;
+    return {
+      itemTotal,
+      total: itemTotal + shippingFee,
+      shippingFee,
+    };
+  };
+
+  const { itemTotal, total, shippingFee } = calculateTotalPrice();
+
+  const deleteFromCart = async (orderDetailId: string) => {
+    try {
+      let response = await removeFromCart(profile.data?.user?.token || '' || '', orderDetailId);
+      if (response) {
+        queryClient.invalidateQueries({
+          queryKey: ['in-cart']
+        })
+      }
+    } catch (error) {
+      console.log("Failed to remove item from cart:", error);
+    }
+  };
 
   const isDifferentAddress = watch("deliveryToDifferentAddress", false);
 
@@ -79,9 +148,9 @@ export default function Checkout() {
                     alt="Profile"
                   />
                   <div className="p-4">
-                    <span className="text-black">A Nguyễn (nguyena123456789@gmail.com)</span>
+                    <span className="text-black">{profile.data?.detail.name} ({profile.data?.detail.email})</span>
                     <div>
-                      <button>Log out</button>
+                      <Link to={'/logout'}>Log out</Link>
                     </div>
                   </div>
                 </div>
@@ -94,7 +163,7 @@ export default function Checkout() {
                 <div className="p-4 space-y-5">
                   <input
                     type="text"
-                    defaultValue={defaultAddress.name}
+                    defaultValue={profile.data?.detail.name}
                     disabled
                     className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7]"
                   />
@@ -102,14 +171,14 @@ export default function Checkout() {
                   <div className="flex space-x-3">
                     <input
                       type="text"
-                      defaultValue={defaultAddress.phone}
+                      defaultValue={profile.data?.detail.phoneNumber}
                       disabled
                       className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7]"
                     />
 
                     <input
                       type="text"
-                      defaultValue={defaultAddress.email}
+                      defaultValue={profile.data?.detail.email}
                       disabled
                       className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7]"
                     />
@@ -300,7 +369,7 @@ export default function Checkout() {
                     </label>
                   </div>
                   <div className="flex items-center space-x-2 ">
-                    <input type="checkbox" name="" id="" className="rounded-sm"></input>
+                    <input required type="checkbox" name="" id="" className="rounded-sm"></input>
                     <p>
                       Tôi đã đọc và đồng ý với{" "}
                       <span className="text-[#0055c3] font-semibold">
@@ -322,62 +391,78 @@ export default function Checkout() {
             </div>
             <div className="w-1/2 ">
               <div className="bg-white h-fit  rounded-3xl p-8 ">
-                <div className="border-b-2 pb-7">
-                  <div className="flex">
-                    <div className="w-1/3 bg-[#dbdbcf]">
-                      <div className="w-32 h-64 ml-12  flex justify-between items-center">
-                        <img
-                          className="w-full"
-                          src="/images/products/bottle-3.png"
-                          alt="Product Collection"
-                        />
-                      </div>
-                    </div>
-                    <div className="w-2/3">
-                      <div className="p-3 space-y-2">
-                        <div className="flex justify-between ">
-                          <div>
-                            <p className="text-black">
-                              Bình giữ nhiệt
-                              <span className="font-semibold"> GRACEFUL</span>
-                            </p>
-                          </div>
-                          <div className="flex space-x-4">
-                            <p className="text-black">?VND</p>
-                            <button>Sửa</button>
-                            <button>Xóa</button>
-                          </div>
-                        </div>
-                        <div>
-                          <p className="">Dịch vụ đi kèm</p>
+                <div className="border-b-2 pb-7 flex flex-col gap-4">
+                  {_.map(cartItems, (item, index) => {
+                    return (
+                      <div key={index} className="flex">
+                        <div className="w-1/3 bg-[#dbdbcf]">
+                          <div className="w-32 h-64 ml-12 relative flex justify-between items-center">
+                            <div className="absolute inset-0 max-lg:right-2/3 left-1/3 bottom-2/3">
+                              {item.bodyImage && item.strapImage ? (
+                                <Model
+                                  topImage={item.topImage}
+                                  bodyImage={item.bodyImage}
+                                  strapImage={item.strapImage}
+                                  width="300px"
+                                />
+                              ) : (
+                                <img src={item.topImage} alt={item.name} width="100px" />
+                              )}
+                            </div>
 
-                          <div className="flex justify-between pl-3">
-                            <div>
-                              <p className="">
-                                Viết thư tay:{" "}
-                                <span className="font-semibold">
-                                  Sinh nhật vui vẻ !
-                                </span>
-                              </p>
-                              <p className="">Gói quà</p>
-                            </div>
-                            <div>
-                              <div className="flex space-x-4">
-                                <p className="text-black">?VND</p>
-                                <button>Sửa</button>
-                                <button>Xóa</button>
+                          </div>
+                        </div>
+                        <div className="w-2/3">
+                          <div className="p-3 space-y-2">
+                            <div className="flex justify-between ">
+                              <div>
+                                <p className="text-black">
+                                  Bình giữ nhiệt
+                                  <span className="font-semibold"> {item.name}</span>
+                                </p>
                               </div>
                               <div className="flex space-x-4">
-                                <p className="text-black">?VND</p>
+                                <p className="text-black">{formatMoney(item.price)}</p>
                                 <button>Sửa</button>
-                                <button>Xóa</button>
+                                <button
+                                  onClick={() => {
+                                    deleteFromCart(item.orderDetailId);
+                                  }}
+                                >Xóa</button>
                               </div>
                             </div>
+                            {/* <div>
+                              <p className="">Dịch vụ đi kèm</p>
+
+                              <div className="flex justify-between pl-3">
+                                <div>
+                                  <p className="">
+                                    Viết thư tay:{" "}
+                                    <span className="font-semibold">
+                                      Sinh nhật vui vẻ !
+                                    </span>
+                                  </p>
+                                  <p className="">Gói quà</p>
+                                </div>
+                                <div>
+                                  <div className="flex space-x-4">
+                                    <p className="text-black">?VND</p>
+                                    <button>Sửa</button>
+                                    <button>Xóa</button>
+                                  </div>
+                                  <div className="flex space-x-4">
+                                    <p className="text-black">?VND</p>
+                                    <button>Sửa</button>
+                                    <button>Xóa</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    )
+                  })}
                 </div>
                 <div className="flex space-x-3 justify-center pt-5 border-b-2 pb-5">
                   <button className="w-56 h-10 border border-[#dbdbcf]   rounded-md bg-[#f9f8f7]">
@@ -394,13 +479,13 @@ export default function Checkout() {
                   </div>
 
                   <div className="text-black font-semibold">
-                    <p>?VND</p>
-                    <p>?VND</p>
+                    <p>{formatMoney(itemTotal)}</p>
+                    <p>{formatMoney(shippingFee)}</p>
                   </div>
                 </div>
                 <div className="text-black font-semibold flex justify-between pt-5">
                   <p>Tổng thanh toán</p>
-                  <p>?VND</p>
+                  <p>{formatMoney(total)}</p>
                 </div>
               </div>
               <button className="bg-[#0055C3] text-white pt-10 flex space-x-3 ">

@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { AddToCartRQ, ApproveOrder, CartRS, Order } from "./types";
+import { AddToCartRQ, ApproveOrder, CartRS, CheckoutRQ, Order } from "./types";
 
 export async function getAllOrder(token: string): Promise<Order[]> {
   return await request.get(`${BASE_URL}/api/Order`, {
@@ -42,6 +42,14 @@ export async function getInCart(token: string): Promise<CartRS[]> {
       "Authorization": `Bearer ${token}`,
     },
   })
+}
+
+export async function checkout(token: string, body: CheckoutRQ): Promise<any> {
+  return request.post(`${BASE_URL}/api/Order/payment`, body, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+    },
+  });
 }
 
 export const useGetAllOrder = (token: string, config?: UseQueryOptions<Order[]>) => {

@@ -12,3 +12,20 @@ export const formatMoney = (amount: number) => {
     minimumFractionDigits: 0,
   }).format(amount);
 };
+
+export function splitProductImageURLs(productImageURL: string): { top: string; body: string; strap: string } {
+  const parts = productImageURL.split(',');
+  if (parts.length !== 3) {
+    // If not exactly 3 parts, consider it as a full image
+    return {
+      top: productImageURL.trim(),
+      body: '',
+      strap: ''
+    };
+  }
+  return {
+    top: parts[0].trim(),
+    body: parts[1].trim(),
+    strap: parts[2].trim()
+  };
+}

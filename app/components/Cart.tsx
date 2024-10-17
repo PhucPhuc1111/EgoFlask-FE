@@ -3,7 +3,8 @@ import { getOrdersInCart, removeFromCart, useGetInCart, useGetProfile } from "~/
 import { Model } from "./Model";
 import _ from "lodash";
 import { useQueryClient } from "@tanstack/react-query";
-import { formatMoney } from "./utils";
+import { formatMoney, splitProductImageURLs } from "./utils";
+import { Link } from "@remix-run/react";
 
 export interface CartItem {
   id: string;
@@ -93,23 +94,6 @@ const Cart: React.FC<CartProps> = () => {
   //   fetchCartItems();
   // }, [token]);
 
-  function splitProductImageURLs(productImageURL: string): { top: string; body: string; strap: string } {
-    const parts = productImageURL.split(',');
-    if (parts.length !== 3) {
-      // If not exactly 3 parts, consider it as a full image
-      return {
-        top: productImageURL.trim(),
-        body: '',
-        strap: ''
-      };
-    }
-    return {
-      top: parts[0].trim(),
-      body: parts[1].trim(),
-      strap: parts[2].trim()
-    };
-  }
-
   const handleCartClick = () => {
     setIsCartOpen((prevState) => !prevState);
   };
@@ -129,11 +113,15 @@ const Cart: React.FC<CartProps> = () => {
   };
 
   const handleRemoveItem = async (id: string) => {
-    let response = await removeFromCart(token || '', id);
+    try {
+      let response = await removeFromCart(token || '', id);
     if (response) {
       queryClient.invalidateQueries({
         queryKey: ['in-cart']
       })
+    }
+    } catch (error) {
+      console.log("Failed to remove item from cart:", error);
     }
   };
 
@@ -238,9 +226,9 @@ const Cart: React.FC<CartProps> = () => {
               </div>
             </div>
             <div className="flex justify-center w-full mt-4">
-              <button className="bg-[#0055C3] text-white py-2 px-6 rounded-lg text-lg font-semibold">
+              <Link to="/checkout" className="bg-[#0055C3] hover:text-white hover:no-underline text-white py-2 px-6 rounded-lg text-lg font-semibold">
                 Tiếp tục thanh toán
-              </button>
+              </Link>
             </div>
             <div className="flex justify-center w-full mt-4">
               <p>Miễn phí vận chuyển cho đơn hàng trên 1.000.000 VND</p>

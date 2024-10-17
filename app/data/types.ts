@@ -113,3 +113,9 @@ export type CartRS = {
   unitPrice: number;
   totalPrice: number;
 };
+
+export type CheckoutRQ = {
+  paymentMethod: 'CashOnDelivery' | 'VNPay' | 'PayOS';
+  returnUrl: string;
+  cancelUrl: string;
+}
