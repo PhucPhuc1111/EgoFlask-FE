@@ -123,7 +123,7 @@ const Profile = () => {
               <div className="col-span-4 ">
                 <div className="">
                   <div className="flex justify-center ">
-                    <img className="h-32 w-32" src='/images/avatar.png' alt="" />
+                  <img className="w-32 h-32 rounded-full" src={profile.data?.user?.avatar?.[0].value || '/images/avatar.png'} alt="Profile" />
                   </div>
 
                   <div className="flex justify-center mt-4">

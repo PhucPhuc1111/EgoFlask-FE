@@ -16,6 +16,10 @@ export type User = {
 
 export type Profile = {
   token: string;
+  role?: string;
+  avatar?: {
+    value?: string;
+  }[];
 }
 export type Account = {
  

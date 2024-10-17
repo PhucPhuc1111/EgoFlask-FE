@@ -1,5 +1,6 @@
 import { NavLink } from "@remix-run/react";
 import _ from "lodash";
+import { useGetProfile } from "~/data";
 
 const links = [
   {
@@ -13,13 +14,15 @@ const links = [
 ];
 
 export const ProfileSidebar = () => {
+  const profile = useGetProfile();
+
   return (
     <div className="">
       
       <div className="flex justify-center pt-7  space-x-3">
-        <img className="w-20 h-20" src='/images/avatar.png' alt="Profile" />
+        <img className="w-20 h-20 rounded-full" src={profile.data?.user?.avatar?.[0].value || '/images/avatar.png'} alt="Profile" />
         <div className="flex mt-7 my-4 text-black text-lg font-semibold font-['Noto Serif']">
-          A Nguyễn
+          {profile.data?.detail.name}
         </div>
       </div>
 

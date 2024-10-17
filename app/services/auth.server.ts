@@ -55,7 +55,10 @@ const googleStrategy = new GoogleStrategy(
       },
     })
     console.log('====login result', JSON.stringify(result.data))
-    let response = result.data as Profile;
+    let response = {
+      ...result.data,
+      avatar: profile.photos,
+    } as Profile;
     return response;
     // return {
     //   profile,
