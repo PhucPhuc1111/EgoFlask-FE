@@ -244,3 +244,10 @@ export type ProvinceResponse = {
   message: string;
   data: Province[];
 };
+
+export type OrderTransaction = {
+  orderId: string;
+  status: string;
+  transactionId: number;
+  transactionStatus: string;
+};

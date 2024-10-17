@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { Link, useLocation, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 import { useEffect, useMemo } from "react";
@@ -23,10 +23,14 @@ const schema = object({
   name: string().required("Tên là bắt buộc"),
   phone: string().required("Số điện thoại là bắt buộc"),
   email: string().email("Email không hợp lệ").required("Email là bắt buộc"),
-  province: string().required("Thành phố là bắt buộc"),
-  district: string().required("Quận là bắt buộc"),
-  ward: string().required("Phường là bắt buộc"),
-  street: string().required("Địa chỉ là bắt buộc"),
+  province: string(),
+    // .required("Thành phố là bắt buộc"),
+  district: string(),
+    // .required("Quận là bắt buộc"),
+  ward: string(),
+    // .required("Phường là bắt buộc"),
+  street: string(),
+    // .required("Địa chỉ là bắt buộc"),
   deliveryToDifferentAddress: boolean(),
   receiverName: string().when("deliveryToDifferentAddress", {
     is: true,
@@ -94,9 +98,13 @@ export default function Checkout() {
   const profile = useGetProfile();
   const getInCart = useGetInCart(profile.data?.user?.token || '');
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const splitAddress = useMemo(() => {
     return _.split(profile.data?.detail.address || '', ', ')
   }, [profile.data?.detail.address]);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const message = queryParams.get('message');
 
   const {
     register,
@@ -206,13 +214,16 @@ export default function Checkout() {
     console.log('data', data);
     try {
       let response = await checkout(profile.data?.user?.token || '', {
-        returnUrl: `${window.location.origin}/checkout-process`,
-        cancelUrl: `${window.location.origin}/checkout-cancel`,
+        returnUrl: `${window.location.origin}/payos/checkout-process`,
+        cancelUrl: `${window.location.origin}/payos/checkout-process`,
         paymentMethod: data.paymentMethod,
       });
 
-      if (response.url.checkoutUrl) {
+      if (response.url.checkoutUrl && data.paymentMethod === 'PayOS') {
         window.location.href = response.url.checkoutUrl;
+      }
+      else {
+        navigate('/checkout/success');
       }
     } catch (error: any) {
       alert(error?.message);
@@ -228,6 +239,12 @@ export default function Checkout() {
     setValue('ward', splitAddress[1] || "");
     setValue('street', splitAddress[0] || "");
   }, [profile.data?.detail])
+
+  useEffect(() => {
+    if (message) {
+      alert(message);
+    }
+  }, [location.search]);
 
   return (
     <main className="mt-[--m-header-top]">

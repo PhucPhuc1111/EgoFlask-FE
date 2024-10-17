@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL, GHN_API_TOKEN, GHN_API_URL } from "./request";
-import { AddToCartRQ, ApproveOrder, CartRS, CheckoutRQ, DistrictResponse, Order, PaymentResponse, ProvinceResponse, WardResponse } from "./types";
+import { AddToCartRQ, ApproveOrder, CartRS, CheckoutRQ, DistrictResponse, Order, OrderTransaction, PaymentResponse, ProvinceResponse, WardResponse } from "./types";
 
 export async function getAllOrder(token: string): Promise<Order[]> {
   return await request.get(`${BASE_URL}/api/Order`, {
@@ -48,6 +48,14 @@ export async function checkout(token: string, body: CheckoutRQ): Promise<Payment
   return request.post(`${BASE_URL}/api/Order/payment?paymentmethod=${body.paymentMethod}&returnUrl=${body.returnUrl}&cancelUrl=${body.cancelUrl}`, undefined, {
     headers: {
       "Authorization": `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
+export async function payOsCallBack(body: OrderTransaction): Promise<any> {
+  return request.post(`${BASE_URL}/api/Order/payos-callback`, body, {
+    headers: {
       'Content-Type': 'application/json',
     },
   });

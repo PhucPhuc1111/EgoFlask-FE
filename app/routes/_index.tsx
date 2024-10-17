@@ -14,20 +14,20 @@ export const meta: MetaFunction = () => {
 
 const products = [
   {
-    'name': 'Graceful',
-    'image': '/images/products/bottle-1.png',
+    'name': 'Dependable',
+    'image': '/images/products/bottle-6.png',
   },
   {
-    'name': 'Gracious',
-    'image': '/images/products/bottle-2.png',
+    'name': 'Optimistic',
+    'image': '/images/products/bottle-7.png',
   },
   {
     'name': 'Creative',
     'image': '/images/products/bottle-3.png',
   },
   {
-    'name': 'Dynamic',
-    'image': '/images/products/bottle-4.png',
+    'name': 'Elegant',
+    'image': '/images/products/bottle-8.png',
   },
 ]
 
