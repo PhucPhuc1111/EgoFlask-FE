@@ -64,6 +64,19 @@ async function _patch(url: string, data?: any, options?: any) {
   return response.data;
 }
 
+axios.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response?.status === 401) {
+      // logout
+      window.location.href = '/logout';
+    }
+    return Promise.reject(error);
+  }
+)
+
 export default {
   get: _get,
   post: _post,
