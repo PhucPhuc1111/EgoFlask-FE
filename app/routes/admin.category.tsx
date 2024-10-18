@@ -1,4 +1,3 @@
-
 import { Image, Pagination, PaginationProps } from "antd";
 import _ from "lodash";
 import { useMemo, useState } from "react";
@@ -14,11 +13,13 @@ export const handle = {
 };
 
 export default function AdminCategory() {
+  
   const { data: profile, isLoading: profileLoading, isError } = useGetProfile();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(100);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null); 
 
   const { data: products, refetch } = useGetAllProducts(currentPage, pageSize, "");
 
@@ -50,6 +51,10 @@ export default function AdminCategory() {
     setSearchTerm(e.target.value);
   };
 
+  const handleEditProduct = (product) => {
+    setSelectedProduct(product); 
+  };
+
   if (isError) {
     return <div>Error loading profile data.</div>;
   }
@@ -69,7 +74,7 @@ export default function AdminCategory() {
           />
         </div>
         <div>
-          <AddProductModal />
+          <AddProductModal onSuccess={refetch} /> 
         </div>
       </div>
 
@@ -103,7 +108,7 @@ export default function AdminCategory() {
                   <td className="border-2 border-[#0055C3] p-6">
                     {product.name}
                   </td>
-                  <td className="border-2 border-[#0055C3] p-6 ">
+                  <td className="border-2 border-[#0055C3] p-6">
                     <div className="flex justify-center bg-[#dbdbcf] w-[90px] h-[152px]">
                       <Image
                         src={product.imageUrl}
@@ -115,11 +120,10 @@ export default function AdminCategory() {
                   </td>
                   <td className="border-2 border-[#0055C3] px-3">
                     <div className="flex justify-center bg-[#dbdbcf] w-full">
-                    <Image src="/images/description.png" alt="" />
-                     
+                      <Image src="/images/description.png" alt="" />
                     </div>
                   </td>
-                  <td className="border-2 border-[#0055C3] px-3 ">
+                  <td className="border-2 border-[#0055C3] px-3">
                     <div className="flex justify-center bg-[#dbdbcf] w-full">
                       <Image src="/images/description.png" alt="" />
                     </div>
@@ -133,12 +137,12 @@ export default function AdminCategory() {
                   <td className="border-2 border-[#0055C3] p-6">
                     <div className="flex flex-col">
                       <div>
-                        <UpdateProductModal productId={product.productId} />
+                        <UpdateProductModal productId={product.productId} productData={product} onSuccess={refetch} />
                       </div>
                       <div>
                         <DeleteProductModal
                           productId={product.productId}
-                          onSuccess={refetch} 
+                          onSuccess={refetch}
                         />
                       </div>
                     </div>
