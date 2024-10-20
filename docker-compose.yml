@@ -1,0 +1,14 @@
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
+      - VITE_GOOGLE_CLIENT_SECRET=${VITE_GOOGLE_CLIENT_SECRET}
+      - VITE_GOOGLE_REDIRECT_URI=${VITE_GOOGLE_REDIRECT_URI}
+      - VITE_GHN_API_TOKEN=${VITE_GHN_API_TOKEN}
+      - VITE_API_URL=${VITE_API_URL}
+      - VITE_GHN_API_URL=${VITE_GHN_API_URL}
+      - NODE_ENV=production
