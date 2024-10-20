@@ -1,5 +1,5 @@
 # Use an official Node runtime as the base image
-FROM node:18 AS builder
+FROM node:20 AS builder
 
 # set for base and all layer that inherit from it
 
@@ -21,7 +21,7 @@ COPY . .
 # Build the Remix app
 RUN npm run build
 
-FROM node:18-slim AS final
+FROM node:20-slim AS final
 ENV NODE_ENV=production
 
 WORKDIR /app
