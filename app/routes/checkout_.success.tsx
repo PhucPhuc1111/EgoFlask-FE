@@ -1,25 +1,27 @@
+import { Link } from "@remix-run/react";
+import { IoCheckmarkCircle } from "react-icons/io5";
 
 
 export default function CheckoutSuccess() {
   return (
     <main className="mt-[--m-header-top]">
-<div className="bg-[#0055C3] w-full">
-<div className="p-12 flex space-x-16">
-      
-        <div className='w-1/2'>
-        <div className="flex justify-center justify-items-center content-center h-auto">
-          <div className="space-y-4 pt-36">
-            <div className="pl-12">
-               <img src="/icons/checksuccess.png" alt="" className="w-52"/>  
+      <div className="bg-[#0055C3] w-full">
+        <div className="p-12 flex space-x-16">
+
+          <div className='w-full'>
+            <div className="flex flex-col justify-center justify-items-center content-center h-auto">
+              <div className="space-y-4 pt-12 flex flex-col items-center justify-center">
+                <div className="">
+                  <IoCheckmarkCircle className="text-white w-32" />
+                </div>
+                <p className="text-white text-3xl font-semibold">Thanh toán thành công</p>
+                <Link to={'/orders'} className="text-white hover:text-white">
+                  Xem đơn hàng
+                </Link>
+              </div>
             </div>
-             
-        <p className="text-white text-3xl font-semibold">Thanh toán thành công</p>
           </div>
-      
-        </div>
-        
-        </div>
-        <div className="w-1/2 ">
+          {/* <div className="w-1/2 ">
             <div className="bg-white h-fit  rounded-3xl p-8 ">
               <div className="border-b-2 pb-7">
                 
@@ -119,11 +121,11 @@ export default function CheckoutSuccess() {
             <p>Trở về trang chủ</p>
             </button>
             
-          </div>
-      </div>
+          </div> */}
+        </div>
       </div>
 
-      </main>
+    </main>
   )
 }
 

@@ -67,10 +67,21 @@ export type Order = {
   totalAmount: number;
   discountAmount?: number | null;
   finalAmount: number;
-  status: "PENDING" | "DELIVERING" | "COMPLETED";
+  status: "PENDING" | "SHIPPING" | "COMPLETED" | "CANCELLED";
   createdAt: string;
   updatedAt: string;
   couponId?: string | null;
+  orderDetails?: OrderDetail[]; // Add this line to include order details in the Order type
+};
+
+export type OrderDetail = {
+  orderDetailId: string;
+  productId: string;
+  productName: string;
+  productImageURL: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
 };
 
 export type ApproveOrder = {

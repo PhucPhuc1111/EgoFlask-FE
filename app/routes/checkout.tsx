@@ -2,8 +2,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link, useLocation, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
-import _ from "lodash";
-import { useEffect, useMemo } from "react";
+import { message } from "antd";
+import _, { set } from "lodash";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { boolean, InferType, object, string } from "yup";
 import { Model } from "~/components";
@@ -24,13 +25,13 @@ const schema = object({
   phone: string().required("Số điện thoại là bắt buộc"),
   email: string().email("Email không hợp lệ").required("Email là bắt buộc"),
   province: string(),
-    // .required("Thành phố là bắt buộc"),
+  // .required("Thành phố là bắt buộc"),
   district: string(),
-    // .required("Quận là bắt buộc"),
+  // .required("Quận là bắt buộc"),
   ward: string(),
-    // .required("Phường là bắt buộc"),
+  // .required("Phường là bắt buộc"),
   street: string(),
-    // .required("Địa chỉ là bắt buộc"),
+  // .required("Địa chỉ là bắt buộc"),
   deliveryToDifferentAddress: boolean(),
   receiverName: string().when("deliveryToDifferentAddress", {
     is: true,
@@ -104,7 +105,9 @@ export default function Checkout() {
   }, [profile.data?.detail.address]);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const message = queryParams.get('message');
+  const messageParams = queryParams.get('message');
+  const messageType = queryParams.get('type');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -202,6 +205,7 @@ export default function Checkout() {
         queryClient.invalidateQueries({
           queryKey: ['in-cart']
         })
+        message
       }
     } catch (error) {
       console.log("Failed to remove item from cart:", error);
@@ -212,6 +216,7 @@ export default function Checkout() {
 
   const onSubmit = async (data: CheckoutForm) => {
     console.log('data', data);
+    setIsLoading(true);
     try {
       let response = await checkout(profile.data?.user?.token || '', {
         returnUrl: `${window.location.origin}/payos/checkout-process`,
@@ -220,13 +225,18 @@ export default function Checkout() {
       });
 
       if (response.url.checkoutUrl && data.paymentMethod === 'PayOS') {
+        setIsLoading(false);
         window.location.href = response.url.checkoutUrl;
       }
       else {
+        setIsLoading(false);
         navigate('/checkout/success');
       }
     } catch (error: any) {
-      alert(error?.message);
+      message.error(error?.message);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -241,8 +251,10 @@ export default function Checkout() {
   }, [profile.data?.detail])
 
   useEffect(() => {
-    if (message) {
-      alert(message);
+    if (messageParams) {
+      if (messageType === 'error') {
+        message.error(messageParams);
+      }
     }
   }, [location.search]);
 
@@ -498,10 +510,12 @@ export default function Checkout() {
               </div>
               <div className="flex justify-center pt-6">
                 <button
+                  disabled={isLoading}
                   type="submit"
-                  className="w-56 border-2 rounded-md h-10 text-white bg-[#0055c3] font-semibold"
+                  className="w-56 flex items-center justify-center border-2 rounded-md h-10 text-white bg-[#0055c3] font-semibold"
                 >
-                  Thanh Toán
+                  {isLoading ?? <img src="/icons/loading.svg" alt="loading" className="w-7 h-7" />}
+                  <span>Thanh Toán</span>
                 </button>
               </div>
             </div>
@@ -540,11 +554,13 @@ export default function Checkout() {
                               <div className="flex space-x-4">
                                 <p className="text-black">{formatMoney(item.price)}</p>
                                 <button>Sửa</button>
-                                <button
+                                <div
+                                  className="cursor-pointer"
                                   onClick={() => {
                                     deleteFromCart(item.orderDetailId);
                                   }}
-                                >Xóa</button>
+                                >Xóa
+                                </div>
                               </div>
                             </div>
                             {/* <div>
@@ -581,10 +597,8 @@ export default function Checkout() {
                   })}
                 </div>
                 <div className="flex space-x-3 justify-center pt-5 border-b-2 pb-5">
-                  <button className="w-56 h-10 border border-[#dbdbcf]   rounded-md bg-[#f9f8f7]">
-                    Mã Ego Flask Voucher
-                  </button>
-                  <button className=" w-24 h-10 border border-[#dbdbcf]  rounded-md bg-[#f9f8f7]">
+                  <input type="text" placeholder="Mã Ego Flask Voucher" className="w-56 h-10 border border-[#dbdbcf]   rounded-md bg-[#f9f8f7]" />
+                  <button type="button" className=" w-24 h-10 border border-[#dbdbcf]  rounded-md bg-[#f9f8f7]">
                     Áp dụng
                   </button>
                 </div>
@@ -604,13 +618,13 @@ export default function Checkout() {
                   <p>{formatMoney(total)}</p>
                 </div>
               </div>
-              <button className="bg-[#0055C3] text-white pt-10 flex space-x-3 ">
+              {/* <Link to={'#'} className="bg-[#0055C3] text-white pt-10 flex space-x-3 ">
                 <div className="h-2 w-2 pt-1">
                   <img src="/icons/back.png" alt="" className="w-full" />
                 </div>
 
                 <p>Quay lại giỏ hàng</p>
-              </button>
+              </Link> */}
             </div>
           </div>
         </div>

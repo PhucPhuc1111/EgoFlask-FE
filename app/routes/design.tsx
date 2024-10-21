@@ -7,6 +7,7 @@ import { ReviewModal } from "~/components";
 import { addToCart, createCustomProduct, useGetComponentList } from "~/data";
 import { useGetProfile } from "~/data";
 import { useQueryClient } from "@tanstack/react-query";
+import { message } from "antd";
 
 const options = [
   {
@@ -83,13 +84,13 @@ export default function Design() {
   const handleAddToCart = async () => {
     if (!top || !body || !strap) {
       if (!top && !body) {
-        alert("Xin lỗi, vui lòng chọn cả nắp bình và thân bình.");
+        message.warning("Xin lỗi, vui lòng chọn cả nắp bình và thân bình.");
       } else if (!top) {
-        alert("Xin lỗi, vui lòng chọn nắp bình.");
+        message.warning("Xin lỗi, vui lòng chọn nắp bình.");
       } else if (!body) {
-        alert("Xin lỗi, vui lòng chọn thân bình.");
+        message.warning("Xin lỗi, vui lòng chọn thân bình.");
       } else if (!strap) {
-        alert("Xin lỗi, vui lòng chọn quai bình.");
+        message.warning("Xin lỗi, vui lòng chọn quai bình.");
       }
     } else {
       try {
@@ -111,7 +112,7 @@ export default function Design() {
 
         if (addToCartResponse) {
           console.log('Product added to cart:', addToCartResponse);
-          alert("Thêm vào giỏ hàng thành công");
+          message.success("Thêm vào giỏ hàng thành công");
           queryClient.invalidateQueries({
             queryKey: ['in-cart']
           })
@@ -162,7 +163,7 @@ export default function Design() {
 
       } catch (error) {
         console.error("Error:", error);
-        alert("Đã xảy ra lỗi khi thêm vào giỏ hàng. Vui lòng thử lại sau.");
+        message.error("Đã xảy ra lỗi khi thêm vào giỏ hàng. Vui lòng thử lại sau.");
       }
     }
   };

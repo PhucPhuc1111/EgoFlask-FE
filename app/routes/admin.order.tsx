@@ -201,14 +201,15 @@ export default function AdminOrder() {
                 </td>
                 <td className="border-2 border-[#0055C3] border-opacity-70 py-2 px-4">
                   <select name="" className="border-1 border-[#0055C3] w-fit h-fit rounded-md">
-                    <option selected={item.status === "PENDING"} value="PENDING">Đang chuẩn bị hàng</option>
-                    <option selected={item.status === "DELIVERING"} value="DELIVERING">Đang vận chuyển</option>
-                    <option selected={item.status === "COMPLETED"} value="COMPLETED">Đã giao hàng</option>
+                    <option selected={item.status === "CANCELLED"} value="PENDING">Đã hủy</option>
+                    <option selected={item.status === "PENDING"} value="PENDING">Đang chờ thanh toán</option>
+                    <option selected={item.status === "SHIPPING"} value="DELIVERING">Đang vận chuyển</option>
+                    <option selected={item.status === "COMPLETED"} value="COMPLETED">Đã thanh toán</option>
                   </select>
                 </td>
                 <td className="border-2 border-[#0055C3] border-opacity-70">
                   <div className="flex items-center justify-center">
-                    <IoCheckmarkCircleOutline className="w-6 h-6 cursor-pointer hover:text-green-400" 
+                    <IoCheckmarkCircleOutline className="w-6 h-6 cursor-pointer hover:text-green-400"
                       onClick={() => {
                         setModalText(`Đơn hàng ${item.orderId} cần được duyệt bởi nhà cung cấp (Supplier). \n
                           Bạn có chắc chắn muốn duyệt đơn này không?`);

@@ -33,7 +33,7 @@ COPY --from=builder /app/build /app/build
 COPY --from=builder /app/package*.json /app/
 COPY --from=builder /app/public /app/public
 
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 #COPY --from=builder /app/node_modules /app/node_modules
 
