@@ -21,13 +21,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     
     if (response) {
       if (cancel === "true") {
-        return redirect(`/checkout?message=${encodeURIComponent("Bạn đã hủy thanh toán thành công")}`);
+        return redirect(`/checkout?message=${encodeURIComponent("Bạn đã hủy thanh toán thành công")}&type=error`);
       }
       return redirect('/checkout/success')
     }
   } catch (error: any) {
     console.log('====error', error);
     
-    return redirect(`/checkout?message=${encodeURIComponent(`Có lỗi trong quá trình xử lý thanh toán: Status: ${error.status}`)}`);
+    return redirect(`/checkout?message=${encodeURIComponent(`Có lỗi trong quá trình xử lý thanh toán: Status: ${error.status}`)}&type=error`);
   }
 }
