@@ -1,11 +1,13 @@
 import { json, LoaderFunctionArgs } from "@remix-run/node";
 import { useLoaderData, useParams } from "@remix-run/react";
-import { useMemo } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { message } from "antd";
+import { useMemo, useState } from "react";
 import { SubFooter } from "~/components";
 import Dropdown from "~/components/Dropdown";
 import Quantity from "~/components/Quantity";
 import { formatMoney } from "~/components/utils";
-import { getProductById, Product } from "~/data";
+import { addToCart, getProductById, Product, useGetProfile } from "~/data";
 
 type LoaderData = {
   product: Product;
@@ -26,6 +28,27 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 const ProductDetail = () => {
   const { product } = useLoaderData<LoaderData>();
+  const profile = useGetProfile();
+  const queryClient = useQueryClient();
+  const [quantity, setQuantity] = useState<number>(1);
+
+  const handleAddToCart = async () => {
+    try {
+      let response = await addToCart(profile.data?.user?.token || "", {
+        productId: product.productId,
+        quantity: quantity,
+      });
+
+      if (response) {
+        message.success("Thêm vào giỏ hàng thành công");
+        queryClient.invalidateQueries({
+          queryKey: ['in-cart'],
+        });
+      }
+    } catch (error: any) {
+      message.error(`Có lỗi xảy ra: ${error?.message}`);
+    }
+  }
 
   if (!product) {
     return <div>Product not found</div>;
@@ -57,7 +80,7 @@ const ProductDetail = () => {
 
               <div className="flex space-x-56">
                 <p className="text-lg font-semibold text-black">
-                  Giá: {formatMoney(product.price)} VND
+                  Giá: {formatMoney(product.price)}
                 </p>
                 <p className="text-black font-semibold text-lg">
                   Đã bán: <span>{product.sold}</span>
@@ -66,8 +89,8 @@ const ProductDetail = () => {
               </div>
               <div> <Dropdown /></div>
               <div className="flex space-x-48">
-                <div><Quantity /></div>
-                <button className="w-48 h-12 bg-[#0055c3] rounded-lg text-white">
+                <div><Quantity quantity={quantity} setQuantity={setQuantity}/></div>
+                <button onClick={handleAddToCart} className="w-48 h-12 bg-[#0055c3] rounded-lg text-white">
                   Thêm vào giỏ hàng
                 </button>
               </div>

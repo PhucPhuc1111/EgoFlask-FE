@@ -1,12 +1,13 @@
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import _ from "lodash";
 import { useMemo } from "react";
 import { formatMoney } from "~/components/utils";
 import { useGetAllProducts } from "~/data";
 
 const Products = () => {
- 
-  const products = useGetAllProducts(1, 10, "");
+
+  const products = useGetAllProducts(1, 100, "");
+  const navigate = useNavigate();
 
   const productList = useMemo(() => {
     return _(products.data)
@@ -41,14 +42,12 @@ const Products = () => {
                 <p className="font-semibold text-black p-0 m-0">
                   {product.name}
                 </p>
-                <p className="text-black">{formatMoney(product.price)} VND</p>
+                <p className="text-black">{formatMoney(product.price)}</p>
               </div>
               <div className="flex justify-center">
-                <Link to={`/products/${product.productId}`}>
-                  <button className="w-60 mt-4 py-2 bg-white text-black rounded hover:bg-slate-300">
-                    Chi tiết sản phẩm
-                  </button>
-                </Link>
+                <button onClick={() => navigate(`/products/${product.productId}`)} className="w-full mt-4 py-2 bg-white text-black rounded hover:bg-slate-300">
+                  Chi tiết sản phẩm
+                </button>
               </div>
             </div>
           ))}

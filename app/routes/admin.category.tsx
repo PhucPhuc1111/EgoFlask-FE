@@ -74,7 +74,7 @@ export default function AdminCategory() {
           />
         </div>
         <div>
-          <AddProductModal onSuccess={refetch} /> 
+          <AddProductModal /> 
         </div>
       </div>
 
@@ -137,12 +137,11 @@ export default function AdminCategory() {
                   <td className="border-2 border-[#0055C3] p-6">
                     <div className="flex flex-col">
                       <div>
-                        <UpdateProductModal productId={product.productId} productData={product} onSuccess={refetch} />
+                        <UpdateProductModal productId={product.productId} productData={product} />
                       </div>
                       <div>
                         <DeleteProductModal
                           productId={product.productId}
-                          onSuccess={refetch}
                         />
                       </div>
                     </div>

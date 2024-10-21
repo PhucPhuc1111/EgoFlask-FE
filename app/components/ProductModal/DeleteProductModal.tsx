@@ -1,10 +1,12 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { Button, Modal } from 'antd';
 import { useState } from 'react';
 import { deleteProductById } from '~/data'; // Thêm hàm xóa sản phẩm từ API
 
-const DeleteProductModal = ({ productId, onSuccess }: { productId: string, onSuccess: () => void }) => {
+const DeleteProductModal = ({ productId }: { productId: string }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const queryClient = useQueryClient();
 
     const showModal = () => {
       setIsModalOpen(true);
@@ -15,7 +17,9 @@ const DeleteProductModal = ({ productId, onSuccess }: { productId: string, onSuc
       try {
         await deleteProductById(productId);
         
-        onSuccess();
+        queryClient.invalidateQueries({
+          queryKey: ['products'],
+        });
         setIsModalOpen(false);
       } catch (error) {
         console.error("Error deleting product:", error);

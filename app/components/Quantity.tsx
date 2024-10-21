@@ -1,7 +1,11 @@
 import { useState } from 'react';
 
-function Quantity() {
-  const [quantity, setQuantity] = useState(1);
+type QuantityProps = {
+  quantity: number;
+  setQuantity: (quantity: number) => void;
+}
+
+function Quantity({ quantity, setQuantity }: QuantityProps) {
 
   const increaseQuantity = () => {
     setQuantity(quantity + 1);

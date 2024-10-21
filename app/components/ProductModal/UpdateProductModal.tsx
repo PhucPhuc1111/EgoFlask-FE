@@ -5,6 +5,7 @@ import { InferType, number, object, string, mixed } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { updateProduct } from "~/data";
+import { useQueryClient } from "@tanstack/react-query";
 
 let schema = object({
   name: string().required("Vui lòng chọn tên sản phẩm"),
@@ -21,12 +22,13 @@ let schema = object({
 const resolver = yupResolver(schema);
 export type UpdateProductForm = InferType<typeof schema>;
 
-const UpdateProductModal = ({ productId, productData, onSuccess }) => {
+const UpdateProductModal = ({ productId, productData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -75,9 +77,10 @@ const UpdateProductModal = ({ productId, productData, onSuccess }) => {
   
       // Gọi hàm updateProduct và truyền formData
       await updateProduct(productId, formData);
-  
+      queryClient.invalidateQueries({
+        queryKey: ['products'],
+      });
       setIsModalOpen(false);
-      onSuccess(); // Gọi callback khi cập nhật thành công
     } catch (error) {
       console.error("Lỗi khi cập nhật sản phẩm:", error);
     } finally {

@@ -5,6 +5,7 @@ import { InferType, mixed, number, object, string } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form"; 
 import { addProduct } from "~/data"; 
+import { useQueryClient } from "@tanstack/react-query";
 
 let schema = object({
   productKey: string(),
@@ -22,7 +23,7 @@ let schema = object({
 const resolver = yupResolver(schema);
 export type AddProductForm = InferType<typeof schema>;
 
-const AddProductModal = ({ onSuccess }) => {
+const AddProductModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fileList, setFileList] = useState([]); 
   const [previewImage, setPreviewImage] = useState(''); 
@@ -31,6 +32,7 @@ const AddProductModal = ({ onSuccess }) => {
   const { register, handleSubmit, setValue, formState: { errors }, trigger } = useForm<AddProductForm>({
     resolver,
   });
+  const queryClient = useQueryClient();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -54,7 +56,9 @@ const AddProductModal = ({ onSuccess }) => {
       });
 
       setIsModalOpen(false);
-      onSuccess(); 
+      queryClient.invalidateQueries({
+        queryKey: ['products'],
+      });
     } catch (error) {
       console.error("Lỗi khi thêm sản phẩm:", error);
     } finally {
