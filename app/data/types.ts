@@ -62,12 +62,18 @@ export type Stock = {
 
 export type Order = {
   orderId: string;
+  customerName: string;
+  customerPhone: string;
+  customerEmail: string;
+  customerAvatar: string;
+  customerAddress: string;
   accountId: number;
   supplierId: number;
   totalAmount: number;
   discountAmount?: number | null;
   finalAmount: number;
-  status: "PENDING" | "SHIPPING" | "COMPLETED" | "CANCELLED";
+  status?: "PENDING" | "SHIPPING" | "COMPLETED" | "CANCELLED";
+  transactionStatus?: 'PAID' | 'CANCELLED' | null;
   createdAt: string;
   updatedAt: string;
   couponId?: string | null;
@@ -82,6 +88,7 @@ export type OrderDetail = {
   quantity: number;
   unitPrice: number;
   totalPrice: number;
+  isCustom: true;
 };
 
 export type ApproveOrder = {
