@@ -16,7 +16,7 @@ export async function getAccountById(token: string, accountId: number): Promise<
     },
   });
 }
-export async function getDashboardData(token: string, filter: string = 'ThisMonth'): Promise<DashboardResponse> {
+export async function getDashboardData(token: string, filter: string = 'Day'): Promise<DashboardResponse> {
   return await request.get(`${BASE_URL}/api/Admin/dashboard?filter=${filter}`, {
     headers: {
       'Authorization': `Bearer ${token}`,
@@ -25,7 +25,7 @@ export async function getDashboardData(token: string, filter: string = 'ThisMont
 }
 export const useGetDashboardData = (
   token: string,
-  filter: string = 'ThisMonth',
+  filter: string = 'Day',
   config?: UseQueryOptions<DashboardResponse>
 ) => {
   return useQuery({

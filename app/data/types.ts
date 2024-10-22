@@ -269,9 +269,13 @@ export type OrderTransaction = {
 
 export type DashboardResponse = {
   totalProductsSold: number;
+  totalProductsSoldYesterday:number;
   totalCustomer: number;
   totalOrders: number;
+  totalOrdersYesterday: number;
   commission: number;
+  commissionYesterday: number;
   revenue: number;
-  visiter: number; // Assuming this is not a typo, otherwise rename to "visitor"
+  revenueYesterday: number;
+  visiter: number; 
 };

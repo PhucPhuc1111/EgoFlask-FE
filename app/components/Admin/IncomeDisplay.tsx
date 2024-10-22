@@ -13,43 +13,35 @@ const incomeData: { [key: string]: IncomeData & { lastPeriod: number } } = {
 
 interface IncomeDisplayProps {
   income?: number;
+  lastincome?: number;
   isLoading?: boolean;
+  select?: string;
 }
 
-const IncomeDisplay: React.FC<IncomeDisplayProps> = ({ income, isLoading }) => {
-  const [selectedTimeframe, setSelectedTimeframe] = useState<string>("Tháng này");
+const IncomeDisplay: React.FC<IncomeDisplayProps> = ({ income,lastincome,select, isLoading }) => {
+  const selectedTimeframe = select
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedTimeframe(e.target.value);
-  };
 
-  const displayIncome = income ?? incomeData[selectedTimeframe].income;
-  const lastPeriodIncome = incomeData[selectedTimeframe].lastPeriod;
+  const displayIncome = income ?? 0;
+  const lastPeriodIncome =lastincome ?? 0;
 
   return (
     <div className="p-4 font-sans border-2 rounded-2xl bg-[#f7f7f7] space-y-3 w-72 h-40 ">
       <div className="flex items-center justify-between ">
         <div className="text-black font-semibold">Doanh thu nhận được </div>
-        <select
-          value={selectedTimeframe}
-          onChange={handleChange}
-          className="bg-[#f7f7f7] border-none ring-0 focus:ring-0 focus:outline-none  "
-        >
-          <option value="Ngày này">Ngày này</option>
-          <option value="Tháng này">Tháng này</option>
-          <option value="Năm này">Năm này</option>
-        </select>
       </div>
 
       <div className="text-3xl text-blue-600 font-bold">
         {isLoading ? "Loading..." : `${displayIncome.toLocaleString()} đ`}
       </div>
       <div className="text-black">
-        {selectedTimeframe === "Tháng này"
+        {selectedTimeframe === "Month"
           ? `Tháng trước: ${lastPeriodIncome.toLocaleString()} đ`
-          : selectedTimeframe === "Năm này"
+          : selectedTimeframe === "Year"
           ? `Năm trước: ${lastPeriodIncome.toLocaleString()} đ`
-          : `Hôm qua: ${lastPeriodIncome.toLocaleString()} đ`}
+          : selectedTimeframe === "Day"
+          ? `Hôm qua: ${lastPeriodIncome.toLocaleString()} đ`
+          : `Toàn bộ: ${lastPeriodIncome.toLocaleString()} đ`}
       </div>
     </div>
   );
