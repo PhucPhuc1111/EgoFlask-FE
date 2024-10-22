@@ -266,3 +266,12 @@ export type OrderTransaction = {
   transactionId: number;
   transactionStatus: string;
 };
+
+export type DashboardResponse = {
+  totalProductsSold: number;
+  totalCustomer: number;
+  totalOrders: number;
+  commission: number;
+  revenue: number;
+  visiter: number; // Assuming this is not a typo, otherwise rename to "visitor"
+};

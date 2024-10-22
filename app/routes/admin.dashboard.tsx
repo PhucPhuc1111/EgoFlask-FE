@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useGetDashboardData } from "../data/admin";
+import { useGetProfile } from "~/data";
 import CustomerDisplay from "~/components/Admin/CustomerDisplay";
 import IncomeBarChart from "~/components/Admin/IncomeBarChart";
 import IncomeDisplay from "~/components/Admin/IncomeDisplay";
@@ -15,47 +17,48 @@ export const handle = {
 };
 
 export default function AdminDashboard() {
-  const [websiteData, setWebsiteData] = useState<number>(89320); 
+  const { data: profile, isLoading: profileLoading, isError } = useGetProfile();
+  const [websiteData, setWebsiteData] = useState<number>(89320);
+  const token = profile?.user?.token; // Replace with the actual token or state variable
+  const { data: dashboardData, isLoading } = useGetDashboardData(token);
+
   return (
     <main className="flex-1 pt-32 pb-10 max-h-screen overflow-auto ">
-      
       <div className="flex space-x-3 px-2">
         <div className="w-1/2  ">
-        <p className="text-black text-lg font-bold p-3">Tổng quan</p>
+          <p className="text-black text-lg font-bold p-3">Tổng quan</p>
           <div className="flex ">
             <div>
-            <div className="p-2">
-              <IncomeDisplay />
+              <div className="p-2">
+                <IncomeDisplay income={dashboardData?.revenue} isLoading={isLoading} />
+              </div>
+              <div className="p-2">
+                <OrderDisplay totalOrders={dashboardData?.totalOrders} isLoading={isLoading} />
+              </div>
+              <div className="p-2">
+                <WebsiteDisplay onWebsiteDataChange={setWebsiteData} visitors={dashboardData?.visiter} isLoading={isLoading} />
+              </div>
             </div>
-            <div className="p-2">
-              <OrderDisplay />
+            <div>
+              <div className="p-2">
+                <CommissionDisplay commission={dashboardData?.commission} isLoading={isLoading} />
+              </div>
+              <div className="p-2">
+                <ProductDisplay totalProductsSold={dashboardData?.totalProductsSold} isLoading={isLoading} />
+              </div>
+              <div className="p-2">
+                <CustomerDisplay totalCustomers={dashboardData?.totalCustomer} isLoading={isLoading} />
+              </div>
             </div>
-            <div className="p-2">
-            <WebsiteDisplay onWebsiteDataChange={setWebsiteData} /> 
-            </div></div>
-          
-
-          <div>
-          <div className="p-2">
-              <CommissionDisplay />
-            </div>
-            <div className="p-2">
-              <ProductDisplay />
-            </div>
-            <div className="p-2">
-              <CustomerDisplay />
-            </div>
-          </div>
           </div>
         </div>
         <div className="w-1/2 ">
-        <div className="py-2">
-        <WebsiteVisitsChart websiteData={websiteData} />
-        </div>
-        <div className="">
-             <IncomeBarChart/>  
-        </div>
-   
+          <div className="py-2">
+            <WebsiteVisitsChart websiteData={websiteData} />
+          </div>
+          <div className="">
+            <IncomeBarChart />
+          </div>
         </div>
       </div>
     </main>

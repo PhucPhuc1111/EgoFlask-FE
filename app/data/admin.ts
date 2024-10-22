@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { Account } from "./types";
+import { Account,DashboardResponse } from "./types";
 
 export async function getAllAccount(token: string, pageIndex: number, pageSize: number): Promise<Account[]> {
   return await request.get(`${BASE_URL}/api/Account/${pageIndex}/${pageSize}`, {
@@ -16,6 +16,25 @@ export async function getAccountById(token: string, accountId: number): Promise<
     },
   });
 }
+export async function getDashboardData(token: string, filter: string = 'ThisMonth'): Promise<DashboardResponse> {
+  return await request.get(`${BASE_URL}/api/Admin/dashboard?filter=${filter}`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+}
+export const useGetDashboardData = (
+  token: string,
+  filter: string = 'ThisMonth',
+  config?: UseQueryOptions<DashboardResponse>
+) => {
+  return useQuery({
+    queryKey: ['dashboard', token, filter],
+    queryFn: () => getDashboardData(token, filter),
+    enabled: !!token,
+    ...config,
+  });
+};
 
 export const useGetAllAccount = (
   token: string,

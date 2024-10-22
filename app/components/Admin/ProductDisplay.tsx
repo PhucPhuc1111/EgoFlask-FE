@@ -11,12 +11,20 @@ const productData: { [key: string]: ProductData & { lastPeriod: number } } = {
   "Ngày này": { product: 25478392, lastPeriod: 25725931 }, 
 };
 
-const ProductDisplay: React.FC = () => {
+interface ProductDisplayProps {
+  totalProductsSold?: number;
+  isLoading?: boolean;
+}
+
+const ProductDisplay: React.FC<ProductDisplayProps> = ({ totalProductsSold, isLoading }) => {
   const [selectedTimeframe, setSelectedTimeframe] = useState<string>("Tháng này");
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedTimeframe(e.target.value);
   };
+
+  const displayProducts = totalProductsSold ?? productData[selectedTimeframe].product;
+  const lastPeriodProducts = productData[selectedTimeframe].lastPeriod;
 
   return (
     <div className="p-4 font-sans border-2 rounded-2xl bg-[#f7f7f7] space-y-3 w-72 h-40 ">
@@ -27,22 +35,21 @@ const ProductDisplay: React.FC = () => {
           onChange={handleChange}
           className="bg-[#f7f7f7] border-none ring-0 focus:ring-0 focus:outline-none relative"
         >
-        
-        <option value="Ngày này">Ngày này</option>
-        <option value="Tháng này">Tháng này</option>
-             <option value="Năm này">Năm này</option>
+          <option value="Ngày này">Ngày này</option>
+          <option value="Tháng này">Tháng này</option>
+          <option value="Năm này">Năm này</option>
         </select>
       </div>
 
       <div className="text-3xl text-blue-600 font-bold">
-        {productData[selectedTimeframe].product.toLocaleString()} 
+        {isLoading ? "Loading..." : `${displayProducts.toLocaleString()}`}
       </div>
       <div className="text-black">
         {selectedTimeframe === "Tháng này"
-          ? `Tháng trước: ${productData["Tháng này"].lastPeriod.toLocaleString()} `
+          ? `Tháng trước: ${lastPeriodProducts.toLocaleString()}`
           : selectedTimeframe === "Năm này"
-          ? `Năm trước: ${productData["Năm này"].lastPeriod.toLocaleString()} `
-          : `Hôm qua: ${productData["Ngày này"].lastPeriod.toLocaleString()} `}
+          ? `Năm trước: ${lastPeriodProducts.toLocaleString()}`
+          : `Hôm qua: ${lastPeriodProducts.toLocaleString()}`}
       </div>
     </div>
   );
