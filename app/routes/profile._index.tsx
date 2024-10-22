@@ -19,12 +19,12 @@ const Profile = () => {
   const gender = useMemo(() => {
     return profile.data?.detail?.gender?.toLowerCase();
   }, [profile.data]);
-  
+
   return (
     <main className="mt-[--m-header-top] ">
       <div className="grid grid-cols-12 w-full space-x-7 pr-8">
         <div className="col-span-2  border-[#e8e8e4] border-2 rounded-r-3xl w-full  ">
-        <ProfileSidebar />
+          <ProfileSidebar />
         </div>
         <div className="col-span-10 border-[#0055C3] my-9 border-2 rounded-3xl px-7  ">
           <div className="p-7">
@@ -33,20 +33,14 @@ const Profile = () => {
             </p>
             <div className="grid grid-cols-12 ">
               <div className="col-span-8 border-r-2 border-[#0055C3] w-full p-7 ">
-                <div className="flex">
-                  <div className="mt-4 space-y-6  font-semibold text-[#9c9797]">
-                    <div className="">Họ và tên</div>
-                    <div className="">Email</div>
-                    <div className="">Số điện thoại</div>
-                    <div className="">Giới tính</div>
-                    <div className="">Ngày sinh</div>
-                  </div>
-                  <div className=" mt-4 ml-4 space-y-6   text-black">
-                    <div className="flex space-x-9">
+                <div className="flex flex-col">
+                  <div className="mt-4 space-y-6  font-semibold">
+                    <div className="flex justify-start gap-10">
+                      <span className="text-[#9c9797]">Họ và tên</span>
                       <span className="">{[profile.data?.detail.name]}</span>
-                     
                     </div>
-                    <div className="flex space-x-9">
+                    <div className="flex justify-start gap-10">
+                      <span className="text-[#9c9797]">Email</span>
                       <span>{profile.data?.detail.email || ""}</span>
                       <Link
                         to="/profile/email"
@@ -55,7 +49,8 @@ const Profile = () => {
                         Thay đổi
                       </Link>
                     </div>
-                    <div className="flex space-x-9">
+                    <div className="flex justify-start gap-10">
+                      <span className="text-[#9c9797]">Số điện thoại</span>
                       <span>{profile.data?.detail.phoneNumber}</span>
                       <Link
                         to="/profile/phone-number"
@@ -64,9 +59,8 @@ const Profile = () => {
                         Thay đổi
                       </Link>
                     </div>
-
-                    
-                    <div className="flex space-x-4">
+                    <div className="flex justify-start gap-10">
+                      <span className="text-[#9c9797]">Giới tính</span>
                       <div className="flex items-center ">
                         <input
                           id="default-radio-1"
@@ -98,7 +92,7 @@ const Profile = () => {
                           checked={!gender}
                           id="default-radio-2"
                           type="radio"
-                              value=""
+                          value=""
                           name="default-radio"
                           className="w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2  dark:border-[#0055c3] dark:focus:ring-[#0055c3]"
                         />
@@ -107,11 +101,21 @@ const Profile = () => {
                         </label>
                       </div>
                     </div>
-                    
-                    <div className="flex space-x-9">
+                    <div className="flex justify-start gap-10">
+                      <span className="text-[#9c9797]">Ngày sinh</span>
                       <span>{profile.data?.detail.birthday}</span>
                       <Link
                         to="/profile/dob"
+                        className="text-[#0055c3] underline"
+                      >
+                        Thay đổi
+                      </Link>
+                    </div>
+                    <div className="flex justify-start gap-10">
+                      <span className="text-[#9c9797]">Địa chỉ</span>
+                      <span className="line-clamp-2">{profile.data?.detail.address}</span>
+                      <Link
+                        to="/profile/phone-number"
                         className="text-[#0055c3] underline"
                       >
                         Thay đổi
@@ -123,7 +127,7 @@ const Profile = () => {
               <div className="col-span-4 ">
                 <div className="">
                   <div className="flex justify-center ">
-                  <img className="w-32 h-32 rounded-full" src={profile.data?.user?.avatar?.[0].value || '/images/avatar.png'} alt="Profile" />
+                    <img className="w-32 h-32 rounded-full" src={profile.data?.user?.avatar?.[0].value || '/images/avatar.png'} alt="Profile" />
                   </div>
 
                   <div className="flex justify-center mt-4">
@@ -142,7 +146,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <div><SubFooter/></div>
+      <div><SubFooter /></div>
     </main>
   );
 };
