@@ -1,10 +1,12 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Image, Modal, Pagination, PaginationProps } from "antd";
+import { Image, message, Modal, Pagination, PaginationProps } from "antd";
 import _ from "lodash";
 import { useCallback, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoCheckmarkCircleOutline, IoSearchOutline } from "react-icons/io5"
-import { approveOrder, ApproveOrder, useGetAllOrder, useGetProfile } from "~/data";
+import { Model } from "~/components";
+import { formatMoney } from "~/components/utils";
+import { approveOrder, ApproveOrder, OrderDetail, useGetAllOrder, useGetProfile } from "~/data";
 
 export const handle = {
   hideHeader: true,
@@ -54,50 +56,70 @@ export default function AdminOrder() {
     console.log('Search: ', search);
   }
 
-  const ProductCard = () => {
+  const ProductCard = ({ orderDetail }: { orderDetail?: OrderDetail[] }) => {
     return (
       <div className="flex flex-row items-center justify-between gap-2">
-        <div className="bg-[#E8E8E4] self-center">
-          <Image src="/images/products/bottle-1.png" alt="bottle" width={89} height={122} className="w-[89px] h-[122px]" />
-        </div>
-        <div className="flex flex-1 flex-col justify-between text-sm">
-          <div className="flex flex-row justify-between">
-            <div className="">Bình giữ nhiệt <span className="font-bold">Graceful</span></div>
-            <div>10000 VND</div>
-          </div>
-          <span className="self-start">x1</span>
-          <div className="flex flex-col items-start">
-            Dịch vụ đi kèm:
-            <div className="w-full flex flex-row items-center justify-between gap-2">
-              <span>Viết thư tay: <span className="font-bold">Sinh nhật vui vẻ</span></span>
-              <span>10000 VND</span>
+        {_.map(orderDetail, (item, index) => {
+          return (
+            <div key={index} className="w-full flex flex-row gap-3">
+              <div className="bg-[#E8E8E4] self-center">
+                {item.isCustom ? (
+                  <Model
+                    topImage={item.head?.imageUrl}
+                    bodyImage={item.body?.imageUrl}
+                    strapImage={item.strap?.imageUrl}
+                    width="89px"
+                  >
+
+                  </Model>
+                ) : (
+                  <Image src={item.productImageURL} alt={item.productName} width={89} className="w-[89px] h-[122px]" />
+                )}
+              </div>
+              <div className="flex flex-1 flex-col justify-between text-sm">
+                <div className="flex flex-row justify-between">
+                  <div className="">Bình giữ nhiệt <span className="font-bold">{item.productName}</span></div>
+                  <div>{formatMoney(item.unitPrice)}</div>
+                </div>
+                <span className="self-start">x{item.quantity}</span>
+                <div className="flex flex-col items-start">
+                  Dịch vụ đi kèm:
+                  <div className="w-full flex flex-row items-center justify-between gap-2">
+                    <div>
+                      <span className="font-bold">Nội dung khắc:{' '}</span>
+                      {item.engrave}; Vị trí khắc: {item.engravePosition || 'Ngẫu nhiên'}
+                    </div>
+                    <span>{formatMoney(50000)}</span>
+                  </div>
+                  <div className="w-full flex flex-row items-center justify-between gap-2">
+                    <span className="font-bold">Gói quà</span>
+                    <span>{formatMoney(10000)}</span>
+                  </div>
+                </div>
+                <div className="border-2 border-[#0055C3] rounded-full my-2" />
+                <div className="w-full flex flex-row items-center justify-between">
+                  <span className="text-[#0055C3] font-bold">Tổng tiền: </span>
+                  <span className="text-[#0055C3] font-bold">{formatMoney(item.totalPrice)}</span>
+                </div>
+              </div>
             </div>
-            <div className="w-full flex flex-row items-center justify-between gap-2">
-              <span>Gói quà</span>
-              <span>10000 VND</span>
-            </div>
-          </div>
-          <div className="border-2 border-[#0055C3] rounded-full my-2" />
-          <div className="w-full flex flex-row items-center justify-between">
-            <span className="text-[#0055C3] font-bold">Tổng tiền: </span>
-            <span className="text-[#0055C3] font-bold">100000 VND </span>
-          </div>
-        </div>
+          )
+        })}
       </div>
     )
   }
 
-  const AddressCard = () => {
+  const AddressCard = ({ name, phone, address }: { name: string, phone: string, address: string }) => {
     return (
       <div className="flex flex-col items-start justify-start text-start gap-4">
         <h4 className="text-black">
-          Nguyễn Văn A
+          {name}
         </h4>
         <span className="text-[#7D7474]">
-          (+84) 905 245 344
+          {phone}
         </span>
         <span className="text-[#7D7474]">
-          1472 Đ. Võ Văn Kiệt, Phường 3, Quận 6, Hồ Chí Minh
+          {address}
         </span>
       </div>
     )
@@ -132,7 +154,7 @@ export default function AdminOrder() {
     try {
       let response = await approveOrder(profile.data?.user?.token || '', data);
       if (response) {
-        setModalText('Duyệt đơn hàng thành công');
+        message.success('Duyệt đơn hàng thành công');
         queryClient.invalidateQueries({
           queryKey: ['order']
         })
@@ -141,7 +163,8 @@ export default function AdminOrder() {
           setConfirmLoading(false);
         }, 1000);
       }
-    } catch (error) {
+    } catch (error: any) {
+      message.error(`Duyệt đơn hàng thất bại: ${error?.message}`);
       setConfirmLoading(false);
     } finally {
       setConfirmLoading(false);
@@ -191,20 +214,20 @@ export default function AdminOrder() {
               <tr key={index} className="text-center">
                 <td className="border-2 border-[#0055C3] border-opacity-70">{item.orderId}</td>
                 <td className="border-2 border-[#0055C3] border-opacity-70 w-1/3 overflow-auto">
-                  <ProfileCard name={"Ngô Quang Thắng"} email="thangnqse173445@fpt.edu.vn" />
+                  <ProfileCard name={item.customerName} email={item.customerEmail} />
                 </td>
                 <td className="border-2 border-[#0055C3] border-opacity-70 w-1/3 p-2">
-                  <ProductCard />
+                  <ProductCard orderDetail={item.orderDetails} />
                 </td>
                 <td className="border-2 border-[#0055C3] border-opacity-70 p-2">
-                  <AddressCard />
+                  <AddressCard address={item.customerAddress} name={item.customerName} phone={item.customerPhone} />
                 </td>
                 <td className="border-2 border-[#0055C3] border-opacity-70 py-2 px-4">
                   <select name="" className="border-1 border-[#0055C3] w-fit h-fit rounded-md">
-                    <option selected={item.status === "CANCELLED"} value="PENDING">Đã hủy</option>
-                    <option selected={item.status === "PENDING"} value="PENDING">Đang chờ thanh toán</option>
+                    <option selected={item.status === "CANCELLED"} value="CANCELLED">Đã hủy</option>
+                    <option selected={item.status === "PENDING"} value="PENDING">Đang chờ duyệt đơn</option>
                     <option selected={item.status === "SHIPPING"} value="DELIVERING">Đang vận chuyển</option>
-                    <option selected={item.status === "COMPLETED"} value="COMPLETED">Đã thanh toán</option>
+                    <option selected={item.status === "COMPLETED"} value="COMPLETED">Đã giao hàng</option>
                   </select>
                 </td>
                 <td className="border-2 border-[#0055C3] border-opacity-70">
@@ -230,7 +253,7 @@ export default function AdminOrder() {
           onChange={onChange}
           onShowSizeChange={onShowSizeChange}
           defaultCurrent={currentPage}
-          total={500}
+          total={order.data?.length}
         />
       </div>
       <Modal

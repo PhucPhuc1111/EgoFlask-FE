@@ -71,8 +71,9 @@ export type Order = {
   supplierId: number;
   totalAmount: number;
   discountAmount?: number | null;
-  finalAmount: number;
+  finalAmount?: number | null;
   status?: "PENDING" | "SHIPPING" | "COMPLETED" | "CANCELLED";
+  transactionId?: string | null;
   transactionStatus?: 'PAID' | 'CANCELLED' | null;
   createdAt: string;
   updatedAt: string;
@@ -80,15 +81,26 @@ export type Order = {
   orderDetails?: OrderDetail[]; // Add this line to include order details in the Order type
 };
 
+export type ComponentDetail = {
+  name: string;
+  color: string;
+  imageUrl: string;
+};
+
 export type OrderDetail = {
   orderDetailId: string;
   productId: string;
   productName: string;
+  isCustom: boolean;
   productImageURL: string;
+  engrave?: string;
+  engravePosition?: string;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
-  isCustom: true;
+  head?: ComponentDetail;
+  body?: ComponentDetail;
+  strap?: ComponentDetail;
 };
 
 export type ApproveOrder = {
