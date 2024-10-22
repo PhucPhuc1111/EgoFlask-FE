@@ -115,7 +115,7 @@ const Profile = () => {
                       <span className="text-[#9c9797]">Địa chỉ</span>
                       <span className="line-clamp-2">{profile.data?.detail.address}</span>
                       <Link
-                        to="/profile/phone-number"
+                        to="/profile/address"
                         className="text-[#0055c3] underline"
                       >
                         Thay đổi

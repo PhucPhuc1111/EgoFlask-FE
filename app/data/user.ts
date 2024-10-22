@@ -18,6 +18,15 @@ export async function registerAccount(user: RegisterForm) {
   }); 
 }
 
+export async function updateProfile(token: string, user: FormData): Promise<{message: string}> {
+  return await request.putMultiPart(`${BASE_URL}/api/Account/update-account`, user, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+}
+
 export function getMe(token: string): Promise<User> {
   return request.get(`${BASE_URL}/api/Account/whoami`, {
     headers: {
