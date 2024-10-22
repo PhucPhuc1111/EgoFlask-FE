@@ -32,16 +32,16 @@ export const Footer = () => {
                 <div className="text-lg w-[150px] pb-4  border-b-2 text-black font-semibold">Chính sách</div>
                 <div className="space-y-3">
                   <div>
-                    <Link className="text-black" to="/chinhhsachbaomat">Chính sách bảo mật</Link>
+                    <Link className="text-black" to="#">Chính sách bảo mật</Link>
                   </div>
                   <div>
-                    <Link className="text-black" to="/chinhhsachbaohanh">Chính sách bảo hành</Link>
+                    <Link className="text-black" to="#">Chính sách bảo hành</Link>
                   </div>
                   <div>
-                    <Link className="text-black" to="/chinhhsachdoitra">Chính sách đổi trả</Link>
+                    <Link className="text-black" to="#">Chính sách đổi trả</Link>
                   </div>
                   <div>
-                    <Link className="text-black" to="/chinhhsachvanchuyen">Chính sách vận chuyển</Link>
+                    <Link className="text-black" to="#">Chính sách vận chuyển</Link>
                   </div>
                 </div>
               </div>
@@ -57,17 +57,17 @@ export const Footer = () => {
 
                 <div className="space-y-3">
                   <div>
-                    <Link className="text-black" to="/facebook">Facebook</Link>
+                    <Link className="text-black" to="https://www.facebook.com/profile.php?id=61566267320324">Facebook</Link>
                   </div>
                   <div>
-                    <Link className="text-black" to="/instagram">Instagram</Link>
+                    <Link target="_blank" to="https://www.instagram.com/egoflaskvietnam/" className="text-black">Instagram</Link>
                   </div>
-                  <div>
+                  {/* <div>
                     <Link className="text-black" to="/shopee">Shopee</Link>
                   </div>
                   <div>
                     <Link className="text-black" to="/tiktok">Tiktok</Link>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
