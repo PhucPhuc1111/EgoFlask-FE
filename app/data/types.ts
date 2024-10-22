@@ -266,3 +266,16 @@ export type OrderTransaction = {
   transactionId: number;
   transactionStatus: string;
 };
+
+export type DashboardResponse = {
+  totalProductsSold: number;
+  totalProductsSoldYesterday:number;
+  totalCustomer: number;
+  totalOrders: number;
+  totalOrdersYesterday: number;
+  commission: number;
+  commissionYesterday: number;
+  revenue: number;
+  revenueYesterday: number;
+  visiter: number; 
+};

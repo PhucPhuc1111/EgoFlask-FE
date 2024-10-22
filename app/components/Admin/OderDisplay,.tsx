@@ -11,38 +11,34 @@ const orderData: { [key: string]: OrderData & { lastPeriod: number } } = {
   "Ngày này": { order: 25478392, lastPeriod: 25725931 }, 
 };
 
-const OrderDisplay: React.FC = () => {
-  const [selectedTimeframe, setSelectedTimeframe] = useState<string>("Tháng này");
+interface OrderDisplayProps {
+  totalOrders?: number;
+  totalOrdersyesterday?: number;
+  isLoading?: boolean;
+  select?: string;
+}
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedTimeframe(e.target.value);
-  };
+const OrderDisplay: React.FC<OrderDisplayProps> = ({ totalOrders, totalOrdersyesterday, isLoading, select }) => {
+  const selectedTimeframe = select ?? "Tháng này";
+
+  const displayOrders = totalOrders ?? 0;
+  const lastPeriodOrders = totalOrdersyesterday ?? 0;
 
   return (
     <div className="p-4 font-sans border-2 rounded-2xl bg-[#f7f7f7] space-y-3 w-72 h-40 ">
       <div className="flex items-center justify-between ">
         <div className="text-black font-semibold">Đơn hàng</div>
-        <select
-          value={selectedTimeframe}
-          onChange={handleChange}
-          className="bg-[#f7f7f7] border-none ring-0 focus:ring-0 focus:outline-none relative"
-        >
-         
-         <option value="Ngày này">Ngày này</option>
-        <option value="Tháng này">Tháng này</option>
-             <option value="Năm này">Năm này</option>
-        </select>
       </div>
 
       <div className="text-3xl text-blue-600 font-bold">
-        {orderData[selectedTimeframe].order.toLocaleString()} 
+        {isLoading ? "Loading..." : `${displayOrders.toLocaleString()}`}
       </div>
       <div className="text-black">
-        {selectedTimeframe === "Tháng này"
-          ? `Tháng trước: ${orderData["Tháng này"].lastPeriod.toLocaleString()} `
-          : selectedTimeframe === "Năm này"
-          ? `Năm trước: ${orderData["Năm này"].lastPeriod.toLocaleString()} `
-          : `Hôm qua: ${orderData["Ngày này"].lastPeriod.toLocaleString()} `}
+        {selectedTimeframe === "Month"
+          ? `Tháng trước: ${lastPeriodOrders.toLocaleString()}`
+          : selectedTimeframe === "Year"
+          ? `Năm trước: ${lastPeriodOrders.toLocaleString()}`
+          : selectedTimeframe === "Day" ? `Hôm qua: ${lastPeriodOrders.toLocaleString()}` : `Toàn bộ: ${lastPeriodOrders.toLocaleString()}`}
       </div>
     </div>
   );
