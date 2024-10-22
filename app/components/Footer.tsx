@@ -57,7 +57,7 @@ export const Footer = () => {
 
                 <div className="space-y-3">
                   <div>
-                    <Link className="text-black" to="https://www.facebook.com/profile.php?id=61566267320324">Facebook</Link>
+                    <Link target="_blank" className="text-black" to="https://www.facebook.com/profile.php?id=61566267320324">Facebook</Link>
                   </div>
                   <div>
                     <Link target="_blank" to="https://www.instagram.com/egoflaskvietnam/" className="text-black">Instagram</Link>
