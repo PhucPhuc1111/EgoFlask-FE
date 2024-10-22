@@ -1,4 +1,5 @@
 import { Link, useMatches } from "@remix-run/react";
+import { getYear } from "date-fns";
 import _ from "lodash";
 
 export const Footer = () => {
@@ -77,7 +78,7 @@ export const Footer = () => {
           <div className="flex justify-center text-center mt-4 text-md w-full text-black  ">
             <div className=" w-5/6 border-t-2  ">
               <p className="mt-4">
-                 Copyright ©2024 Ego Flask All rights reserved
+                 Copyright ©{getYear(new Date())} Ego Flask All rights reserved
             </p>   
             </div>
            
