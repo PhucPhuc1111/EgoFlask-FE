@@ -36,7 +36,7 @@ export default function AdminOrder() {
 
   const filteredOrder = useMemo(() => {
     return _(order.data)
-      .orderBy(it => it.createdAt, 'desc')
+      .orderBy(it => it.updatedAt, 'desc')
       .value();
   }, [order.data, searchValue, currentPage, pageSize]);
 
