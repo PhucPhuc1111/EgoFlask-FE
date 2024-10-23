@@ -72,7 +72,7 @@ const Orders = () => {
     {
       id: 3,
       name: "Creative",
-      img: "/images/products/bottle-3.png",
+      img: "/images/products/bottle-3.png?v=1",
       price: "200.000",
     },
     {

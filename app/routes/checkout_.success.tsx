@@ -30,7 +30,7 @@ export default function CheckoutSuccess() {
                     <div className="w-32 h-64 ml-12  flex justify-between items-center">
                       <img
                         className="w-full"
-                        src="/images/products/bottle-3.png"
+                        src="/images/products/bottle-3.png?v=1"
                         alt="Product Collection"
                       />
                     </div>

@@ -78,7 +78,7 @@ const Contact = () => {
         </div>
         <div className="w-5/12 ml-7  ">
           <div className="mt-[130px] flex justify-center  ">
-            <img className="w-full" src="/images/BigLogo.png" alt="" />
+            <img className="w-full" src="/images/BigLogo.png?v=1" alt="logo" />
           </div>
         </div>
       </div>

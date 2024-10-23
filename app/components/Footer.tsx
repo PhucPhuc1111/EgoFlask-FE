@@ -16,7 +16,7 @@ export const Footer = () => {
             
               <div className="">
                 <div className="px-12 mt-16">
-                     <img className="w-11/12 " src='/images/BigLogo.png' alt="" />
+                     <img className="w-11/12 " src='/images/BigLogo.png?v=1' alt="logo" />
                      <div className="text-center ">
                   Refresh your vibe, express your side
                 </div>

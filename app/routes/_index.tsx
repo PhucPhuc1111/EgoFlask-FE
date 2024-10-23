@@ -23,7 +23,7 @@ const products = [
   },
   {
     'name': 'Creative',
-    'image': '/images/products/bottle-3.png',
+    'image': '/images/products/bottle-3.png?v=1',
   },
   {
     'name': 'Elegant',
@@ -81,7 +81,7 @@ export default function Index() {
         </ul> */}
         <div className="flex justify-center">
           <div className="">
-            <img className="w-[1165px] max-h-full aspect-[1165/1005]" src="/images/Banner.jpg" alt="" uk-scrollspy="cls:uk-animation-scale-up; repeat: true;" />
+            <img className="w-full h-auto max-h-full aspect-[1165/1005]" src="/images/Banner.webp" alt="banner" uk-scrollspy="cls:uk-animation-scale-up; repeat: true;" />
           </div>
         </div>
         <div>
@@ -90,7 +90,7 @@ export default function Index() {
           </div>
           <div className="flex" uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100; repeat: true;">
             <div className="w-1/2" uk-scrollspy-class="uk-animation-slide-left">
-              <img className="w-full aspect[733/586]" src='/images/subBanner1.jpg' alt="" />
+              <img className="w-full h-auto aspect[733/586]" src='/images/subBanner1.webp' alt="banner" />
             </div>
             <div className="w-1/2 mt-16 p-12 space-y-7 text-black text-justify px-16 " uk-scrollspy-class="uk-animation-slide-right">
               <p>
@@ -124,9 +124,9 @@ export default function Index() {
             <SubFooter />
           </div>
         </div>
-        <div className="w-full bg-[#0055c3] text-white flex">
+        <div className="w-full h-auto bg-[#0055c3] text-white flex">
           <div className="w-1/2" uk-scrollspy="cls:uk-animation-slide-left-medium; repeat: true;">
-            <img src='/images/subBanner2.jpg' className="w-[713px] aspect-[713/729]" alt="" />
+            <img src='/images/subBanner2.webp' className="w-full h-auto aspect-[713/729]" alt="banner" />
           </div>
           <div className="w-1/2 text-center">
             <div className="flex  justify-center p-12 w-full justify-items-center">
@@ -159,7 +159,7 @@ export default function Index() {
             {_.map(products, (product, index) => (
               <div key={index} className="w-[320px] h-[462px] border-4 border-[#0055c3] cursor-pointer">
                 <div className="flex justify-center">
-                  <img src={product.image} className="w-[185px] h-[355px] relative" alt="" />
+                  <img src={product.image} className="w-full h-auto aspect-[236/383]" alt={product.name} />
                 </div>
                 <p className="py-5">{product.name}</p>
               </div>

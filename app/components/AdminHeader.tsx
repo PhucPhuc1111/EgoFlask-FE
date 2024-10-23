@@ -21,7 +21,7 @@ export const AdminHeader = () => {
           </div>
           <div className="flex items-center justify-center -translate-x-1/2 w-full">
             <img
-              src="/images/Logo.png"
+              src="/images/Logo.png?v=1"
               alt="Logo"
               className="logo w-[157px] h-[45px] cursor-pointer"
               onClick={() => navigate("/admin")}

@@ -5,6 +5,7 @@ import _ from "lodash";
 import { useQueryClient } from "@tanstack/react-query";
 import { formatMoney, splitProductImageURLs } from "./utils";
 import { Link } from "@remix-run/react";
+import { IoCartOutline } from "react-icons/io5";
 
 export interface CartItem {
   id: string;
@@ -142,12 +143,16 @@ const Cart: React.FC<CartProps> = () => {
 
   return (
     <div className="relative z-[9999]">
-      <img
+      <IoCartOutline 
+        className="cursor-pointer w-6 h-6"
+        onClick={handleCartClick}
+      />
+      {/* <img
         className="cursor-pointer w-6 h-6"
         src="/icons/shopping-cart.png"
         alt="Shopping Cart Icon"
         onClick={handleCartClick}
-      />
+      /> */}
       {isCartOpen && (
         <div className="absolute right-0 mt-2 w-[500px] bg-white border border-gray-300 rounded-[10px] shadow-lg z-10">
           <div className="flex justify-between items-center p-4">

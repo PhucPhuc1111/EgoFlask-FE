@@ -175,7 +175,7 @@ export default function Design() {
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-1 w-full items-center justify-center">
           <div className="border-[3px] border-[#0055C3] rounded-xl w-[700px] flex flex-col items-center justify-center gap-4 py-6 px-10 mr-14">
-            <img src="/images/BigLogo.png" alt="Logo" className="aspect-[157/45] w-[157px] h-[45px]" />
+            <img src="/images/BigLogo.png?v=1" alt="Logo" className="aspect-[157/45] w-[157px] h-[45px]" />
             <div className="self-start cursor-pointer flex flex-col gap-3 w-full">
               {_.map(options, (option, index) => (
                 <div key={index} className="flex flex-col w-full">
