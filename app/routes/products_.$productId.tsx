@@ -67,7 +67,7 @@ const ProductDetail = () => {
         <div className="flex p-12 space-x-8">
           <div className="w-1/3 bg-[#e8e8e4] flex justify-center ">
             <img
-              className="w-[274px] h-[525px] relative"
+              className="w-[274px] h-[525px] aspect-[160/525]"
               src={product.imageUrl}
               alt={product.name}
             />

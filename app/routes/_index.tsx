@@ -5,12 +5,12 @@ import { Link, useLocation } from "@remix-run/react";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Home" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
-};
+// export const meta: MetaFunction = () => {
+//   return [
+//     { title: "Home" },
+//     { name: "description", content: "Welcome to Remix!" },
+//   ];
+// };
 
 const products = [
   {
