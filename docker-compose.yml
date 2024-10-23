@@ -12,7 +12,4 @@ services:
       - VITE_API_URL=${VITE_API_URL}
       - VITE_GHN_API_URL=${VITE_GHN_API_URL}
       - NODE_ENV=production
-    retry:
-      max_attempts: 3
-      interval: 30s
     restart: always
