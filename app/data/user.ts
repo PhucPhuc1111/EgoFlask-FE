@@ -22,7 +22,6 @@ export async function updateProfile(token: string, user: FormData): Promise<{mes
   return await request.putMultiPart(`${BASE_URL}/api/Account/update-account`, user, {
     headers: {
       'Authorization': `Bearer ${token}`,
-      "Content-Type": "application/json",
     },
   })
 }
