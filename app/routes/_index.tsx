@@ -157,7 +157,7 @@ export default function Index() {
           </div>
           <div className="flex justify-center space-x-16 p-12 text-center max-w-full overflow-y-hidden overflow-x-auto" uk-scrollspy="target: > div; cls:uk-animation-scale-up; repeat: true; delay: 300;">
             {_.map(products, (product, index) => (
-              <div key={index} className="w-[320px] h-[462px] border-4 border-[#0055c3] cursor-pointer">
+              <div key={index} className="w-[320px] h-auto border-4 border-[#0055c3] cursor-pointer">
                 <div className="flex justify-center">
                   <img src={product.image} className="w-full h-auto aspect-[236/383]" alt={product.name} />
                 </div>

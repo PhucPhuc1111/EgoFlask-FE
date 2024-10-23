@@ -50,7 +50,7 @@ export default function App() {
     <html lang="vi">
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=640, width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, viewport-fit=cover" />
         <title>Ego Flask</title>
         <meta name="description" content="Bình nước custom theo ý bạn!" />
         <script src="/js/uikit.min.js"></script>
