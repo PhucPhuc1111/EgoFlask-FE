@@ -141,8 +141,8 @@ export const Header = () => {
     <header className="absolute top-0 w-full bg-white z-10">
       <div className="flex flex-col items-center justify-center gap-2">
       
-        <div className="top-bar w-full h-[37px] flex items-center justify-center py-2 text-white bg-[#0055C3]">
-          Miễn phí vận chuyển cho đơn hàng trên 1.000.000 VND
+        <div className="top-bar w-full h-[37px] flex items-center justify-center py-2 bg-[#0055C3]">
+          <h4 className='text-white font-medium text-center max-[375px]:text-2xs text-xs'>Miễn phí vận chuyển cho đơn hàng trên 1.000.000 VND</h4>
         </div>
 
       
@@ -184,7 +184,7 @@ export const Header = () => {
           <div className="flex items-center space-x-4 sm:space-x-6">
             
             <IoPersonOutline
-              className="cursor-pointer w-5 h-5 sm:w-6 sm:h-6"
+              className="cursor-pointer w-8 h-8 sm:w-6 sm:h-6"
               onClick={() => {
                 if (user) {
                   navigate("/profile");

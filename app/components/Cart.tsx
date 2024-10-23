@@ -144,7 +144,7 @@ const Cart: React.FC<CartProps> = () => {
   return (
     <div className="relative z-[9999]">
       <IoCartOutline 
-        className="cursor-pointer w-6 h-6"
+        className="cursor-pointer w-8 h-8 sm:w-6 sm:h-6"
         onClick={handleCartClick}
       />
       {/* <img
