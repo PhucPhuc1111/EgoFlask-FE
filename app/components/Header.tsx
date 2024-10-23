@@ -141,8 +141,8 @@ export const Header = () => {
     <header className="absolute top-0 w-full bg-white z-10">
       <div className="flex flex-col items-center justify-center gap-2">
       
-        <div className="top-bar w-full h-[37px] flex items-center justify-center py-2 bg-[#0055C3]">
-          <h4 className='text-white font-medium text-center max-[375px]:text-2xs text-xs'>Miễn phí vận chuyển cho đơn hàng trên 1.000.000 VND</h4>
+        <div className="top-bar w-full h-[37px] flex items-center justify-center text-center py-2 bg-[#0055C3]">
+          <span className='text-white font-medium text-center text-xs max-[375px]:text-2xs sm:text-base'>Miễn phí vận chuyển cho đơn hàng trên 1.000.000 VND</span>
         </div>
 
       
@@ -199,7 +199,7 @@ export const Header = () => {
               <div uk-dropdown="">
                 <Link
                   to="/logout?redirectTo=/?logout=true"
-                  className="flex items-center justify-center gap-2 text-red-500 hover:bg-red-500 hover:text-white rounded-md p-3"
+                  className="flex items-center justify-center hover:no-underline no-underline gap-2 text-red-500 hover:bg-red-500 hover:text-white rounded-md p-3"
                 >
                   <IoLogOut className="w-5 h-5 cursor-pointer text-inherit" />
                   <span className="text-xs">Đăng xuất</span>
@@ -220,7 +220,9 @@ export const Header = () => {
                 <NavLink
                   key={index}
                   to={item.link}
-                  className="text-base text-black hover:text-[#0255C3]"
+                  className={({ isActive }) =>
+                    `text-base hover:no-underline ${isActive ? "text-[#0055C3] font-bold" : "text-black hover:text-[#0255C3]"}`
+                  }
                   onClick={() => setMenuOpen(false)} 
                 >
                   {item.title}
