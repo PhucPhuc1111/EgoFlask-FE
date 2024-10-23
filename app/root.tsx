@@ -58,7 +58,7 @@ export default function App() {
         <Links />
       </head>
       <QueryClientProvider client={queryClient}>
-        <body className="w-full h-full overflow-y-auto">
+        <body className="w-full h-full overflow-y-auto overflow-x-hidden">
           <div id="wrapper">
             <Header />
             <Outlet />
