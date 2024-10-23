@@ -89,7 +89,7 @@ const ProductDetail = () => {
               </div>
               <div> <Dropdown /></div>
               <div className="flex space-x-48">
-                <div><Quantity quantity={quantity} setQuantity={setQuantity}/></div>
+                <div><Quantity quantity={quantity} setQuantity={setQuantity} /></div>
                 <button onClick={handleAddToCart} className="w-48 h-12 bg-[#0055c3] rounded-lg text-white">
                   Thêm vào giỏ hàng
                 </button>
@@ -97,7 +97,56 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-        <div className="p-12  space-y-3 ">
+        <div className="p-12 flex flex-col gap-5">
+          <div className="flex items-center bg-[#0255C3] gap-8">
+            <img src="/images/description.jpg" alt="description" className="aspect-[576-572] w-1/2" />
+            <div className="flex-1 text-white">
+              <h4 className="text-white font-bold text-xl uppercase">
+                Mô tả sản phẩm
+              </h4>
+              <ul className="list-disc pt-2 space-y-2 text-base">
+                <li>
+                  Dung tích: 500ml
+                </li>
+                <li>
+                  Chất liệu: Inox không gỉ 304
+                </li>
+                <li>
+                  Đựng được nước nóng/ấm/lạnh
+                </li>
+                <li>
+                  Giữ nhiệt từ 6 - 12 tiếng
+                </li>
+                <li>
+                  Sản phẩm được dán bằng Decal chuyên dụng chống thấm nước
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="flex items-center bg-[#0255C3] gap-8 py-5">
+            <img src="/images/guide.jpg" alt="guide" className="aspect-[576-572] w-1/2" />
+            <div className="flex-1 text-white">
+              <h4 className="text-white font-bold text-xl uppercase">
+                HƯỚNG DẪN BẢO QUẢN
+              </h4>
+              <ul className="list-decimal pt-2 space-y-2 text-base">
+                <li>
+                  Rửa sạch bằng tay và dùng khăn mềm thấm lau sạch sản phẩm, hạn chế để nước đọng lại trên bề mặt bình
+                </li>
+                <li>
+                  Không dùng bất kỳ vật cứng nào chà xát bề mặt bình
+                </li>
+                <li>
+                  Tránh để sản phẩm tiếp xúc với nhiệt độ cao trong thời gian dài
+                </li>
+                <li>
+                  Không ngâm sản phẩm trong nước
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        {/* <div className="p-12  space-y-3 ">
           <p className="uppercase  text-lg font-semibold text-black">
             Đánh giá từ khách hàng
           </p>
@@ -214,7 +263,7 @@ const ProductDetail = () => {
             <p>Nhận xét của bạn:</p>
             <input type="text" className="w-full h-[150px]" />
           </div>
-        </div>
+        </div> */}
       </div>
       <div>
         <SubFooter />
