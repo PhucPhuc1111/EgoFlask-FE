@@ -24,14 +24,14 @@ const schema = object({
   name: string().required("Tên là bắt buộc"),
   phone: string().required("Số điện thoại là bắt buộc"),
   email: string().email("Email không hợp lệ").required("Email là bắt buộc"),
-  province: string(),
-  // .required("Thành phố là bắt buộc"),
-  district: string(),
-  // .required("Quận là bắt buộc"),
-  ward: string(),
-  // .required("Phường là bắt buộc"),
-  street: string(),
-  // .required("Địa chỉ là bắt buộc"),
+  province: string()
+    .required("Thành phố là bắt buộc"),
+  district: string()
+    .required("Quận là bắt buộc"),
+  ward: string()
+    .required("Phường là bắt buộc"),
+  street: string()
+    .required("Địa chỉ là bắt buộc"),
   deliveryToDifferentAddress: boolean(),
   receiverName: string().when("deliveryToDifferentAddress", {
     is: true,
@@ -224,9 +224,12 @@ export default function Checkout() {
         paymentMethod: data.paymentMethod,
       });
 
-      if (response.url.checkoutUrl && data.paymentMethod === 'PayOS') {
+      if (response.status !== "Failed" && response.url.checkoutUrl && data.paymentMethod === 'PayOS') {
         setIsLoading(false);
         window.location.href = response.url.checkoutUrl;
+      }
+      else if (response.status === "Failed") {
+        message.error(response.message)
       }
       else {
         setIsLoading(false);
@@ -294,7 +297,11 @@ export default function Checkout() {
                     disabled
                     className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7]"
                   />
-
+                  {errors.province && (
+                    <p className="text-red-500 text-xs">
+                      Thông tin địa chỉ không đầy đủ, vui lòng nhấn vào <Link to={'/profile/address'} className="font-bold">đây</Link> để cập nhật
+                    </p>
+                  )}
                   <div className="flex space-x-3">
                     <input
                       type="text"
