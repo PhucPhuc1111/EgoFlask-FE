@@ -183,7 +183,7 @@ const Cart: React.FC<CartProps> = () => {
                       width="100px"
                     />
                   ) : (
-                    <img src={item.topImage} alt={item.name} width="100px" />
+                    <img src={item.topImage} alt={item.name} className="w-1/6 h-auto" />
                   )}
                   <div className="flex flex-col flex-1 ml-4">
                     <div className="flex justify-between items-center w-full">

@@ -8,6 +8,16 @@ import { addToCart, createCustomProduct, useGetComponentList } from "~/data";
 import { useGetProfile } from "~/data";
 import { useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
+import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { authenticator } from "~/services/auth.server";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  let user = await authenticator.isAuthenticated(request);
+  if (!user) {
+    return redirect(`/login?message=${encodeURIComponent("Vui lòng đăng nhập để tiếp tục")}&type=error`);
+  }
+  return json({}, { status: 200 });
+}
 
 const options = [
   {
