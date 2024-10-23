@@ -2,6 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { ActionFunctionArgs, json } from "@remix-run/node"
 import { Form, Link, useLocation, useNavigate } from "@remix-run/react"
 import { useQueryClient } from "@tanstack/react-query"
+import { message } from "antd"
 import { FormEvent, useEffect, useState } from "react"
 import { IoEye, IoEyeOff, IoLogoGoogle } from "react-icons/io5"
 import { AuthorizationError } from "remix-auth"
@@ -48,6 +49,17 @@ export default function Login() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const queryParams = new URLSearchParams(location.search)
+  const messageParams = queryParams.get('message')
+  const type = queryParams.get('type')
+
+  useEffect(() => {
+    if (messageParams) {
+      if (type == 'error') {
+        message.error(messageParams)
+      }
+    }
+  }, [messageParams])
 
   useEffect(() => {
     if (location.search == '?success') {

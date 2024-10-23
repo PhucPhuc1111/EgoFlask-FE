@@ -4,6 +4,7 @@ import _ from "lodash";
 import { Link, useLocation } from "@remix-run/react";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { message } from "antd";
 
 // export const meta: MetaFunction = () => {
 //   return [
@@ -36,6 +37,16 @@ export default function Index() {
   const searchParams = new URLSearchParams(location.search);
   const logout = searchParams.get("logout");
   const queryClient = useQueryClient();
+  const messageParams = searchParams.get('message')
+  const type = searchParams.get('type')
+
+  useEffect(() => {
+    if (messageParams) {
+      if (type == 'error') {
+        message.error(messageParams)
+      }
+    }
+  }, [messageParams])
 
   useEffect(() => {
     if (logout) {
