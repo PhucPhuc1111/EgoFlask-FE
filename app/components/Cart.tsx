@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { formatMoney, splitProductImageURLs } from "./utils";
 import { Link } from "@remix-run/react";
 import { IoCartOutline } from "react-icons/io5";
+import { message } from "antd";
 
 export interface CartItem {
   id: string;
@@ -120,9 +121,10 @@ const Cart: React.FC<CartProps> = () => {
       queryClient.invalidateQueries({
         queryKey: ['in-cart']
       })
+      message.success("Xóa sản phẩm thành công!");
     }
-    } catch (error) {
-      console.log("Failed to remove item from cart:", error);
+    } catch (error: any) {
+      message.error("Xóa sản phẩm không thành công:", error?.message);
     }
   };
 
