@@ -301,7 +301,7 @@ export default function Register() {
           {errors.confirmPassword && <span className="text-red-500 font-bold text-xs sm:text-sm">{errors.confirmPassword.message}</span>}
 
           <button type="submit" disabled={isSubmitting} className="flex items-center justify-center uppercase active:bg-blue-800 hover:bg-blue-900 disabled:bg-blue-900 bg-[#0055C3] w-full py-2 sm:py-4 rounded-lg text-white font-semibold text-lg sm:text-xl">
-            {!isSubmitting && <img src="/icons/loading.svg" alt="" className="w-5 h-5 sm:w-10 sm:h-10" />}
+            {isSubmitting && <img src="/icons/loading.svg" alt="" className="w-5 h-5 sm:w-10 sm:h-10" />}
             <span className="text-sm sm:text-xl">
               Tạo tài khoản
             </span>
