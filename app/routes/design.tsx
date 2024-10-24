@@ -518,7 +518,7 @@ export default function Design() {
                   <div className="uk-slider-items uk-child-width-1-5 uk-grid ml-16">
                     {_.map(componentList, (component, index) => (
                       <div key={index} className={`uk-position-relative cursor-pointer ${(top && top.imageUrl === component.imageUrl) || (body && body.imageUrl === component.imageUrl) || (strap && strap.imageUrl === component.imageUrl) ? "opacity-100" : "opacity-30"}`} onClick={() => handleColorSelect(active, component)}>
-                        <img src={component.imageUrl} alt={component.name} className="object-cover h-[400px] sm:h-[400px] md:h-[500px] " />
+                        <img src={component.imageUrl} alt={component.name} className="object-cover h-[300px] sm:h-[400px] md:h-[500px] " />
                       </div>
                     ))}
                   </div>

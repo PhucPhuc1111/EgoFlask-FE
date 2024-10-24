@@ -112,7 +112,7 @@ function Dropdown() {
         )}
       </div>
 
-      {/* Input for "Viết thư tay" */}
+      
       {isLetterChecked && (
         <div className="mt-4">
           <input
