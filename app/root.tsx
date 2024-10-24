@@ -1,9 +1,11 @@
 import {
+  isRouteErrorResponse,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteError,
 } from "@remix-run/react";
 import "./tailwind.css";
 import { useState } from "react";
@@ -45,6 +47,7 @@ export default function App() {
         }),
       }),
   );
+  const error = useRouteError();
 
   return (
     <html lang="vi">
@@ -61,6 +64,13 @@ export default function App() {
         <body className="w-full h-full overflow-y-auto overflow-x-hidden">
           <div id="wrapper">
             <Header />
+            <h1>
+              {isRouteErrorResponse(error)
+                ? `${error.status} ${error.statusText}`
+                : error instanceof Error
+                  ? error.message
+                  : "Unknown Error"}
+            </h1>
             <Outlet />
             <Footer />
           </div>

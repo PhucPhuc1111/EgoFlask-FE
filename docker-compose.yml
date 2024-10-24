@@ -12,4 +12,5 @@ services:
       - VITE_API_URL=${VITE_API_URL}
       - VITE_GHN_API_URL=${VITE_GHN_API_URL}
       - NODE_ENV=production
+      - SESSION_SECRET=${SESSION_SECRET}
     restart: always
