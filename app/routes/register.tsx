@@ -210,7 +210,7 @@ export default function Register() {
 
   return (
     <main className="mt-[--m-header-top] xl:px-[500px] pb-[--m-footer-bottom] px-4 sm:px-0">
-      <div className="w-full flex flex-col items-center justify-center gap-2 pt-20 mx-auto">
+    <div className="w-full flex flex-col items-center justify-center gap-2 pt-5 mx-auto">
         <LoginNavbar />
         <form
           onSubmit={handleSubmit(onSubmit)}
