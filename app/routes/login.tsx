@@ -76,7 +76,7 @@ export default function Login() {
 
   return (
     <main className="mt-[--m-header-top] xl:px-[500px] pb-[--m-footer-bottom] px-4 sm:px-0">
-      <div className="w-full flex flex-col items-center justify-center gap-2 pt-5 mx-auto">
+      <div className="w-full flex flex-col items-center justify-center gap-3 sm:gap-5 pt-5 mx-auto">
         <LoginNavbar />
         <p className="text-center text-[#393334] text-sm sm:text-base">
           Bạn đã trải nghiệm dịch vụ của Ego Flask? Tuyệt vời! <br />
@@ -117,8 +117,8 @@ export default function Login() {
           </button>
         </Form>
         <p className="text-[#393334] text-sm sm:text-base">Hoặc đăng nhập bằng</p>
-        <Link to={'/google'} className="bg-red-500 text-white hover:no-underline hover:text-white hover:bg-red-600 flex items-center justify-center gap-2 p-4 rounded-md">
-          <IoLogoGoogle />
+        <Link to={'/google'} className="bg-white text-[#1F1F1F] border-[1px] border-[#747775] hover:no-underline hover:text-black hover:border-[#C1D5F6] flex items-center justify-center gap-2 p-3 rounded-full">
+          <img src="/icons/ic-google.png" alt="google" className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer"/>
           <span>Đăng nhập bằng Google</span>
         </Link>
         <Link to={'/forgot-password'} className="text-[#0055C3] text-sm sm:text-base uppercase font-semibold hover:no-underline">

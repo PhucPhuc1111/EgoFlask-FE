@@ -148,7 +148,7 @@ export const Header = () => {
       
         <div className="nav-bar flex items-center justify-between w-full h-12 px-4 sm:px-16">
           
-          <div className="sm:hidden w-1/2 ">
+          <div className="min-[768px]:hidden w-1/2 ">
             {menuOpen ? (
               <IoClose className="w-6 h-6 cursor-pointer" onClick={() => setMenuOpen(false)} />
             ) : (
@@ -156,7 +156,7 @@ export const Header = () => {
             )}
           </div>
 
-          <nav className="hidden sm:flex items-center space-x-8">
+          <nav className="max-[767px]:hidden flex items-center space-x-8">
             {_.map(navBar, (item, index) => (
               <NavLink
                 key={index}
