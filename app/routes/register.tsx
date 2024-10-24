@@ -152,6 +152,7 @@
 //   )
 // }
 import { yupResolver } from "@hookform/resolvers/yup";
+import { MetaFunction } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
 import _ from "lodash";
 import { useState } from "react";
@@ -161,6 +162,20 @@ import { InferType, number, object, ref, string } from "yup";
 import { LoginNavbar } from "~/components";
 import { criteria } from "~/components/utils";
 import { registerAccount } from "~/data/user";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Đăng ký" },
+    {
+      property: "og:title",
+      content: "Đăng ký để nhận nhiều ưu đãi hơn",
+    },
+    {
+      name: "description",
+      content: "Đăng ký để nhận nhiều ưu đãi hơn",
+    },
+  ];
+};
 
 let schema = object({
   firstName: string().required("Vui lòng nhập tên của bạn"),

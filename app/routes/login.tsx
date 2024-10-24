@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup"
-import { ActionFunctionArgs, json } from "@remix-run/node"
+import { ActionFunctionArgs, json, MetaFunction } from "@remix-run/node"
 import { Form, Link, useLocation, useNavigate } from "@remix-run/react"
 import { useQueryClient } from "@tanstack/react-query"
 import { message } from "antd"
@@ -10,6 +10,20 @@ import { useRemixForm } from "remix-hook-form"
 import { InferType, object, string } from "yup"
 import { LoginNavbar } from "~/components"
 import { authenticator } from "~/services/auth.server"
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Đăng nhập" },
+    {
+      property: "og:title",
+      content: "Đăng nhập để nhận nhiều ưu đãi hơn",
+    },
+    {
+      name: "description",
+      content: "Đăng nhập để nhận nhiều ưu đãi hơn",
+    },
+  ];
+};
 
 export async function action({ request }: ActionFunctionArgs) {
   try {
@@ -111,9 +125,9 @@ export default function Login() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex items-center justify-center uppercase active:bg-blue-800 hover:bg-blue-900 disabled:bg-blue-900 bg-[#0055C3] w-full py-4 rounded-lg text-white font-semibold text-lg sm:text-xl">
-            {isSubmitting && <img src="/icons/loading.svg" alt="" className="w-10 h-10" />}
-            <span>Đăng nhập</span>
+            className="flex items-center justify-center uppercase active:bg-blue-800 hover:bg-blue-900 disabled:bg-blue-900 bg-[#0055C3] w-full py-2 sm:py-4 rounded-lg text-white font-semibold text-sm sm:text-xl">
+            {isSubmitting && <img src="/icons/loading.svg" alt="" className="w-5 h-5 sm:w-10 sm:h-10" />}
+            <span className="">Đăng nhập</span>
           </button>
         </Form>
         <p className="text-[#393334] text-sm sm:text-base">Hoặc đăng nhập bằng</p>
