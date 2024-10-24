@@ -75,8 +75,8 @@ export default function Login() {
   };
 
   return (
-    <main className="lg:mt-[--m-header-top] xl:px-[500px] pb-[--m-footer-bottom] px-4 sm:px-0">
-      <div className="w-full flex flex-col items-center justify-center gap-9 pt-20 mx-auto">
+    <main className="mt-[--m-header-top] xl:px-[500px] pb-[--m-footer-bottom] px-4 sm:px-0">
+      <div className="w-full flex flex-col items-center justify-center gap-2 pt-5 mx-auto">
         <LoginNavbar />
         <p className="text-center text-[#393334] text-sm sm:text-base">
           Bạn đã trải nghiệm dịch vụ của Ego Flask? Tuyệt vời! <br />
