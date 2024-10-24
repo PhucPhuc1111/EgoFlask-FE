@@ -6,12 +6,19 @@ import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
 
-// export const meta: MetaFunction = () => {
-//   return [
-//     { title: "Home" },
-//     { name: "description", content: "Welcome to Remix!" },
-//   ];
-// };
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Trang chủ" },
+    {
+      property: "og:title",
+      content: "Trang chủ - Bình nước custom theo ý bạn",
+    },
+    {
+      name: "description",
+      content: "Bình nước custom theo ý bạn",
+    },
+  ];
+};
 
 const products = [
   {

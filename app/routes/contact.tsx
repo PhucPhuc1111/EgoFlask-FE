@@ -90,8 +90,23 @@
 // };
 
 // export default Contact;
+import { MetaFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 import { SubFooter } from "~/components";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Liên hệ" },
+    {
+      property: "og:title",
+      content: "Thông tin liên hệ",
+    },
+    {
+      name: "description",
+      content: "Mạng xã hội và thông tin liên hệ của Ego Flask",
+    },
+  ];
+};
 
 const Contact = () => {
   return (

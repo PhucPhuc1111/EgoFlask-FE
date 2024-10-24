@@ -12,7 +12,7 @@ import {
 import "./tailwind.css";
 import { useState } from "react";
 import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { LinksFunction } from "@remix-run/node";
+import { LinksFunction, MetaFunction } from "@remix-run/node";
 import styles from "./tailwind.css?url";
 import { Footer, Header } from "./components";
 import { redirect } from "@remix-run/react";
@@ -28,6 +28,20 @@ export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
   { rel: "icon", href: "/images/SquareLogo.png" },
 ];
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Ego Flask - Bình nước custom theo ý bạn" },
+    {
+      property: "og:title",
+      content: "Bình nước custom theo ý bạn - Bình nước custom theo ý bạn",
+    },
+    {
+      name: "description",
+      content: "Bình nước custom theo ý bạn - Bình nước custom theo ý bạn",
+    },
+  ];
+};
 
 export function ErrorBoundary() {
   const navigate = useNavigate();
@@ -100,8 +114,8 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover" />
-        <title>Ego Flask</title>
-        <meta name="description" content="Bình nước custom theo ý bạn!" />
+        {/* <title>Ego Flask</title>
+        <meta name="description" content="Bình nước custom theo ý bạn!" /> */}
         <script src="/js/uikit.min.js"></script>
         <Meta />
         <Links />

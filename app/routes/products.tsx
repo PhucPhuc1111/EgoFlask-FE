@@ -58,11 +58,26 @@
 // };
 
 // export default Products;
+import { MetaFunction } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
 import _ from "lodash";
 import { useMemo } from "react";
 import { formatMoney } from "~/components/utils";
 import { useGetAllProducts } from "~/data";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Sản phẩm" },
+    {
+      property: "og:title",
+      content: "Sản phẩm có sẵn",
+    },
+    {
+      name: "description",
+      content: "Bình nước design sẵn cho bạn lựa chọn",
+    },
+  ];
+};
 
 const Products = () => {
   const products = useGetAllProducts(1, 100, "");

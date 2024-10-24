@@ -366,7 +366,7 @@ import { addToCart, createCustomProduct, useGetComponentList } from "~/data";
 import { useGetProfile } from "~/data";
 import { useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
-import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { json, LoaderFunctionArgs, MetaFunction, redirect } from "@remix-run/node";
 import { authenticator } from "~/services/auth.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -376,6 +376,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
   return json({}, { status: 200 });
 }
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Thiết kế" },
+    {
+      property: "og:title",
+      content: "Thiết kế bình nước theo ý bạn",
+    },
+    {
+      name: "description",
+      content: "Thiết kế bình nước theo ý bạn",
+    },
+  ];
+};
 
 const options = [
   { name: "Thân bình", value: "body" },
