@@ -85,6 +85,9 @@ const Products = () => {
       </div>
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {products.isLoading && (
+            <img src="/icons/loading-2.svg" alt="loading" className="w-20 h-20 justify-self-center sm:col-span-4"/>
+          )}
           {_.map(productList, (product, index) => (
             <div
               key={index}
