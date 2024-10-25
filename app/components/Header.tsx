@@ -188,7 +188,7 @@ export const Header = () => {
               />
             ) : (
               <IoPersonOutline
-                className="cursor-pointer w-8 h-8 sm:w-6 sm:h-6"
+                className="cursor-pointer w-6 h-6 sm:w-7 sm:h-7"
                 onClick={() => {
                   navigate("/login")
                 }}
