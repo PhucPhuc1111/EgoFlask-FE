@@ -464,7 +464,7 @@ export default function Design() {
   };
 
   return (
-    <main className="lg:mt-[--m-header-top] xl:px-8 pb-[--m-footer-bottom]">
+    <main className="lg:mt-[--m-header-top] xl:px-8 pb-[--m-footer-bottom] pt-20 mx-auto overflow-x-hidden">
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-col lg:flex-row w-full items-center justify-center gap-6 lg:gap-14 lg:mt-auto mt-6  ">
          
