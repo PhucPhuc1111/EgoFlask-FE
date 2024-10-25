@@ -29,7 +29,7 @@ export default function ProfileUpdateName() {
   const onSubmit = async (data: UpdateNameForm) => {
     let formData = new FormData();
     formData.append("Name", data.name); 
-    formData.append("AvatarPic", '');
+    formData.append("AvatarPic",  profile.data?.detail?.avatar || '');
     formData.append("Gender", profile.data?.detail?.gender || "");
     formData.append("Dob", profile.data?.detail?.birthday || "");
     formData.append("PhoneNumber", profile.data?.detail?.phoneNumber || "");

@@ -36,7 +36,7 @@ export default function ProfileUpdateDob() {
   const onSubmit = async () => {
     let formData = new FormData();
     formData.append("Name", profile.data?.detail?.name || "");
-    formData.append("AvatarPic", "");
+    formData.append("AvatarPic",  profile.data?.detail?.avatar || '');
     formData.append("Gender", profile.data?.detail?.gender || "");
     formData.append("Dob", dob || ""); 
     formData.append("PhoneNumber", profile.data?.detail?.phoneNumber || "");

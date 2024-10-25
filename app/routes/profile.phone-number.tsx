@@ -105,7 +105,7 @@ export default function ProfileUpdatePhoneNumber() {
   const onSubmit = async (data: UpdatePhoneForm) => {
     let formData = new FormData();
     formData.append("Name", profile.data?.detail?.name ||'');
-    formData.append("AvatarPic", '');
+    formData.append("AvatarPic",  profile.data?.detail?.avatar || '');
     formData.append("Gender", profile.data?.detail?.gender || ""); 
     formData.append("Dob", profile.data?.detail?.birthday || ""); 
     formData.append("Address", profile.data?.detail?.address || ""); 
