@@ -464,7 +464,7 @@ export default function Design() {
   };
 
   return (
-    <main className="lg:mt-[--m-header-top] xl:px-8 pb-[--m-footer-bottom] pt-20 mx-auto overflow-x-hidden">
+    <main className="lg:mt-[--m-header-top] xl:px-8 pb-[--m-footer-bottom] pt-20 px-3 mx-auto overflow-x-hidden">
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-col lg:flex-row w-full items-center justify-center gap-6 lg:gap-14 lg:mt-auto mt-6  ">
          
@@ -527,7 +527,7 @@ export default function Design() {
           <div className="flex flex-col w-full items-center justify-center mt-12">
             <h4 className="text-[18px] sm:text-[20px] leading-5 text-black font-bold mt-4 lg:mt-10">Thiết kế chiếc bình giữ nhiệt của riêng bạn</h4>
             <div uk-slider="sets: true; finite: true;">
-              <div className="uk-position-relative">
+              <div className="uk-inline">
                 <div className="uk-slider-container">
                   <div className="uk-slider-items uk-child-width-1-2 uk-child-width-1-3@s mx-auto">
                     {_.map(componentList, (component, index) => (
@@ -537,8 +537,8 @@ export default function Design() {
                     ))}
                   </div>
                 </div>
-                <a className="uk-position-center-left-out" href="" uk-slider-item="previous"><IoArrowBackCircle className="w-8 h-10 sm:h-14 text-[#0055C3] cursor-pointer" /></a>
-                <a className="uk-position-center-right-out" href="" uk-slider-item="next"><IoArrowForwardCircle className="w-8 h-10 sm:h-14 text-[#0055C3] cursor-pointer" /></a>
+                <a className="uk-position-center-left" href="" uk-slider-item="previous"><IoArrowBackCircle className="w-8 h-10 sm:h-14 text-[#0055C3] cursor-pointer" /></a>
+                <a className="uk-position-center-right" href="" uk-slider-item="next"><IoArrowForwardCircle className="w-8 h-10 sm:h-14 text-[#0055C3] cursor-pointer" /></a>
               </div>
             </div>
           </div>
