@@ -67,7 +67,7 @@ export default function ProfileUpdateAddress() {
     const duration = 3000
     let formData = new FormData();
     formData.append("Name", profile.data?.detail?.name ||'');
-    formData.append("AvatarPic", '');
+    formData.append("AvatarPic",  profile.data?.detail?.avatar || '');
     formData.append("Gender", profile.data?.detail?.gender || "");
     formData.append("Dob", profile.data?.detail?.birthday || "");
     formData.append('Address', `${data.address}, ${mapWards[data.wards]?.WardName}, ${mapDistricts[data.districts]?.DistrictName}, ${mapProvinces[data.provinces]?.ProvinceName}`);
