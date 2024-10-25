@@ -13,6 +13,8 @@ export const handle = {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   let user = await authenticator.isAuthenticated(request);
+  console.log('user', user);
+  
   if (!user) return redirect('/login');
   else if (String(user?.role)?.toLowerCase() === 'user') return redirect('/');
   return json({}, { status: 200 });

@@ -156,11 +156,13 @@ import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link, useNavigate } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import { ProfileSidebar, SubFooter } from "~/components";
-import { useGetProfile, updateProfile } from "~/data"; 
-import { message, Upload } from "antd";
+import { useGetProfile, updateProfile } from "~/data";
+import { GetProp, Image, message, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { RcFile } from "antd/es/upload/interface";
+import { RcFile, UploadChangeParam, UploadFile, UploadProps } from "antd/es/upload/interface";
 import { authenticator } from "~/services/auth.server";
+import { useQueryClient } from "@tanstack/react-query";
+import { IoCloudUpload } from "react-icons/io5";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   let user = await authenticator.isAuthenticated(request);
@@ -170,14 +172,25 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({}, { status: 200 });
 }
 
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
+const getBase64 = (file: FileType): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+
 const Profile = () => {
-  const { data: profile, refetch } = useGetProfile(); 
+  const { data: profile } = useGetProfile();
   const [gender, setGender] = useState<string>(profile?.detail?.gender?.toLowerCase() || "");
   const [isEditingGender, setIsEditingGender] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState<string>(profile?.detail?.avatar || ""); // Lưu avatar hiện tại
-  const [newAvatarFile, setNewAvatarFile] = useState<RcFile | null>(null); // Lưu file mới
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (profile?.detail?.gender) {
@@ -190,14 +203,15 @@ const Profile = () => {
   };
 
   const handleSaveProfile = async () => {
+    setIsLoading(true);
     let formData = new FormData();
     formData.append("Name", profile?.detail?.name || "");
 
-  
-    if (newAvatarFile) {
-      formData.append("AvatarPic", newAvatarFile);
+
+    if (fileList[0].originFileObj) {
+      formData.append("AvatarPic", fileList[0].originFileObj);
     } else {
-      formData.append("AvatarPic", avatarUrl); 
+      formData.append("AvatarPic", profile?.detail?.avatar || "");
     }
 
     formData.append("Gender", gender);
@@ -208,38 +222,71 @@ const Profile = () => {
     try {
       let response = await updateProfile(profile?.user?.token || "", formData);
       if (response) {
-        message.success("Cập nhật thành công, vui lòng đăng nhập lại", 3);
-        refetch();
-        setTimeout(() => {
-          navigate('/logout?redirectTo=/login');
-        }, 1500);
+        message.success("Cập nhật thành công", 3);
+        queryClient.invalidateQueries({
+          queryKey: ['profile']
+        })
       }
+      setIsLoading(false);
     } catch (error: any) {
       message.error(`Cập nhật thất bại: ${error?.message}`);
+      setIsLoading(false);
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
-  const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result as string));
-    reader.readAsDataURL(img);
+  const handlePreview = async (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj as FileType);
+    }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
   };
 
-  const handleChangeAvatar = (info: { file: RcFile }) => {
-    setLoading(true);
-    getBase64(info.file, (imageUrl) => {
-      setLoading(false);
-      setAvatarUrl(imageUrl); 
-      setNewAvatarFile(info.file); 
-    });
-  };
+  const uploadProps: UploadProps = {
+    accept: '.jpg, .png',
+    listType: 'picture-circle',
+    onRemove: (file) => {
+      setFileList((prev) => prev.filter((f) => f.uid !== file.uid));
+    },
+    beforeUpload: (file) => {
+      const isJpg = file.type === 'image/jpeg';
+      const isPng = file.type === 'image/png';
+      console.log(file);
 
-  const uploadButton = (
-    <div>
-      {loading ? <PlusOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
+      if (!isJpg && !isPng) {
+        message.error('Bạn chỉ được upload file PNG hoặc JPG!');
+        return Upload.LIST_IGNORE;
+      }
+      const isLt2M = file.size / 1024 / 1024 < 20;
+      if (!isLt2M) {
+        message.error('Ảnh phải nhỏ hơn 20MB!');
+        return Upload.LIST_IGNORE;
+      }
+      setFileList((prev) => [...prev, file]);
+      return false; // Prevent automatic upload
+    },
+    fileList,
+    onChange(info) {
+      const { status } = info.file;
+      setFileList(info.fileList);
+      if (status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    onDrop(e) {
+      console.log('Dropped files', e.dataTransfer.files);
+    },
+    onPreview: handlePreview,
+  };
 
   return (
     <main className="mt-[--m-header-top]">
@@ -336,11 +383,11 @@ const Profile = () => {
                             {gender === "male"
                               ? "Nam"
                               : gender === "female"
-                              ? "Nữ"
-                              : "Không muốn đề cập"}
+                                ? "Nữ"
+                                : "Không muốn đề cập"}
                           </span>
                           <button
-                            onClick={() => setIsEditingGender(true)} 
+                            onClick={() => setIsEditingGender(true)}
                             className="text-[#0055c3] underline"
                           >
                             Thay đổi
@@ -376,27 +423,36 @@ const Profile = () => {
               <div className="lg:col-span-4 mt-8 lg:mt-0">
                 <div className="flex flex-col items-center">
                   <Upload
-                    name="avatar"
-                    listType="picture-circle"
-                    className="avatar-uploader"
-                    showUploadList={false}
-                    beforeUpload={() => false} 
-                    onChange={handleChangeAvatar}
+                    {...uploadProps}
                   >
-                    {avatarUrl ? (
-                      <img src={avatarUrl} alt="avatar" style={{ width: '100%' }} />
-                    ) : (
-                      uploadButton
+                    {fileList.length > 0 ? null : (
+                      <div className="flex flex-col items-center justify-center">
+                        <IoCloudUpload />
+                        <span className="text-xs">Upload</span>
+                      </div>
                     )}
                   </Upload>
-                  <button
-                    onClick={handleSaveProfile}
-                    className="border-2 rounded-lg h-12 w-24 mt-4 text-sm lg:text-base bg-[#0055c3] text-white"
-                  >
-                    Thay đổi ảnh
-                  </button>
+                  {previewImage && (
+                    <Image
+                      wrapperStyle={{ display: 'none' }}
+                      preview={{
+                        visible: previewOpen,
+                        onVisibleChange: (visible) => setPreviewOpen(visible),
+                        afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                      }}
+                      src={previewImage}
+                    />
+                  )}
+                  {fileList.length > 0 && (
+                    <button
+                      onClick={handleSaveProfile}
+                      className="border-2 rounded-lg h-auto w-auto mt-4 p-2 text-sm lg:text-base bg-[#0055c3] text-white"
+                    >
+                      {isLoading ? <img src="/icons/loading.svg" alt="loading" className="w-7 h-7" /> : <span>Thay đổi ảnh</span>}
+                    </button>
+                  )}
                   <div className="text-center mt-4 text-sm lg:text-base">
-                    <p>Dung lượng file tối đa 1MB</p>
+                    <p>Dung lượng file tối đa 20MB</p>
                     <p>Định dạng: .JPEG, .PNG</p>
                   </div>
                 </div>

@@ -1,5 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "@remix-run/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
 import { useForm } from "react-hook-form";
 import { InferType, object, string } from "yup";
@@ -25,6 +26,7 @@ export default function ProfileUpdateName() {
 
   const profile = useGetProfile(); 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const onSubmit = async (data: UpdateNameForm) => {
     let formData = new FormData();
@@ -39,10 +41,10 @@ export default function ProfileUpdateName() {
     try {
       let response = await updateProfile(profile.data?.user?.token || '', formData);
       if (response) {
-        message.success("Cập nhật tên thành công, vui lòng đăng nhập lại", 3);
-        setTimeout(() => {
-          navigate('/logout?redirectTo=/login'); 
-        }, 3000);
+        message.success("Cập nhật tên thành công", 3);
+        queryClient.invalidateQueries({
+          queryKey: ['profile']
+        })
       }
     } catch (error: any) {
       message.error(`Cập nhật thất bại: ${error?.message}`);

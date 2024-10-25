@@ -65,7 +65,7 @@ export const ProfileSidebar = () => {
     <div className="px-4 lg:px-0"> 
       <div className="flex flex-col lg:flex-row justify-center  pt-4 lg:pt-7 space-y-4 lg:space-y-0 lg:space-x-3 items-center">
         <img 
-          className="w-16 h-16 lg:w-20 lg:h-20 rounded-full" 
+          className="w-16 h-16 lg:w-20 lg:h-20 rounded-full object-cover" 
           src={profile?.data?.detail?.avatar || ""}
           alt="Profile" 
         />
