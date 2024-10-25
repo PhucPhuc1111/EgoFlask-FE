@@ -19,7 +19,7 @@ let schema = object({
 const resolver = yupResolver(schema);
 type UpdateAddress = InferType<typeof schema>;
 
-export default function ProfileUpdateEmail() {
+export default function ProfileUpdateAddress() {
   const {
     register,
     formState: { errors },
@@ -66,12 +66,12 @@ export default function ProfileUpdateEmail() {
     console.log("data", data);
     const duration = 3000
     let formData = new FormData();
-    formData.append("Name", '');
+    formData.append("Name", profile.data?.detail?.name ||'');
     formData.append("AvatarPic", '');
-    formData.append("Gender", '');
-    formData.append("Dob", '');
+    formData.append("Gender", profile.data?.detail?.gender || "");
+    formData.append("Dob", profile.data?.detail?.birthday || "");
     formData.append('Address', `${data.address}, ${mapWards[data.wards]?.WardName}, ${mapDistricts[data.districts]?.DistrictName}, ${mapProvinces[data.provinces]?.ProvinceName}`);
-    formData.append('PhoneNumber', '')
+    formData.append("PhoneNumber", profile.data?.detail?.phoneNumber || "");
 
     try {
       let response = await updateProfile(profile.data?.user?.token || '', formData);
@@ -87,11 +87,11 @@ export default function ProfileUpdateEmail() {
   };
 
   return (
-    <main className="mt-[--m-header-top] ">
-      <div className="grid grid-cols-12 w-full space-x-7 pr-8">
-        <div className="col-span-2  border-[#e8e8e4] border-2 rounded-r-2xl w-full  ">
-          <ProfileSidebar />
-        </div>
+    <main className="mt-[--m-header-top]">
+    <div className="grid grid-cols-1 lg:grid-cols-12 w-full lg:space-x-7 lg:pr-8">
+      <div className="lg:col-span-2 border-[#e8e8e4] border-2 rounded-r-3xl w-full mb-4 lg:mb-0">
+        <ProfileSidebar />
+      </div>
         <div className="col-span-10 border-[#0055C3] my-9 border-2 rounded-3xl px-7  ">
           <div className="p-7 ">
             <p className="text-lg font-semibold text-[#0055C3] pt-4 mt-7">

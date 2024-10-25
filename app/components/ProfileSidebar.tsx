@@ -63,10 +63,10 @@ export const ProfileSidebar = () => {
 
   return (
     <div className="px-4 lg:px-0"> 
-      <div className="flex flex-col lg:flex-row justify-center pt-4 lg:pt-7 space-y-4 lg:space-y-0 lg:space-x-3 items-center">
+      <div className="flex flex-col lg:flex-row justify-center  pt-4 lg:pt-7 space-y-4 lg:space-y-0 lg:space-x-3 items-center">
         <img 
           className="w-16 h-16 lg:w-20 lg:h-20 rounded-full" 
-          src={profile.data?.user?.avatar?.[0].value || '/images/avatar.png'} 
+          src={profile?.data?.detail?.avatar || ""}
           alt="Profile" 
         />
         <div className="flex mt-4 lg:mt-7 my-4 text-black text-sm lg:text-lg font-semibold font-['Noto Serif']">
