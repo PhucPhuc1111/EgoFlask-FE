@@ -250,6 +250,7 @@ const Orders = () => {
           <div className="lg:col-span-10 border-[#0055C3] my-9 border-2 p-4 lg:p-6">
             {/* Thêm class overflow-x-auto cho phép cuộn ngang */}
             <div className="overflow-x-auto">
+              {myOrders.isLoading && <img src="/icons/loading-2.svg" alt="loading" className="w-10 h-10 sm:w-12 sm:h-12 justify-self-center" />}
               <table className="min-w-[700px] w-full text-sm lg:text-base">
                 <thead className="bg-[#0055C3] text-white">
                   <tr>
