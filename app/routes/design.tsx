@@ -529,16 +529,16 @@ export default function Design() {
             <div uk-slider="sets: true; finite: true;">
               <div className="uk-position-relative">
                 <div className="uk-slider-container">
-                  <div className="uk-slider-items uk-child-width-1-5 uk-grid ml-16">
+                  <div className="uk-slider-items uk-child-width-1-2 uk-child-width-1-3@s mx-auto">
                     {_.map(componentList, (component, index) => (
-                      <div key={index} className={`uk-position-relative cursor-pointer ${(top && top.imageUrl === component.imageUrl) || (body && body.imageUrl === component.imageUrl) || (strap && strap.imageUrl === component.imageUrl) ? "opacity-100" : "opacity-30"}`} onClick={() => handleColorSelect(active, component)}>
+                      <div key={index} className={`cursor-pointer ${(top && top.imageUrl === component.imageUrl) || (body && body.imageUrl === component.imageUrl) || (strap && strap.imageUrl === component.imageUrl) ? "opacity-100" : "opacity-30"}`} onClick={() => handleColorSelect(active, component)}>
                         <img src={component.imageUrl} alt={component.name} className="object-cover h-[300px] sm:h-[400px] md:h-[500px] " />
                       </div>
                     ))}
                   </div>
                 </div>
-                <a className="uk-position-center-left-out" href="" uk-slider-item="previous"><IoArrowBackCircle className="w-8 h-10 sm:h-14 text-[#232529] cursor-pointer" /></a>
-                <a className="uk-position-center-right-out" href="" uk-slider-item="next"><IoArrowForwardCircle className="w-8 h-10 sm:h-14 text-[#232529] cursor-pointer" /></a>
+                <a className="uk-position-center-left-out" href="" uk-slider-item="previous"><IoArrowBackCircle className="w-8 h-10 sm:h-14 text-[#0055C3] cursor-pointer" /></a>
+                <a className="uk-position-center-right-out" href="" uk-slider-item="next"><IoArrowForwardCircle className="w-8 h-10 sm:h-14 text-[#0055C3] cursor-pointer" /></a>
               </div>
             </div>
           </div>
