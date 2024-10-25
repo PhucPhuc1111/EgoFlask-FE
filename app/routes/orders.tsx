@@ -257,6 +257,7 @@ const Orders = () => {
                     <th>Tổng tiền</th>
                     <th>Địa chỉ nhận hàng</th>
                     <th>Tình trạng</th>
+                    <th>Trạng thái thanh toán</th>
                     <th>Chi tiết đơn hàng</th>
                   </tr>
                 </thead>
@@ -277,7 +278,7 @@ const Orders = () => {
                         </div>
                       </td>
                       <td>
-                        <div className="min-w-[226px] h-[132px]">
+                        <div className="w-auto h-auto pb-4">
                           <div className="space-y-2">
                             <p className="font-semibold text-black">{order.customerName}</p>
                             <p>{order.customerPhone}</p>
@@ -285,19 +286,39 @@ const Orders = () => {
                           </div>
                         </div>
                       </td>
-                      <td>
+                      <td className="text-center">
                         {order.transactionStatus === 'PAID' ? (
                           <p>
                             {order.status === 'PENDING'
                               ? 'Đang chờ duyệt đơn'
                               : order.status === 'SHIPPING'
-                              ? 'Đang vận chuyển'
-                              : order.status === 'CANCELLED'
-                              ? 'Đã hủy'
-                              : 'Đã giao hàng'}
+                                ? 'Đang vận chuyển'
+                                : order.status === 'CANCELLED'
+                                  ? 'Đã hủy'
+                                  : 'Đã giao hàng'}
                           </p>
+                        ) : order.transactionStatus === 'CANCELLED' ? (
+                          <p>Đã hủy</p>
+                        ) : order.transactionStatus === null && (
+                          // cho case COD
+                          <p>
+                            {order.status === 'PENDING'
+                              ? 'Đang chờ duyệt đơn'
+                              : order.status === 'SHIPPING'
+                                ? 'Đang vận chuyển'
+                                : order.status === 'CANCELLED'
+                                  ? 'Đã hủy'
+                                  : 'Đã giao hàng'}
+                          </p>
+                        )}
+                      </td>
+                      <td className="text-center">
+                        {order.transactionStatus === 'PAID' ? (
+                          <p>Đã thanh toán</p>
+                        ) : order.transactionStatus === 'CANCELLED' ? (
+                          <p>Đã hủy</p>
                         ) : (
-                          <p>{order.transactionStatus === 'CANCELLED' ? 'Đã hủy' : 'Đang chờ thanh toán'}</p>
+                          <p>Chưa thanh toán</p>
                         )}
                       </td>
                       <td>
