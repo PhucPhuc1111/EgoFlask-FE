@@ -337,7 +337,7 @@ const Cart: React.FC = () => {
   return (
     <div className="relative z-50">
       <IoCartOutline
-        className="cursor-pointer w-8 h-8 sm:w-6 sm:h-6"
+        className="cursor-pointer w-6 h-6 sm:w-7 sm:h-7"
         onClick={handleCartClick}
       />
       {isCartOpen && (

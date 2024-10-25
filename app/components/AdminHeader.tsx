@@ -14,7 +14,7 @@ export const AdminHeader = () => {
         </div>
         <div className="nav-bar flex flex-rows items-center justify-center w-full h-12 px-16">
           <div className="flex flex-row justify-start items-center space-x-8 w-full">
-            <img src={profile.data?.user?.avatar?.[0].value || '/images/avatar.png'} alt="avatar" className="w-[51px] h-[51px] rounded-full" />
+            <img src={profile.data?.detail.avatar || '/images/avatar.png'} alt="avatar" className="w-[51px] h-[51px] rounded-full object-cover" />
             <span className="text-black font-semibold text-base">
               {profile.data?.detail.name}
             </span>

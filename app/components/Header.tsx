@@ -140,14 +140,14 @@ export const Header = () => {
   return (
     <header className="absolute top-0 w-full bg-white z-10">
       <div className="flex flex-col items-center justify-center gap-2">
-      
+
         <div className="top-bar w-full h-[37px] flex items-center justify-center text-center py-2 bg-[#0055C3]">
           <span className='text-white font-medium text-center text-xs max-[375px]:text-2xs sm:text-base'>Miễn phí vận chuyển cho đơn hàng trên 1.000.000 VND</span>
         </div>
 
-      
+
         <div className="nav-bar flex items-center justify-between w-full h-12 px-4 sm:px-16">
-          
+
           <div className="min-[768px]:hidden w-1/2 ">
             {menuOpen ? (
               <IoClose className="w-6 h-6 cursor-pointer" onClick={() => setMenuOpen(false)} />
@@ -170,8 +170,8 @@ export const Header = () => {
             ))}
           </nav>
 
-          
-          <div className="flex-grow flex justify-center">
+
+          <div className="flex-1 flex justify-center">
             <img
               src="/images/Logo.png?v=1"
               alt="Logo"
@@ -180,21 +180,21 @@ export const Header = () => {
             />
           </div>
 
-          
-          <div className="flex items-center space-x-4 sm:space-x-6">
-            
-            <IoPersonOutline
-              className="cursor-pointer w-8 h-8 sm:w-6 sm:h-6"
-              onClick={() => {
-                if (user) {
-                  navigate("/profile");
-                } else {
-                  navigate("/login");
-                }
-              }}
-            />
 
-          
+          <div className="flex items-center gap-4 sm:gap-6">
+            {user ? (
+              <img src={profile.data?.detail.avatar || '/images/avatar.png'} alt="avatar" className='rounded-full w-6 h-6 sm:w-8 sm:h-8 object-cover cursor-pointer'
+                onClick={() => navigate("/profile")}
+              />
+            ) : (
+              <IoPersonOutline
+                className="cursor-pointer w-8 h-8 sm:w-6 sm:h-6"
+                onClick={() => {
+                  navigate("/login")
+                }}
+              />
+            )}
+
             {user && (
               <div uk-dropdown="">
                 <Link
@@ -206,13 +206,11 @@ export const Header = () => {
                 </Link>
               </div>
             )}
-
-         
-            <Cart /> 
+            <Cart />
           </div>
         </div>
 
-      
+
         {menuOpen && (
           <div className="sm:hidden bg-white p-4 absolute w-1/2 top-24 left-0 shadow-md">
             <nav className="flex flex-col space-y-4">
@@ -223,7 +221,7 @@ export const Header = () => {
                   className={({ isActive }) =>
                     `text-base hover:no-underline ${isActive ? "text-[#0055C3] font-bold" : "text-black hover:text-[#0255C3]"}`
                   }
-                  onClick={() => setMenuOpen(false)} 
+                  onClick={() => setMenuOpen(false)}
                 >
                   {item.title}
                 </NavLink>
