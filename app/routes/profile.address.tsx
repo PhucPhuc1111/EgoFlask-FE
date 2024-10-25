@@ -37,6 +37,8 @@ export default function ProfileUpdateAddress() {
   const wards = useGetWards(Number(districtId));
   const provinceId = watch('provinces');
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const splitAddress = useMemo(() => {
     return _.split(profile.data?.detail.address || '', ', ')
   }, [profile.data?.detail.address]);
@@ -76,10 +78,10 @@ export default function ProfileUpdateAddress() {
     try {
       let response = await updateProfile(profile.data?.user?.token || '', formData);
       if (response) {
-        message.success("Cập nhật địa chỉ thành công, vui lòng đăng nhập lại", 3);
-        setTimeout(() => {
-          navigate('/logout?redirectTo=/login')
-        }, duration)
+        message.success("Cập nhật địa chỉ thành công", 3);
+        queryClient.invalidateQueries({
+          queryKey: ['profile']
+        })
       }
     } catch (error: any) {
       message.error(`Cập nhật thất bại: ${error?.message}`);
