@@ -143,10 +143,18 @@ export type CartRS = {
   orderDetailId: string;
   productId: string;
   productName: string;
+  isCustom: boolean;
   productImageURL: string;
+  engrave?: string | null;
+  engravePosition?: string | null;
+  letter?: string | null;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
+  isGift: boolean;
+  head?: ComponentDetail;
+  body?: ComponentDetail;
+  strap?: ComponentDetail;
 };
 
 export type CheckoutRQ = {

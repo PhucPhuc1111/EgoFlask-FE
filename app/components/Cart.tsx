@@ -256,7 +256,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { formatMoney, splitProductImageURLs } from "./utils";
 import { Link } from "@remix-run/react";
 import { IoCartOutline, IoClose } from "react-icons/io5";
-import { message } from "antd";
+import { message, Modal } from "antd";
+const { confirm } = Modal;
 
 const Cart: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -304,19 +305,25 @@ const Cart: React.FC = () => {
   };
 
   const handleRemoveItem = async (id: string) => {
-    try {
-      let response = await removeFromCart(token || "", id);
-      if (response) {
-        queryClient.invalidateQueries({ queryKey: ["in-cart"] });
-        message.success("Xóa sản phẩm thành công!");
-      }
-    } catch (error: any) {
-      message.error("Xóa sản phẩm không thành công:", error?.message);
-    }
+    confirm({
+      title: 'Xóa sản phẩm',
+      content: 'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?',
+      onOk: async () => {
+        try {
+          let response = await removeFromCart(token || "", id);
+          if (response) {
+            queryClient.invalidateQueries({ queryKey: ["in-cart"] });
+            message.success("Xóa sản phẩm thành công!");
+          }
+        } catch (error: any) {
+          message.error("Xóa sản phẩm không thành công:", error?.message);
+        }
+      },
+    })
   };
 
   const calculateTotalPrice = () => {
-    const itemTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    const itemTotal = _.sumBy(cartItems, (item) => item.price * item.quantity);
     const shippingFee = itemTotal >= 1000000 ? 0 : 20000;
     return {
       itemTotal,

@@ -643,8 +643,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link, useLocation, useNavigate } from "@remix-run/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { message } from "antd";
-import _, { set } from "lodash";
+import { message, Modal } from "antd";
+import _ from "lodash";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { boolean, InferType, object, string } from "yup";
@@ -652,6 +652,7 @@ import { Model } from "~/components";
 import { formatMoney, splitProductImageURLs } from "~/components/utils";
 import { checkout, removeFromCart, useGetDistricts, useGetInCart, useGetProfile, useGetProvinces, useGetWards } from "~/data";
 import { authenticator } from "~/services/auth.server";
+const { confirm } = Modal;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   let user = await authenticator.isAuthenticated(request);
@@ -713,7 +714,7 @@ const paymentMethods = [
   },
   {
     value: "PayOS",
-    label: "Thanh toán qua PayOS",
+    label: "Thanh toán qua chuyển khoản",
   }
 ];
 
@@ -759,7 +760,7 @@ export default function Checkout() {
   const cartItems = useMemo(() => {
     if (!getInCart.data) return [];
     return _.map(getInCart.data, (item) => {
-      const { orderDetailId, productImageURL, productName, unitPrice, quantity } = item;
+      const { orderDetailId, productImageURL, productName, unitPrice, quantity, head, body, strap } = item;
       let topImage = "";
       let bodyImage = "";
       let strapImage = "";
@@ -780,12 +781,16 @@ export default function Checkout() {
         price: unitPrice,
         quantity,
         orderDetailId,
+        productImageURL,
+        head,
+        body,
+        strap,
       };
     });
   }, [getInCart.data]);
 
   const calculateTotalPrice = () => {
-    const itemTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    const itemTotal = _.sumBy(cartItems, (item) => item.price * item.quantity);
     const shippingFee = itemTotal >= 1000000 ? 0 : 20000;
     return {
       itemTotal,
@@ -797,17 +802,23 @@ export default function Checkout() {
   const { itemTotal, total, shippingFee } = calculateTotalPrice();
 
   const deleteFromCart = async (orderDetailId: string) => {
-    try {
-      let response = await removeFromCart(profile.data?.user?.token || "", orderDetailId);
-      if (response) {
-        queryClient.invalidateQueries({
-          queryKey: ["in-cart"],
-        });
-        message.success("Xóa sản phẩm thành công!");
+    confirm({
+      title: 'Xóa sản phẩm',
+      content: 'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?',
+      onOk: async () => {
+        try {
+          let response = await removeFromCart(profile.data?.user?.token || "", orderDetailId);
+          if (response) {
+            queryClient.invalidateQueries({
+              queryKey: ["in-cart"],
+            });
+            message.success("Xóa sản phẩm thành công!");
+          }
+        } catch (error: any) {
+          message.error("Xóa sản phẩm không thành công:", error?.message);
+        }
       }
-    } catch (error: any) {
-      message.error("Xóa sản phẩm không thành công:", error?.message);
-    }
+    })
   };
 
   const isDifferentAddress = watch("deliveryToDifferentAddress", false);
@@ -821,10 +832,13 @@ export default function Checkout() {
         paymentMethod: data.paymentMethod,
       });
 
-      if (response.status !== "Failed" && response.url.checkoutUrl && data.paymentMethod === "PayOS") {
-        window.location.href = response.url.checkoutUrl;
-      } else if (response.status === "Failed") {
+      if (response.status === "Failed") {
         message.error(response.message);
+        return;
+      }
+
+      if (data.paymentMethod === "PayOS") {
+        window.location.href = response.url.checkoutUrl;
       } else {
         navigate("/checkout/success");
       }
@@ -911,90 +925,90 @@ export default function Checkout() {
                   </div>
 
                   {isDifferentAddress && (
-  <div className="space-y-4">
-    <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
-      <input
-        type="text"
-        placeholder="Họ và tên người nhận"
-        {...register("receiverName")}
-        className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-      />
-      {errors.receiverName && (
-        <p className="text-red-500 text-xs md:text-sm">{errors.receiverName?.message}</p>
-      )}
-      <input
-        type="text"
-        placeholder="Số điện thoại người nhận"
-        {...register("receiverPhone")}
-        className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-      />
-      {errors.receiverPhone && (
-        <p className="text-red-500 text-xs md:text-sm">{errors.receiverPhone?.message}</p>
-      )}
-    </div>
+                    <div className="space-y-4">
+                      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
+                        <input
+                          type="text"
+                          placeholder="Họ và tên người nhận"
+                          {...register("receiverName")}
+                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                        />
+                        {errors.receiverName && (
+                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverName?.message}</p>
+                        )}
+                        <input
+                          type="text"
+                          placeholder="Số điện thoại người nhận"
+                          {...register("receiverPhone")}
+                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                        />
+                        {errors.receiverPhone && (
+                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverPhone?.message}</p>
+                        )}
+                      </div>
 
-    <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
-      <select
-        {...register("receiverProvince")}
-        className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-      >
-        <option value="">Chọn thành phố</option>
-        {_.map(provinces.data?.data, (province, index) => (
-          <option key={index} value={province.ProvinceID}>
-            {province.ProvinceName}
-          </option>
-        ))}
-      </select>
-      {errors.receiverProvince && (
-        <p className="text-red-500 text-xs md:text-sm">{errors.receiverProvince?.message}</p>
-      )}
+                      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
+                        <select
+                          {...register("receiverProvince")}
+                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                        >
+                          <option value="">Chọn thành phố</option>
+                          {_.map(provinces.data?.data, (province, index) => (
+                            <option key={index} value={province.ProvinceID}>
+                              {province.ProvinceName}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.receiverProvince && (
+                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverProvince?.message}</p>
+                        )}
 
-      <select
-        {...register("receiverDistrict")}
-        disabled={!watch("receiverProvince")}
-        className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-      >
-        <option value="">Chọn quận</option>
-        {_.map(filterDistrictsByProviceId, (district, index) => (
-          <option key={index} value={district.DistrictID}>
-            {district.DistrictName}
-          </option>
-        ))}
-      </select>
-      {errors.receiverDistrict && (
-        <p className="text-red-500 text-xs md:text-sm">{errors.receiverDistrict?.message}</p>
-      )}
-    </div>
+                        <select
+                          {...register("receiverDistrict")}
+                          disabled={!watch("receiverProvince")}
+                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                        >
+                          <option value="">Chọn quận</option>
+                          {_.map(filterDistrictsByProviceId, (district, index) => (
+                            <option key={index} value={district.DistrictID}>
+                              {district.DistrictName}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.receiverDistrict && (
+                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverDistrict?.message}</p>
+                        )}
+                      </div>
 
-    <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
-      <select
-        {...register("receiverWard")}
-        disabled={!watch("receiverDistrict")}
-        className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-      >
-        <option value="">Chọn phường</option>
-        {_.map(wards.data?.data, (ward, index) => (
-          <option key={index} value={ward.WardCode}>
-            {ward.WardName}
-          </option>
-        ))}
-      </select>
-      {errors.receiverWard && (
-        <p className="text-red-500 text-xs md:text-sm">{errors.receiverWard?.message}</p>
-      )}
+                      <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
+                        <select
+                          {...register("receiverWard")}
+                          disabled={!watch("receiverDistrict")}
+                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                        >
+                          <option value="">Chọn phường</option>
+                          {_.map(wards.data?.data, (ward, index) => (
+                            <option key={index} value={ward.WardCode}>
+                              {ward.WardName}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.receiverWard && (
+                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverWard?.message}</p>
+                        )}
 
-      <input
-        type="text"
-        placeholder="123 Đường Nguyễn Huệ"
-        {...register("receiverStreet")}
-        className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-      />
-      {errors.receiverStreet && (
-        <p className="text-red-500 text-xs md:text-sm">{errors.receiverStreet?.message}</p>
-      )}
-    </div>
-  </div>
-)}
+                        <input
+                          type="text"
+                          placeholder="123 Đường Nguyễn Huệ"
+                          {...register("receiverStreet")}
+                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                        />
+                        {errors.receiverStreet && (
+                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverStreet?.message}</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                 </div>
               </div>
@@ -1028,17 +1042,18 @@ export default function Checkout() {
                 <div className="border-b-2 pb-7 flex flex-col gap-4">
                   {_.map(cartItems, (item, index) => (
                     <div key={index} className="flex">
-                      <div className="w-1/3 bg-[#dbdbcf]">
-                        <div className="w-32 h-64 ml-12 relative flex justify-between items-center">
-                          <div className="absolute inset-0 max-lg:right-2/3 left-1/3 bottom-2/3">
-                            {item.bodyImage && item.strapImage ? (
+                      {item.head && item.body ? (
+                        <div className="w-1/3 bg-[#dbdbcf]">
+                          <div className="w-32 h-64 ml-12 relative flex justify-between items-center">
+                            <div className="absolute inset-0 max-lg:right-2/3 left-1/3 bottom-2/3">
                               <Model topImage={item.topImage} bodyImage={item.bodyImage} strapImage={item.strapImage} width="300px" />
-                            ) : (
-                              <img src={item.topImage} alt={item.name} width="100px" />
-                            )}
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      ) : (
+                        <img src={item.productImageURL} alt={item.name} width="100px" />
+                      )}
+
                       <div className="w-2/3">
                         <div className="p-3 space-y-2">
                           <div className="flex justify-between">
