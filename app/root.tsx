@@ -10,7 +10,7 @@ import {
   useRouteError,
 } from "@remix-run/react";
 import "./tailwind.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { LinksFunction, MetaFunction } from "@remix-run/node";
 import styles from "./tailwind.css?url";
@@ -108,6 +108,19 @@ export default function App() {
         }),
       }),
   );
+
+  useEffect(() => {
+    var Tawk_API: any = Tawk_API || {}, Tawk_LoadStart = new Date();
+    (function() {
+      var s1 = document.createElement("script");
+      var s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = 'https://embed.tawk.to/671e4caf2480f5b4f594b533/1ib75n3st';
+      s1.charset = 'UTF-8';
+      s1.setAttribute('crossorigin', '*');
+      s0.parentNode?.insertBefore(s1, s0);
+    })();
+  }, []);
 
   return (
     <html lang="vi">
