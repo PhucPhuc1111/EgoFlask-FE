@@ -163,6 +163,7 @@ import { RcFile, UploadChangeParam, UploadFile, UploadProps } from "antd/es/uplo
 import { authenticator } from "~/services/auth.server";
 import { useQueryClient } from "@tanstack/react-query";
 import { IoCloudUpload } from "react-icons/io5";
+import { format } from "date-fns";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   let user = await authenticator.isAuthenticated(request);
@@ -397,7 +398,7 @@ const Profile = () => {
                     </div>
                     <div className="flex flex-col lg:flex-row lg:gap-10">
                       <span className="text-[#9c9797]">Ngày sinh</span>
-                      <span>{profile?.detail?.birthday}</span>
+                      <span>{format(profile?.detail?.birthday || new Date('2000-01-01'), 'dd/MM/yyyy')}</span>
                       <Link
                         to="/profile/dob"
                         className="text-[#0055c3] underline"

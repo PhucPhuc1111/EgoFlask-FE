@@ -6,6 +6,7 @@ import { InferType, object, string } from "yup";
 import { ProfileSidebar, SubFooter } from "~/components";
 import { updateProfile, useGetProfile } from "~/data";
 import { useQueryClient } from "@tanstack/react-query";
+import { format, parseISO } from "date-fns";
 
 let schema = object({
   dob: string().required(),
@@ -75,9 +76,17 @@ export default function ProfileUpdateDob() {
                 <div className="flex flex-col gap-2">
                   <DatePicker
                     onChange={(date) => {
-                      setValue('dob', date.toISOString())
+                      if (date) {
+                        setValue('dob', format(date.toDate(), 'yyyy-MM-dd'));
+                      } else {
+                        setValue('dob', '');
+                      }
                     }}
-                    placeholder={profile.data?.detail.birthday || 'Nhập ngày sinh'}
+                    placeholder={
+                      profile?.data?.detail?.birthday
+                        ? format(profile.data.detail.birthday, 'dd/MM/yyyy')
+                        : 'Nhập ngày sinh'
+                    }
                     format="DD/MM/YYYY"
                     className="w-full rounded-md"
                   />
