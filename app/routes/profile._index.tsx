@@ -342,7 +342,7 @@ const Profile = () => {
                               id="male"
                               type="radio"
                               name="gender"
-                              checked={gender === "male"}
+                              checked={gender.toLowerCase() === "male"}
                               onChange={() => handleGenderChange("male")}
                               className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2"
                             />
@@ -355,7 +355,7 @@ const Profile = () => {
                               id="female"
                               type="radio"
                               name="gender"
-                              checked={gender === "female"}
+                              checked={gender.toLowerCase() === "female"}
                               onChange={() => handleGenderChange("female")}
                               className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2"
                             />
@@ -368,7 +368,7 @@ const Profile = () => {
                               id="not-specified"
                               type="radio"
                               name="gender"
-                              checked={gender === ""}
+                              checked={gender.length === 0 || gender.toLowerCase() === 'not specified'}
                               onChange={() => handleGenderChange("")}
                               className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-[#0055c3] focus:ring-2"
                             />
