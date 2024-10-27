@@ -159,7 +159,12 @@ import { ProfileSidebar, SubFooter } from "~/components";
 import { useGetProfile, updateProfile } from "~/data";
 import { GetProp, Image, message, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { RcFile, UploadChangeParam, UploadFile, UploadProps } from "antd/es/upload/interface";
+import {
+  RcFile,
+  UploadChangeParam,
+  UploadFile,
+  UploadProps,
+} from "antd/es/upload/interface";
 import { authenticator } from "~/services/auth.server";
 import { useQueryClient } from "@tanstack/react-query";
 import { IoCloudUpload } from "react-icons/io5";
@@ -173,7 +178,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   return json({}, { status: 200 });
 }
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 const getBase64 = (file: FileType): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -185,11 +190,13 @@ const getBase64 = (file: FileType): Promise<string> =>
 
 const Profile = () => {
   const { data: profile } = useGetProfile();
-  const [gender, setGender] = useState<string>(profile?.detail?.gender?.toLowerCase() || "");
+  const [gender, setGender] = useState<string>(
+    profile?.detail?.gender?.toLowerCase() || ""
+  );
   const [isEditingGender, setIsEditingGender] = useState(false);
   const queryClient = useQueryClient();
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
+  const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -208,13 +215,13 @@ const Profile = () => {
     let formData = new FormData();
     formData.append("Name", profile?.detail?.name || "");
 
-
-    if (fileList[0].originFileObj) {
+    if (fileList[0]?.originFileObj) {
       formData.append("AvatarPic", fileList[0].originFileObj);
     } else {
       formData.append("AvatarPic", profile?.detail?.avatar || "");
     }
 
+    // Append gender to formData
     formData.append("Gender", gender);
     formData.append("Dob", profile?.detail?.birthday || "");
     formData.append("PhoneNumber", profile?.detail?.phoneNumber || "");
@@ -225,15 +232,13 @@ const Profile = () => {
       if (response) {
         message.success("Cập nhật thành công", 3);
         queryClient.invalidateQueries({
-          queryKey: ['profile']
-        })
+          queryKey: ["profile"],
+        });
+        setIsEditingGender(false);
       }
       setIsLoading(false);
     } catch (error: any) {
       message.error(`Cập nhật thất bại: ${error?.message}`);
-      setIsLoading(false);
-    }
-    finally {
       setIsLoading(false);
     }
   };
@@ -248,23 +253,23 @@ const Profile = () => {
   };
 
   const uploadProps: UploadProps = {
-    accept: '.jpg, .png',
-    listType: 'picture-circle',
+    accept: ".jpg, .png",
+    listType: "picture-circle",
     onRemove: (file) => {
       setFileList((prev) => prev.filter((f) => f.uid !== file.uid));
     },
     beforeUpload: (file) => {
-      const isJpg = file.type === 'image/jpeg';
-      const isPng = file.type === 'image/png';
+      const isJpg = file.type === "image/jpeg";
+      const isPng = file.type === "image/png";
       console.log(file);
 
       if (!isJpg && !isPng) {
-        message.error('Bạn chỉ được upload file PNG hoặc JPG!');
+        message.error("Bạn chỉ được upload file PNG hoặc JPG!");
         return Upload.LIST_IGNORE;
       }
       const isLt2M = file.size / 1024 / 1024 < 20;
       if (!isLt2M) {
-        message.error('Ảnh phải nhỏ hơn 20MB!');
+        message.error("Ảnh phải nhỏ hơn 20MB!");
         return Upload.LIST_IGNORE;
       }
       setFileList((prev) => [...prev, file]);
@@ -274,17 +279,17 @@ const Profile = () => {
     onChange(info) {
       const { status } = info.file;
       setFileList(info.fileList);
-      if (status !== 'uploading') {
+      if (status !== "uploading") {
         console.log(info.file, info.fileList);
       }
-      if (status === 'done') {
+      if (status === "done") {
         message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === 'error') {
+      } else if (status === "error") {
         message.error(`${info.file.name} file upload failed.`);
       }
     },
     onDrop(e) {
-      console.log('Dropped files', e.dataTransfer.files);
+      console.log("Dropped files", e.dataTransfer.files);
     },
     onPreview: handlePreview,
   };
@@ -384,8 +389,8 @@ const Profile = () => {
                             {gender === "male"
                               ? "Nam"
                               : gender === "female"
-                                ? "Nữ"
-                                : "Không muốn đề cập"}
+                              ? "Nữ"
+                              : "Không muốn đề cập"}
                           </span>
                           <button
                             onClick={() => setIsEditingGender(true)}
@@ -398,7 +403,12 @@ const Profile = () => {
                     </div>
                     <div className="flex flex-col lg:flex-row lg:gap-10">
                       <span className="text-[#9c9797]">Ngày sinh</span>
-                      <span>{format(profile?.detail?.birthday || new Date('2000-01-01'), 'dd/MM/yyyy')}</span>
+                      <span>
+                        {format(
+                          profile?.detail?.birthday || new Date("2000-01-01"),
+                          "dd/MM/yyyy"
+                        )}
+                      </span>
                       <Link
                         to="/profile/dob"
                         className="text-[#0055c3] underline"
@@ -423,9 +433,7 @@ const Profile = () => {
               </div>
               <div className="lg:col-span-4 mt-8 lg:mt-0">
                 <div className="flex flex-col items-center">
-                  <Upload
-                    {...uploadProps}
-                  >
+                  <Upload {...uploadProps}>
                     {fileList.length > 0 ? null : (
                       <div className="flex flex-col items-center justify-center">
                         <IoCloudUpload />
@@ -435,11 +443,12 @@ const Profile = () => {
                   </Upload>
                   {previewImage && (
                     <Image
-                      wrapperStyle={{ display: 'none' }}
+                      wrapperStyle={{ display: "none" }}
                       preview={{
                         visible: previewOpen,
                         onVisibleChange: (visible) => setPreviewOpen(visible),
-                        afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                        afterOpenChange: (visible) =>
+                          !visible && setPreviewImage(""),
                       }}
                       src={previewImage}
                     />
@@ -449,7 +458,15 @@ const Profile = () => {
                       onClick={handleSaveProfile}
                       className="border-2 rounded-lg h-auto w-auto mt-4 p-2 text-sm lg:text-base bg-[#0055c3] text-white"
                     >
-                      {isLoading ? <img src="/icons/loading.svg" alt="loading" className="w-7 h-7" /> : <span>Thay đổi ảnh</span>}
+                      {isLoading ? (
+                        <img
+                          src="/icons/loading.svg"
+                          alt="loading"
+                          className="w-7 h-7"
+                        />
+                      ) : (
+                        <span>Thay đổi ảnh</span>
+                      )}
                     </button>
                   )}
                   <div className="text-center mt-4 text-sm lg:text-base">

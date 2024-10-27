@@ -46,7 +46,8 @@ export default function ProfileUpdateDob() {
         message.success("Cập nhật ngày sinh thành công", 3);
         queryClient.invalidateQueries({
           queryKey: ['profile']
-        })
+        });
+        navigate("/profile");
       }
     } catch (error: any) {
       message.error(`Cập nhật thất bại: ${error?.message}`);

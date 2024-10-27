@@ -20,6 +20,8 @@ const resolver = yupResolver(schema);
 type UpdateAddress = InferType<typeof schema>;
 
 export default function ProfileUpdateAddress() {
+  const navigate = useNavigate();
+
   const {
     register,
     formState: { errors },
@@ -36,7 +38,7 @@ export default function ProfileUpdateAddress() {
   const districtId = watch('districts');
   const wards = useGetWards(Number(districtId));
   const provinceId = watch('provinces');
-  const navigate = useNavigate();
+ 
   const queryClient = useQueryClient();
 
   const splitAddress = useMemo(() => {
@@ -81,7 +83,8 @@ export default function ProfileUpdateAddress() {
         message.success("Cập nhật địa chỉ thành công", 3);
         queryClient.invalidateQueries({
           queryKey: ['profile']
-        })
+        });
+        navigate("/profile");
       }
     } catch (error: any) {
       message.error(`Cập nhật thất bại: ${error?.message}`);

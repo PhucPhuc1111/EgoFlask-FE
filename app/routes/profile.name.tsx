@@ -44,7 +44,8 @@ export default function ProfileUpdateName() {
         message.success("Cập nhật tên thành công", 3);
         queryClient.invalidateQueries({
           queryKey: ['profile']
-        })
+        });
+        navigate("/profile");
       }
     } catch (error: any) {
       message.error(`Cập nhật thất bại: ${error?.message}`);
