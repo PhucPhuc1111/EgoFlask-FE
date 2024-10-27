@@ -120,7 +120,8 @@ export default function ProfileUpdatePhoneNumber() {
         message.success("Cập nhật số điện thoại thành công", 3);
         queryClient.invalidateQueries({
           queryKey: ['profile']
-        })
+        });
+        navigate("/profile");
       }
     } catch (error: any) {
       message.error(`Cập nhật thất bại: ${error?.message}`);
