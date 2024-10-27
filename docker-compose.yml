@@ -5,6 +5,7 @@ services:
     ports:
       - "3000:3000"
     environment:
+      - TZ=Asia/Ho_Chi_Minh
       - VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
       - VITE_GOOGLE_CLIENT_SECRET=${VITE_GOOGLE_CLIENT_SECRET}
       - VITE_GOOGLE_REDIRECT_URI=${VITE_GOOGLE_REDIRECT_URI}
