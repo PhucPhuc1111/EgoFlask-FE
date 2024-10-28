@@ -650,7 +650,7 @@ import { useForm } from "react-hook-form";
 import { boolean, InferType, object, string } from "yup";
 import { Model } from "~/components";
 import { formatMoney, splitProductImageURLs } from "~/components/utils";
-import { checkout, removeFromCart, useGetDistricts, useGetInCart, useGetProfile, useGetProvinces, useGetWards } from "~/data";
+import { checkout, removeFromCart, updateProfile, useGetDistricts, useGetInCart, useGetProfile, useGetProvinces, useGetWards } from "~/data";
 import { authenticator } from "~/services/auth.server";
 const { confirm } = Modal;
 
@@ -747,6 +747,18 @@ export default function Checkout() {
   const wards = useGetWards(Number(districtId));
   const provinceId = watch("receiverProvince");
 
+  const mapProvinces = useMemo(() => {
+    return _.mapKeys(provinces.data?.data, it => it.ProvinceID)
+  }, [provinces.data?.data]);
+
+  const mapDistricts = useMemo(() => {
+    return _.mapKeys(districts.data?.data, it => it.DistrictID)
+  }, [districts.data?.data]);
+
+  const mapWards = useMemo(() => {
+    return _.mapKeys(wards.data?.data, it => it.WardCode)
+  }, [districts.data?.data, wards.data?.data]);
+
   useEffect(() => {
     setValue("name", profile.data?.detail.name || "");
     setValue("phone", profile.data?.detail.phoneNumber || "");
@@ -823,9 +835,38 @@ export default function Checkout() {
 
   const isDifferentAddress = watch("deliveryToDifferentAddress", false);
 
+  const updateAddress = async (data: CheckoutForm) => {
+    console.log("data", data);
+    let formData = new FormData();
+    formData.append("Name", profile.data?.detail?.name ||'');
+    formData.append("AvatarPic",  profile.data?.detail?.avatar || '');
+    formData.append("Gender", profile.data?.detail?.gender || "");
+    formData.append("Dob", profile.data?.detail?.birthday || "");
+    formData.append('Address', `${data.receiverStreet}, ${mapWards[data.receiverWard || ""]?.WardName}, ${mapDistricts[data.receiverDistrict || ""]?.DistrictName}, ${mapProvinces[data.receiverProvince || ""]?.ProvinceName}`);
+    formData.append("PhoneNumber", profile.data?.detail?.phoneNumber || "");
+
+    try {
+      let response = await updateProfile(profile.data?.user?.token || '', formData);
+      if (response) {
+        message.success("Cập nhật địa chỉ thành công", 3);
+        queryClient.invalidateQueries({
+          queryKey: ['profile']
+        });
+      }
+    } catch (error: any) {
+      message.error(`Cập nhật thất bại: ${error?.message}`);
+    }
+  };
+
+  console.log('errors', errors);
+
   const onSubmit = async (data: CheckoutForm) => {
+    console.log('data', data);
     setIsLoading(true);
     try {
+      if (data.deliveryToDifferentAddress) {
+        updateAddress(data);
+      }
       let response = await checkout(profile.data?.user?.token || "", {
         returnUrl: `${window.location.origin}/payos/checkout-process`,
         cancelUrl: `${window.location.origin}/payos/checkout-process`,
@@ -844,6 +885,7 @@ export default function Checkout() {
       }
     } catch (error: any) {
       message.error(error?.message);
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -918,7 +960,11 @@ export default function Checkout() {
                       className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7] text-xs md:text-sm"
                     />
                   </div>
-
+                  <div className="">
+                    {(errors.district || errors.ward || errors.province || errors.street) && (
+                      <p className="text-red-500 text-xs md:text-sm">Địa chỉ giao hàng bị thiếu, vui lòng chọn "Giao hàng đến địa chỉ khác"</p>
+                    )}
+                  </div>
                   <div className="flex items-center space-x-2">
                     <input type="checkbox" {...register("deliveryToDifferentAddress")} className="text-xs md:text-sm" />
                     <span className="text-xs md:text-sm">Giao hàng đến địa chỉ khác</span>
@@ -927,85 +973,95 @@ export default function Checkout() {
                   {isDifferentAddress && (
                     <div className="space-y-4">
                       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
-                        <input
-                          type="text"
-                          placeholder="Họ và tên người nhận"
-                          {...register("receiverName")}
-                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-                        />
-                        {errors.receiverName && (
-                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverName?.message}</p>
-                        )}
-                        <input
-                          type="text"
-                          placeholder="Số điện thoại người nhận"
-                          {...register("receiverPhone")}
-                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-                        />
-                        {errors.receiverPhone && (
-                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverPhone?.message}</p>
-                        )}
+                        <div className="flex flex-col">
+                          <input
+                            type="text"
+                            placeholder="Họ và tên người nhận"
+                            {...register("receiverName")}
+                            className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                          />
+                          {errors.receiverName && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverName?.message}</p>
+                          )}
+                        </div>
+                        <div className="flex flex-col">
+                          <input
+                            type="text"
+                            placeholder="Số điện thoại người nhận"
+                            {...register("receiverPhone")}
+                            className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                          />
+                          {errors.receiverPhone && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverPhone?.message}</p>
+                          )}
+                        </div>
                       </div>
 
                       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
-                        <select
-                          {...register("receiverProvince")}
-                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-                        >
-                          <option value="">Chọn thành phố</option>
-                          {_.map(provinces.data?.data, (province, index) => (
-                            <option key={index} value={province.ProvinceID}>
-                              {province.ProvinceName}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.receiverProvince && (
-                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverProvince?.message}</p>
-                        )}
-
-                        <select
-                          {...register("receiverDistrict")}
-                          disabled={!watch("receiverProvince")}
-                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-                        >
-                          <option value="">Chọn quận</option>
-                          {_.map(filterDistrictsByProviceId, (district, index) => (
-                            <option key={index} value={district.DistrictID}>
-                              {district.DistrictName}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.receiverDistrict && (
-                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverDistrict?.message}</p>
-                        )}
+                        <div className="flex flex-col">
+                          <select
+                            {...register("receiverProvince")}
+                            className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                          >
+                            <option value="">Chọn thành phố</option>
+                            {_.map(provinces.data?.data, (province, index) => (
+                              <option key={index} value={province.ProvinceID}>
+                                {province.ProvinceName}
+                              </option>
+                            ))}
+                          </select>
+                          {errors.receiverProvince && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverProvince?.message}</p>
+                          )}
+                        </div>
+                        <div className="flex flex-col">
+                          <select
+                            {...register("receiverDistrict")}
+                            disabled={!watch("receiverProvince")}
+                            className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                          >
+                            <option value="">Chọn quận</option>
+                            {_.map(filterDistrictsByProviceId, (district, index) => (
+                              <option key={index} value={district.DistrictID}>
+                                {district.DistrictName}
+                              </option>
+                            ))}
+                          </select>
+                          {errors.receiverDistrict && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverDistrict?.message}</p>
+                          )}
+                        </div>
                       </div>
 
                       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
-                        <select
-                          {...register("receiverWard")}
-                          disabled={!watch("receiverDistrict")}
-                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-                        >
-                          <option value="">Chọn phường</option>
-                          {_.map(wards.data?.data, (ward, index) => (
-                            <option key={index} value={ward.WardCode}>
-                              {ward.WardName}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.receiverWard && (
-                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverWard?.message}</p>
-                        )}
-
-                        <input
-                          type="text"
-                          placeholder="123 Đường Nguyễn Huệ"
-                          {...register("receiverStreet")}
-                          className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
-                        />
-                        {errors.receiverStreet && (
-                          <p className="text-red-500 text-xs md:text-sm">{errors.receiverStreet?.message}</p>
-                        )}
+                        <div className="flex flex-col">
+                          <select
+                            {...register("receiverWard")}
+                            disabled={!watch("receiverDistrict")}
+                            className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                          >
+                            <option value="">Chọn phường</option>
+                            {_.map(wards.data?.data, (ward, index) => (
+                              <option key={index} value={ward.WardCode}>
+                                {ward.WardName}
+                              </option>
+                            ))}
+                          </select>
+                          {errors.receiverWard && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverWard?.message}</p>
+                          )}
+                        </div>
+                        <div className="flex flex-col">
+                          <input
+                            type="text"
+                            placeholder="123 Đường Nguyễn Huệ"
+                            {...register("receiverStreet")}
+                            className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
+                          />
+                          {errors.receiverStreet && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverStreet?.message}</p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}
