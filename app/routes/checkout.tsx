@@ -671,36 +671,36 @@ const schema = object({
   ward: string().required("Phường là bắt buộc"),
   street: string().required("Địa chỉ là bắt buộc"),
   deliveryToDifferentAddress: boolean(),
-  receiverName: string().when("deliveryToDifferentAddress", {
-    is: true,
-    then: schema => schema.required("Họ và tên người nhận là bắt buộc"),
-    otherwise: schema => schema.notRequired(),
-  }),
-  receiverPhone: string().when("deliveryToDifferentAddress", {
-    is: true,
-    then: schema => schema.required("Số điện thoại người nhận là bắt buộc"),
-    otherwise: schema => schema.notRequired(),
-  }),
-  receiverProvince: string().when("deliveryToDifferentAddress", {
-    is: true,
-    then: schema => schema.required("Thành phố là bắt buộc"),
-    otherwise: schema => schema.notRequired(),
-  }),
-  receiverDistrict: string().when("deliveryToDifferentAddress", {
-    is: true,
-    then: schema => schema.required("Quận là bắt buộc"),
-    otherwise: schema => schema.notRequired(),
-  }),
-  receiverWard: string().when("deliveryToDifferentAddress", {
-    is: true,
-    then: schema => schema.required("Phường là bắt buộc"),
-    otherwise: schema => schema.notRequired(),
-  }),
-  receiverStreet: string().when("deliveryToDifferentAddress", {
-    is: true,
-    then: schema => schema.required("Địa chỉ là bắt buộc"),
-    otherwise: schema => schema.notRequired(),
-  }),
+  // receiverName: string().when("deliveryToDifferentAddress", {
+  //   is: true,
+  //   then: schema => schema.required("Họ và tên người nhận là bắt buộc"),
+  //   otherwise: schema => schema.notRequired(),
+  // }),
+  // receiverPhone: string().when("deliveryToDifferentAddress", {
+  //   is: true,
+  //   then: schema => schema.required("Số điện thoại người nhận là bắt buộc"),
+  //   otherwise: schema => schema.notRequired(),
+  // }),
+  // receiverProvince: string().when("deliveryToDifferentAddress", {
+  //   is: true,
+  //   then: schema => schema.required("Thành phố là bắt buộc"),
+  //   otherwise: schema => schema.notRequired(),
+  // }),
+  // receiverDistrict: string().when("deliveryToDifferentAddress", {
+  //   is: true,
+  //   then: schema => schema.required("Quận là bắt buộc"),
+  //   otherwise: schema => schema.notRequired(),
+  // }),
+  // receiverWard: string().when("deliveryToDifferentAddress", {
+  //   is: true,
+  //   then: schema => schema.required("Phường là bắt buộc"),
+  //   otherwise: schema => schema.notRequired(),
+  // }),
+  // receiverStreet: string().when("deliveryToDifferentAddress", {
+  //   is: true,
+  //   then: schema => schema.required("Địa chỉ là bắt buộc"),
+  //   otherwise: schema => schema.notRequired(),
+  // }),
   paymentMethod: string().required("Phương thức thanh toán là bắt buộc"),
 });
 
@@ -743,9 +743,9 @@ export default function Checkout() {
 
   const provinces = useGetProvinces();
   const districts = useGetDistricts();
-  const districtId = watch("receiverDistrict");
+  const districtId = watch("district");
   const wards = useGetWards(Number(districtId));
-  const provinceId = watch("receiverProvince");
+  const provinceId = watch("province");
 
   const mapProvinces = useMemo(() => {
     return _.mapKeys(provinces.data?.data, it => it.ProvinceID)
@@ -838,12 +838,12 @@ export default function Checkout() {
   const updateAddress = async (data: CheckoutForm) => {
     console.log("data", data);
     let formData = new FormData();
-    formData.append("Name", profile.data?.detail?.name ||'');
-    formData.append("AvatarPic",  profile.data?.detail?.avatar || '');
+    formData.append("Name", data.name || '');
+    formData.append("AvatarPic", profile.data?.detail?.avatar || '');
     formData.append("Gender", profile.data?.detail?.gender || "");
     formData.append("Dob", profile.data?.detail?.birthday || "");
-    formData.append('Address', `${data.receiverStreet}, ${mapWards[data.receiverWard || ""]?.WardName}, ${mapDistricts[data.receiverDistrict || ""]?.DistrictName}, ${mapProvinces[data.receiverProvince || ""]?.ProvinceName}`);
-    formData.append("PhoneNumber", profile.data?.detail?.phoneNumber || "");
+    formData.append('Address', `${data.street}, ${mapWards[data.ward || ""]?.WardName}, ${mapDistricts[data.district || ""]?.DistrictName}, ${mapProvinces[data.province || ""]?.ProvinceName}`);
+    formData.append("PhoneNumber", data.phone || "");
 
     try {
       let response = await updateProfile(profile.data?.user?.token || '', formData);
@@ -857,8 +857,6 @@ export default function Checkout() {
       message.error(`Cập nhật thất bại: ${error?.message}`);
     }
   };
-
-  console.log('errors', errors);
 
   const onSubmit = async (data: CheckoutForm) => {
     console.log('data', data);
@@ -894,7 +892,15 @@ export default function Checkout() {
     return _(districts.data?.data)
       .filter(it => it.ProvinceID === Number(provinceId))
       .value()
-  }, [watch('receiverProvince'), districts.data?.data]);
+  }, [watch('province'), districts.data?.data]);
+
+  useEffect(() => {
+    if (messageParams) {
+      if (messageType === 'error') {
+        message.error(messageParams);
+      }
+    }
+  }, [location.search]);
 
   return (
     <main className="mt-[--m-header-top]">
@@ -977,22 +983,22 @@ export default function Checkout() {
                           <input
                             type="text"
                             placeholder="Họ và tên người nhận"
-                            {...register("receiverName")}
+                            {...register("name")}
                             className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
                           />
-                          {errors.receiverName && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverName?.message}</p>
+                          {errors.name && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.name?.message}</p>
                           )}
                         </div>
                         <div className="flex flex-col">
                           <input
                             type="text"
                             placeholder="Số điện thoại người nhận"
-                            {...register("receiverPhone")}
+                            {...register("phone")}
                             className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
                           />
-                          {errors.receiverPhone && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverPhone?.message}</p>
+                          {errors.phone && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.phone?.message}</p>
                           )}
                         </div>
                       </div>
@@ -1000,7 +1006,7 @@ export default function Checkout() {
                       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
                         <div className="flex flex-col">
                           <select
-                            {...register("receiverProvince")}
+                            {...register("province")}
                             className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
                           >
                             <option value="">Chọn thành phố</option>
@@ -1010,14 +1016,14 @@ export default function Checkout() {
                               </option>
                             ))}
                           </select>
-                          {errors.receiverProvince && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverProvince?.message}</p>
+                          {errors.province && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.province?.message}</p>
                           )}
                         </div>
                         <div className="flex flex-col">
                           <select
-                            {...register("receiverDistrict")}
-                            disabled={!watch("receiverProvince")}
+                            {...register("district")}
+                            disabled={!watch("province")}
                             className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
                           >
                             <option value="">Chọn quận</option>
@@ -1027,8 +1033,8 @@ export default function Checkout() {
                               </option>
                             ))}
                           </select>
-                          {errors.receiverDistrict && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverDistrict?.message}</p>
+                          {errors.district && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.district?.message}</p>
                           )}
                         </div>
                       </div>
@@ -1036,8 +1042,8 @@ export default function Checkout() {
                       <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
                         <div className="flex flex-col">
                           <select
-                            {...register("receiverWard")}
-                            disabled={!watch("receiverDistrict")}
+                            {...register("ward")}
+                            disabled={!watch("district")}
                             className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
                           >
                             <option value="">Chọn phường</option>
@@ -1047,19 +1053,19 @@ export default function Checkout() {
                               </option>
                             ))}
                           </select>
-                          {errors.receiverWard && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverWard?.message}</p>
+                          {errors.ward && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.ward?.message}</p>
                           )}
                         </div>
                         <div className="flex flex-col">
                           <input
                             type="text"
                             placeholder="123 Đường Nguyễn Huệ"
-                            {...register("receiverStreet")}
+                            {...register("street")}
                             className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
                           />
-                          {errors.receiverStreet && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.receiverStreet?.message}</p>
+                          {errors.street && (
+                            <p className="text-red-500 text-xs md:text-sm">{errors.street?.message}</p>
                           )}
                         </div>
                       </div>
