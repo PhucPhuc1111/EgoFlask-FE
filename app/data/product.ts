@@ -12,13 +12,13 @@ export async function getProductById(id: string): Promise<Product> {
   return await request.get(`${BASE_URL}/api/Product/${id}`);
 }
 
-export async function addProduct(product: AddProductForm) {
+export async function addProduct(product: AddProductForm, token: string) {
   try {
     const formData = new FormData();
 
     formData.append("ProductKey", product.productKey || 'null');
     formData.append("Name", product.name);
-    formData.append("ImageUrl", product.imageUrl); 
+    formData.append("ImageUrl", product.imageUrl as any); 
     formData.append("Description", product.description || 'null');
     formData.append("Guides", product.guides || 'null');
     formData.append("Price", String(product.price));
@@ -26,24 +26,26 @@ export async function addProduct(product: AddProductForm) {
     formData.append("Engrave", product.engrave || 'null');
     formData.append("Status", product.status || 'ACTIVE');
 
-    
-    for (let pair of formData.entries()) {
-      console.log(pair[0]+ ': ' + pair[1]); 
-    }
-
-    return await request.postMultiPart(`${BASE_URL}/api/Product`, formData);
-  } catch (error) {
-    console.error("Error adding product:", error.response || error.message);
+    return await request.postMultiPart(`${BASE_URL}/api/Product`, formData, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      }
+    });
+  } catch (error: any) {
+    console.error("Error adding product:", error?.response || error?.message);
     throw error;
   }
 }
-export async function updateProduct(id: string, formData: FormData) {
+export async function updateProduct(id: string, formData: FormData, token: string) {
   try {
   
-    const response = await request.putMultiPart(`${BASE_URL}/api/Product/${id}`, formData);
+    const response = await request.putMultiPart(`${BASE_URL}/api/Product/${id}`, formData, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      }
+    });
 
     
-    console.log("API Response:", response);
     return response;
 
   } catch (error) {
@@ -52,8 +54,13 @@ export async function updateProduct(id: string, formData: FormData) {
   }
 }
 
-export async function deleteProductById(id: string): Promise<void> {
-  return await request.delete(`${BASE_URL}/api/Product/${id}`);
+export async function deleteProductById(id: string, token: string): Promise<void> {
+  return await request.deleteWithOptions(`${BASE_URL}/api/Product/${id}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    }
+  });
 }
 
 export const useGetAllProducts = (

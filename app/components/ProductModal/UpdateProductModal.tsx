@@ -1,11 +1,13 @@
-import { Button, Modal, Upload, Image, Spin } from "antd";
+import { Button, Modal, Upload, Image, Spin, UploadFile, GetProp, UploadProps, message } from "antd";
 import { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { InferType, number, object, string, mixed } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { updateProduct } from "~/data";
+import { Product, updateProduct, useGetProfile } from "~/data";
 import { useQueryClient } from "@tanstack/react-query";
+
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 let schema = object({
   name: string().required("Vui lòng chọn tên sản phẩm"),
@@ -22,10 +24,16 @@ let schema = object({
 const resolver = yupResolver(schema);
 export type UpdateProductForm = InferType<typeof schema>;
 
-const UpdateProductModal = ({ productId, productData }) => {
+type UpdateProductModalProps = {
+  productId: string;
+  productData: Product;
+}
+
+const UpdateProductModal = ({ productId, productData }: UpdateProductModalProps) => {
+  const profile = useGetProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [fileList, setFileList] = useState([]);
-  const [previewImage, setPreviewImage] = useState("");
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [previewImage, setPreviewImage] = useState<string | undefined>("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
@@ -57,7 +65,7 @@ const UpdateProductModal = ({ productId, productData }) => {
       formData.append("Name", data.name);
       
       // Nếu có ảnh mới, thêm vào FormData. Nếu không, giữ lại ảnh cũ.
-      if (fileList.length > 0) {
+      if (fileList.length > 0 && fileList[0]?.originFileObj) {
         formData.append("ImageUrl", fileList[0]?.originFileObj);
       } else {
         formData.append("ImageUrl", productData.imageUrl); // Giữ lại ảnh cũ
@@ -70,19 +78,16 @@ const UpdateProductModal = ({ productId, productData }) => {
       formData.append("Engrave", data.engrave || "null");
       formData.append("Status", data.status || "ACTIVE");
   
-      // Log FormData để kiểm tra
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
-      }
-  
       // Gọi hàm updateProduct và truyền formData
-      await updateProduct(productId, formData);
+      await updateProduct(productId, formData, profile.data?.user?.token || "");
       queryClient.invalidateQueries({
         queryKey: ['products'],
       });
+      message.success("Cập nhật sản phẩm thành công");
       setIsModalOpen(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Lỗi khi cập nhật sản phẩm:", error);
+      message.error(`Lỗi khi cập nhật sản phẩm: ${error?.message}`);
     } finally {
       setLoading(false);
     }
@@ -93,27 +98,27 @@ const UpdateProductModal = ({ productId, productData }) => {
     setIsModalOpen(false);
   };
 
-  const handlePreview = async (file) => {
+  const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      file.preview = await getBase64(file.originFileObj as FileType);
     }
     setPreviewImage(file.url || file.preview);
   };
 
-  const handleChange = ({ fileList: newFileList }) => {
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
     if (newFileList.length > 0) {
       const lastFile = newFileList[newFileList.length - 1];
-      setValue("imageUrl", lastFile.originFileObj);
+      setValue("imageUrl", lastFile.originFileObj as any);
       trigger("imageUrl");
     }
   };
 
-  const getBase64 = (file) =>
+  const getBase64 = (file: FileType): Promise<string> =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
+      reader.onload = () => resolve(reader.result as string);
       reader.onerror = (error) => reject(error);
     });
 

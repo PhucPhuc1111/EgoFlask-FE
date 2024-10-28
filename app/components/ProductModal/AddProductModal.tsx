@@ -1,10 +1,10 @@
-import { Button, Modal, Upload, Image, Spin } from "antd";
+import { Button, Modal, Upload, Image, Spin, GetProp, UploadProps, UploadFile, message } from "antd";
 import { useState } from "react";
 import { PlusOutlined } from '@ant-design/icons';
 import { InferType, mixed, number, object, string } from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form"; 
-import { addProduct } from "~/data"; 
+import { addProduct, useGetProfile } from "~/data"; 
 import { useQueryClient } from "@tanstack/react-query";
 
 let schema = object({
@@ -19,13 +19,16 @@ let schema = object({
   createAt: string(),
   status: string(),
 });
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
+
 
 const resolver = yupResolver(schema);
 export type AddProductForm = InferType<typeof schema>;
 
 const AddProductModal = () => {
+  const profile = useGetProfile();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [fileList, setFileList] = useState([]); 
+  const [fileList, setFileList] = useState<UploadFile[]>([]); 
   const [previewImage, setPreviewImage] = useState(''); 
   const [previewOpen, setPreviewOpen] = useState(false); 
   const [loading, setLoading] = useState(false); // Loading state
@@ -52,15 +55,17 @@ const AddProductModal = () => {
 
       await addProduct({
         ...data,
-        imageUrl: file, 
-      });
+        imageUrl: file as any, 
+      }, profile.data?.user?.token || '');
 
       setIsModalOpen(false);
       queryClient.invalidateQueries({
         queryKey: ['products'],
       });
-    } catch (error) {
+      message.success("Thêm sản phẩm thành công");
+    } catch (error: any) {
       console.error("Lỗi khi thêm sản phẩm:", error);
+      message.error(`Lỗi khi thêm sản phẩm: ${error?.message}`);
     } finally {
       setLoading(false); 
     }
@@ -70,27 +75,27 @@ const AddProductModal = () => {
     setIsModalOpen(false);
   };
 
-  const handlePreview = async (file) => {
+  const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      file.preview = await getBase64(file.originFileObj as FileType);
     }
-    setPreviewImage(file.url || file.preview);
+    setPreviewImage(file.url || (file.preview as string));
   };
 
-  const handleChange = ({ fileList: newFileList }) => {
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
     if (newFileList.length > 0) {
       const lastFile = newFileList[newFileList.length - 1];
-      setValue("imageUrl", lastFile.originFileObj); 
+      setValue("imageUrl", lastFile.originFileObj as any); 
       trigger("imageUrl"); 
     }
   };
 
-  const getBase64 = (file) =>
+  const getBase64 = (file: FileType): Promise<string> =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
+      reader.onload = () => resolve(reader.result as string);
       reader.onerror = (error) => reject(error);
     });
 
