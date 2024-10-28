@@ -154,6 +154,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { MetaFunction } from "@remix-run/node";
 import { useNavigate } from "@remix-run/react";
+import { message } from "antd";
 import _ from "lodash";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -211,6 +212,7 @@ export default function Register() {
     try {
       let response = await registerAccount(data);
       if (response) {
+        message.success("Tài khoản đã được tạo thành công! Kiểm tra mail để xác thực tài khoản."); 
         navigate('/login');
       }
     } catch (error: any) {
