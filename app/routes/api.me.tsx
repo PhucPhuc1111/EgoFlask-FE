@@ -9,6 +9,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   if (!user) return json({user: {}, detail: {}});
   try {
     let detail: User = await getMe(user.token);
+    console.log(`====user detail`, detail);
+    
     return json({ user, detail});
   } catch (error: any) {
     return json({ user, detail: {}})

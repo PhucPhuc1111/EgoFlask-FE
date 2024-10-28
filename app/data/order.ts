@@ -131,6 +131,7 @@ export const useGetInCart = (token: string, config?: UseQueryOptions<CartRS[]>) 
     queryKey: ["in-cart"],
     queryFn: () => getInCart(token),
     enabled: !!token,
+    retry: 1,
     ...config,
   });
 }
