@@ -152,12 +152,18 @@ export default function AdminCustomer() {
     return _(accounts.data)
       .orderBy((it) => it.createAt, "desc")
       .filter(
-        (customer) =>
-          (customer.name &&
-            customer.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (customer.email &&
-            customer.email.toLowerCase().includes(searchTerm.toLowerCase()))
-      )
+        (customer) => {      
+          if (searchTerm.length > 0) {
+            if (customer.name?.toLowerCase().trim().includes(searchTerm.toLowerCase())) {
+              return true;
+            } 
+            else if (customer.email?.toLowerCase().trim().includes(searchTerm.toLowerCase())) {
+              return true;
+            }
+            return false;
+          }
+          return true;
+        })
       .value();
   }, [accounts.data, pageSize, currentPage, searchTerm]);
 
