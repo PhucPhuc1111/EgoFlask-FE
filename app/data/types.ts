@@ -307,3 +307,15 @@ export type DashboardResponse = {
   revenueYesterday: number;
   visiter: number; 
 };
+
+
+export interface WeeklyIncome {
+  weekNumber: number;
+  income: number;
+}
+
+export interface MonthlyIncomeResponse {
+  month: string;
+  totalIncome: number;
+  weeklyIncomes: WeeklyIncome[];
+}

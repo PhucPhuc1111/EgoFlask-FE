@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import request, { BASE_URL } from "./request";
-import { Account,DashboardResponse } from "./types";
+import { Account,DashboardResponse,MonthlyIncomeResponse  } from "./types";
 
 export async function getAllAccount(token: string, pageIndex: number, pageSize: number): Promise<Account[]> {
   return await request.get(`${BASE_URL}/api/Account/${pageIndex}/${pageSize}`, {
@@ -48,3 +48,27 @@ export const useGetAllAccount = (
     ...config,
   })
 }
+
+export async function getMonthlyIncomeData(
+  token: string,
+  year: number
+): Promise<MonthlyIncomeResponse[]> {
+  return await request.get(`${BASE_URL}/api/Admin/monthly-income?year=${year}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+export const useGetMonthlyIncomeData = (
+  token: string,
+  year: number,
+  config?: UseQueryOptions<MonthlyIncomeResponse[]>
+) => {
+  return useQuery<MonthlyIncomeResponse[]>({
+    queryKey: ["monthlyIncome", year],
+    queryFn: () => getMonthlyIncomeData(token, year),
+    enabled: !!token,
+    ...config,
+  });
+};
