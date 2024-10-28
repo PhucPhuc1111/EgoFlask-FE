@@ -230,7 +230,7 @@ export default function AdminCustomer() {
                       alt="avatar"
                       width={32}
                       height={32}
-                      className=" rounded-full"
+                      className=" rounded-full object-cover"
                     />
                     
                       <span>{customer.name}</span>
