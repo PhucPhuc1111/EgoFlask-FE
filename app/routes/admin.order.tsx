@@ -394,7 +394,7 @@ export default function AdminOrder() {
   const ProfileCard = ({ email, name, avatar}: { name: string, email: string, avatar:string }) => {
     return (
       <div className="flex items-center justify-center gap-2">
-        <Image  src={avatar || "/images/avatar.png"}  alt="avatar" width={32} height={32} className="w-8 h-8 self-start rounded-full" />
+        <Image  src={avatar || "/images/avatar.png"}  alt="avatar" width={32} height={32} className="w-8 h-8 self-start rounded-full object-cover" />
         <div className="flex flex-col items-start gap-1">
           <span>
             {name}
