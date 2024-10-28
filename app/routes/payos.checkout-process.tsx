@@ -17,7 +17,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       transactionId: Number(orderCode),
       transactionStatus: status || ""
     })
-    console.log('====response', response);
+    console.log('====checkout response', response);
     
     if (response) {
       if (cancel === "true") {
@@ -25,9 +25,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
       }
       return redirect('/checkout/success')
     }
+    redirect(`/checkout?message=${encodeURIComponent(`Có lỗi trong quá trình xử lý thanh toán: ${response}`)}&type=error`);
   } catch (error: any) {
     console.log('====error', error);
     
-    return redirect(`/checkout?message=${encodeURIComponent(`Có lỗi trong quá trình xử lý thanh toán: Status: ${error.status}`)}&type=error`);
+    return redirect(`/checkout?message=${encodeURIComponent(`Có lỗi trong quá trình xử lý thanh toán: Status: ${error?.message}`)}&type=error`);
   }
 }
