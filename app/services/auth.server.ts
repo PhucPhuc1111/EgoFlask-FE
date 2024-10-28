@@ -32,7 +32,7 @@ authenticator.use(
       }
     } catch (error: any) {
       console.log('====login error', error.response.data);
-      throw new AuthorizationError("Internal Server Error", { name: `${error}`, message: `${error?.response?.data?.message}` })
+      throw new AuthorizationError("Internal Server Error", { name: `${error}`, message: `${error?.response?.data?.message || error?.response?.data}` })
     }
   }),
   "user-pass"
