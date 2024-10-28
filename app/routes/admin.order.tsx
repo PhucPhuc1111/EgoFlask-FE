@@ -391,10 +391,10 @@ export default function AdminOrder() {
     )
   }
 
-  const ProfileCard = ({ email, name }: { name: string, email: string }) => {
+  const ProfileCard = ({ email, name, avatar}: { name: string, email: string, avatar:string }) => {
     return (
       <div className="flex items-center justify-center gap-2">
-        <Image src="/images/avatar.png" alt="avatar" width={32} height={32} className="w-8 h-8 self-start" />
+        <Image  src={avatar || "/images/avatar.png"}  alt="avatar" width={32} height={32} className="w-8 h-8 self-start rounded-full" />
         <div className="flex flex-col items-start gap-1">
           <span>
             {name}
@@ -480,7 +480,7 @@ export default function AdminOrder() {
               <tr key={index} className="text-center">
                 <td className="border-2 border-[#0055C3] border-opacity-70">{item.orderId}</td>
                 <td className="border-2 border-[#0055C3] border-opacity-70 w-1/3 overflow-auto">
-                  <ProfileCard name={item.customerName} email={item.customerEmail} />
+                  <ProfileCard name={item.customerName} email={item.customerEmail} avatar={item.customerAvatar} />
                 </td>
                 <td className="border-2 border-[#0055C3] border-opacity-70 w-1/3 p-2">
                   <ProductCard orderDetail={item.orderDetails} />

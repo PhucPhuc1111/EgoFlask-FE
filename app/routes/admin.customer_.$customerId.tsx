@@ -57,7 +57,7 @@ export default function AdminCustomerDetail() {
           <div className="border-[#0055C3] w-full p-7">
             <div className="flex items-center space-x-7">
               <p className="text-lg font-semibold text-[#0055C3]">Hồ sơ</p>
-              <img className="h-20 w-20" src={customerDetail.avatar || "/images/avatar.png"} alt="avatar" />
+              <img className="h-20 w-20 rounded-full" src={customerDetail.avatar || "/images/avatar.png"} alt="avatar" />
             </div>
             <div className="flex space-x-24">
               <div className="mt-4 space-y-6 font-semibold text-[#9c9797]">
