@@ -73,6 +73,7 @@ export type Order = {
   totalAmount: number;
   discountAmount?: number | null;
   finalAmount?: number | null;
+  paymentMethod?: 'PayOS' | 'CashOnDelivery' | 'VNPay';
   status?: "PENDING" | "SHIPPING" | "COMPLETED" | "CANCELLED";
   transactionId?: string | null;
   transactionStatus?: 'PAID' | 'CANCELLED' | null;

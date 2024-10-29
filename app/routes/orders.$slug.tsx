@@ -189,6 +189,17 @@ export default function OrderDetails() {
       },
     },
     {
+      title: "Thư tay",
+      dataIndex: "letter",
+      key: "letter",
+      render: (value: string) => {
+        if (value) {
+          return value;
+        }
+        return "Không có";
+      },
+    },
+    {
       title: "Khắc",
       dataIndex: "engrave",
       key: "engrave",

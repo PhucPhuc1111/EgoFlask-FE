@@ -212,6 +212,7 @@
 // export default Orders;
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link, Outlet, useLocation } from "@remix-run/react";
+import { format } from "date-fns";
 import _ from "lodash";
 import { useMemo } from "react";
 import { ProfileSidebar, SubFooter } from "~/components";
@@ -251,14 +252,17 @@ const Orders = () => {
             {/* Thêm class overflow-x-auto cho phép cuộn ngang */}
             <div className="overflow-x-auto">
               {myOrders.isLoading && <img src="/icons/loading-2.svg" alt="loading" className="w-10 h-10 sm:w-12 sm:h-12 justify-self-center" />}
-              <table className="min-w-[700px] w-full text-sm lg:text-base">
+              <table className="min-w-[700px] w-full text-sm lg:text-base table-auto">
                 <thead className="bg-[#0055C3] text-white">
                   <tr>
                     <th>Mã đơn hàng</th>
                     <th>Tổng tiền</th>
                     <th>Địa chỉ nhận hàng</th>
                     <th>Tình trạng</th>
+                    <th>Ngày đặt hàng</th>
+                    <th>Ngày cập nhật</th>
                     <th>Trạng thái thanh toán</th>
+                    <th>Phương thức thanh toán</th>
                     <th>Chi tiết đơn hàng</th>
                   </tr>
                 </thead>
@@ -313,6 +317,8 @@ const Orders = () => {
                           </p>
                         )}
                       </td>
+                      <td>{format(order.createdAt, "HH:mm:ss dd/MM/yyyy")}</td>
+                      <td>{format(order.updatedAt, "HH:mm:ss dd/MM/yyyy")}</td>
                       <td className="text-center">
                         {order.transactionStatus === 'PAID' ? (
                           <p>Đã thanh toán</p>
@@ -322,6 +328,7 @@ const Orders = () => {
                           <p>Chưa thanh toán</p>
                         )}
                       </td>
+                      <td className="text-center">{order.paymentMethod || "Chưa thanh toán"}</td>
                       <td>
                         <div className="flex justify-center">
                           <Link to={`/orders/${order.orderId}`} className="bg-[#0055C3] text-white hover:text-white p-2 rounded-lg text-xs lg:text-base">
