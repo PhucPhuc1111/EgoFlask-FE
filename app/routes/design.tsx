@@ -500,7 +500,7 @@ export default function Design() {
                 <div className="flex items-center gap-2 cursor-pointer">
                   <IoAddCircleSharp className="w-6 h-6 text-[#0055C3]" />
                   <span className="text-sm sm:text-base text-black">Khắc laser</span>
-                  {/* <span className="ml-auto text-xs sm:text-sm text-black">+ 50.000 VND</span> */}
+                  <span className="ml-auto text-xs sm:text-sm text-black">Miễn phí</span>
                 </div>
               </div>
 
@@ -526,6 +526,7 @@ export default function Design() {
                 <div className="flex items-center gap-2 cursor-pointer">
                   <input type="radio" name="option" className="mr-2" onChange={() => setisGift(true)} />
                   <span className="text-sm sm:text-base text-black">Gói quà</span>
+                  <span className="ml-auto text-xs sm:text-sm text-black">Miễn phí</span>
                 </div>
               </div>
             </div>
