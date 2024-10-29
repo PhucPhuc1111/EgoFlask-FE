@@ -355,8 +355,13 @@ export default function AdminOrder() {
                       <span className="font-bold">Nội dung khắc:{' '}</span>
                       {item.engrave}; Vị trí khắc: {item.engravePosition || 'Ngẫu nhiên'}
                     </div>
+                  
                     <span>{formatMoney(50000)}</span>
                   </div>
+                  <div>
+                      <span className="font-bold">Nội dung thư tay:{' '}</span>
+                      {item.letter}
+                    </div>
                   <div className="w-full flex flex-row items-center justify-between gap-2">
                     <span className="font-bold">Gói quà</span>
                     <span>{formatMoney(10000)}</span>
