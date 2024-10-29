@@ -41,6 +41,7 @@ export default function AdminDashboard() {
             className="bg-[#f7f7f7] border-none ring-0 focus:ring-0 focus:outline-none ml-2"
           >
             <option value="Day">Hôm nay</option>
+            <option value="Week">Tuần này</option>
             <option value="Month">Tháng này</option>
             <option value="Year">Năm nay</option>
             <option value="AllTime">Toàn bộ</option>

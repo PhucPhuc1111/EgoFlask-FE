@@ -66,7 +66,6 @@
 //   paymentMethod: string().required("Phương thức thanh toán là bắt buộc"),
 // });
 
-
 // const resolver = yupResolver(schema);
 // type CheckoutForm = InferType<typeof schema>;
 
@@ -650,7 +649,16 @@ import { useForm } from "react-hook-form";
 import { boolean, InferType, object, string } from "yup";
 import { Model } from "~/components";
 import { formatMoney, splitProductImageURLs } from "~/components/utils";
-import { checkout, removeFromCart, updateProfile, useGetDistricts, useGetInCart, useGetProfile, useGetProvinces, useGetWards } from "~/data";
+import {
+  checkout,
+  removeFromCart,
+  updateProfile,
+  useGetDistricts,
+  useGetInCart,
+  useGetProfile,
+  useGetProvinces,
+  useGetWards,
+} from "~/data";
 import { authenticator } from "~/services/auth.server";
 const { confirm } = Modal;
 
@@ -715,7 +723,7 @@ const paymentMethods = [
   {
     value: "PayOS",
     label: "Thanh toán qua chuyển khoản",
-  }
+  },
 ];
 
 export default function Checkout() {
@@ -723,7 +731,10 @@ export default function Checkout() {
   const getInCart = useGetInCart(profile.data?.user?.token || "");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const splitAddress = useMemo(() => _.split(profile.data?.detail.address || "", ", "), [profile.data?.detail.address]);
+  const splitAddress = useMemo(
+    () => _.split(profile.data?.detail.address || "", ", "),
+    [profile.data?.detail.address]
+  );
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const messageParams = queryParams.get("message");
@@ -748,15 +759,15 @@ export default function Checkout() {
   const provinceId = watch("province");
 
   const mapProvinces = useMemo(() => {
-    return _.mapKeys(provinces.data?.data, it => it.ProvinceID)
+    return _.mapKeys(provinces.data?.data, (it) => it.ProvinceID);
   }, [provinces.data?.data]);
 
   const mapDistricts = useMemo(() => {
-    return _.mapKeys(districts.data?.data, it => it.DistrictID)
+    return _.mapKeys(districts.data?.data, (it) => it.DistrictID);
   }, [districts.data?.data]);
 
   const mapWards = useMemo(() => {
-    return _.mapKeys(wards.data?.data, it => it.WardCode)
+    return _.mapKeys(wards.data?.data, (it) => it.WardCode);
   }, [districts.data?.data, wards.data?.data]);
 
   useEffect(() => {
@@ -772,7 +783,18 @@ export default function Checkout() {
   const cartItems = useMemo(() => {
     if (!getInCart.data) return [];
     return _.map(getInCart.data, (item) => {
-      const { orderDetailId, productImageURL, productName, unitPrice, quantity, head, body, strap } = item;
+      const {
+        orderDetailId,
+        productImageURL,
+        productName,
+        unitPrice,
+        quantity,
+        head,
+        body,
+        strap,
+        letter,
+        isGift,
+      } = item;
       let topImage = "";
       let bodyImage = "";
       let strapImage = "";
@@ -792,6 +814,8 @@ export default function Checkout() {
         name: productName,
         price: unitPrice,
         quantity,
+        letter,
+        isGift,
         orderDetailId,
         productImageURL,
         head,
@@ -815,11 +839,14 @@ export default function Checkout() {
 
   const deleteFromCart = async (orderDetailId: string) => {
     confirm({
-      title: 'Xóa sản phẩm',
-      content: 'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?',
+      title: "Xóa sản phẩm",
+      content: "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?",
       onOk: async () => {
         try {
-          let response = await removeFromCart(profile.data?.user?.token || "", orderDetailId);
+          let response = await removeFromCart(
+            profile.data?.user?.token || "",
+            orderDetailId
+          );
           if (response) {
             queryClient.invalidateQueries({
               queryKey: ["in-cart"],
@@ -829,8 +856,8 @@ export default function Checkout() {
         } catch (error: any) {
           message.error("Xóa sản phẩm không thành công:", error?.message);
         }
-      }
-    })
+      },
+    });
   };
 
   const isDifferentAddress = watch("deliveryToDifferentAddress", false);
@@ -838,19 +865,27 @@ export default function Checkout() {
   const updateAddress = async (data: CheckoutForm) => {
     console.log("data", data);
     let formData = new FormData();
-    formData.append("Name", data.name || '');
-    formData.append("AvatarPic", profile.data?.detail?.avatar || '');
+    formData.append("Name", data.name || "");
+    formData.append("AvatarPic", profile.data?.detail?.avatar || "");
     formData.append("Gender", profile.data?.detail?.gender || "");
     formData.append("Dob", profile.data?.detail?.birthday || "");
-    formData.append('Address', `${data.street}, ${mapWards[data.ward || ""]?.WardName}, ${mapDistricts[data.district || ""]?.DistrictName}, ${mapProvinces[data.province || ""]?.ProvinceName}`);
+    formData.append(
+      "Address",
+      `${data.street}, ${mapWards[data.ward || ""]?.WardName}, ${
+        mapDistricts[data.district || ""]?.DistrictName
+      }, ${mapProvinces[data.province || ""]?.ProvinceName}`
+    );
     formData.append("PhoneNumber", data.phone || "");
 
     try {
-      let response = await updateProfile(profile.data?.user?.token || '', formData);
+      let response = await updateProfile(
+        profile.data?.user?.token || "",
+        formData
+      );
       if (response) {
         message.success("Cập nhật địa chỉ thành công", 3);
         queryClient.invalidateQueries({
-          queryKey: ['profile']
+          queryKey: ["profile"],
         });
       }
     } catch (error: any) {
@@ -859,7 +894,7 @@ export default function Checkout() {
   };
 
   const onSubmit = async (data: CheckoutForm) => {
-    console.log('data', data);
+    console.log("data", data);
     setIsLoading(true);
     try {
       if (data.deliveryToDifferentAddress) {
@@ -896,13 +931,13 @@ export default function Checkout() {
   };
   const filterDistrictsByProviceId = useMemo(() => {
     return _(districts.data?.data)
-      .filter(it => it.ProvinceID === Number(provinceId))
-      .value()
-  }, [watch('province'), districts.data?.data]);
+      .filter((it) => it.ProvinceID === Number(provinceId))
+      .value();
+  }, [watch("province"), districts.data?.data]);
 
   useEffect(() => {
     if (messageParams) {
-      if (messageType === 'error') {
+      if (messageType === "error") {
         message.error(messageParams);
       }
     }
@@ -915,20 +950,32 @@ export default function Checkout() {
           <div className="p-6 md:p-12 flex flex-col md:flex-row md:space-x-16 space-y-6 md:space-y-0">
             <div className="w-full md:w-1/2 bg-white rounded-3xl p-6">
               <div className="border-b-2">
-                <span className="text-sm md:text-lg font-semibold text-black">Thông tin cá nhân</span>
+                <span className="text-sm md:text-lg font-semibold text-black">
+                  Thông tin cá nhân
+                </span>
                 <div className="flex p-4">
-                  <img className="w-12 h-12 md:w-20 md:h-20" src="/images/avatar.png" alt="Profile" />
+                  <img
+                    className="w-12 h-12 md:w-20 md:h-20"
+                    src="/images/avatar.png"
+                    alt="Profile"
+                  />
                   <div className="p-2 md:p-4">
-                    <span className="text-black text-xs md:text-sm">{profile.data?.detail.name} ({profile.data?.detail.email})</span>
+                    <span className="text-black text-xs md:text-sm">
+                      {profile.data?.detail.name} ({profile.data?.detail.email})
+                    </span>
                     <div>
-                      <Link to={"/logout"} className="text-xs md:text-sm">Log out</Link>
+                      <Link to={"/logout"} className="text-xs md:text-sm">
+                        Log out
+                      </Link>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="border-b-2 mt-6">
-                <span className="text-sm md:text-lg font-semibold text-black">Thông tin thanh toán</span>
+                <span className="text-sm md:text-lg font-semibold text-black">
+                  Thông tin thanh toán
+                </span>
                 <div className="p-4 space-y-4">
                   <input
                     type="text"
@@ -952,16 +999,28 @@ export default function Checkout() {
                   </div>
 
                   <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
-                    <select defaultValue={splitAddress[3]} disabled className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7] text-xs md:text-sm">
+                    <select
+                      defaultValue={splitAddress[3]}
+                      disabled
+                      className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7] text-xs md:text-sm"
+                    >
                       <option value={splitAddress[3]}>{splitAddress[3]}</option>
                     </select>
-                    <select defaultValue={splitAddress[2]} disabled className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7] text-xs md:text-sm">
+                    <select
+                      defaultValue={splitAddress[2]}
+                      disabled
+                      className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7] text-xs md:text-sm"
+                    >
                       <option value={splitAddress[2]}>{splitAddress[2]}</option>
                     </select>
                   </div>
 
                   <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-3">
-                    <select defaultValue={splitAddress[1]} disabled className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7] text-xs md:text-sm">
+                    <select
+                      defaultValue={splitAddress[1]}
+                      disabled
+                      className="w-full rounded-md border-[#dbdbcf] bg-[#f9f8f7] text-xs md:text-sm"
+                    >
                       <option value={splitAddress[1]}>{splitAddress[1]}</option>
                     </select>
                     <input
@@ -973,13 +1032,25 @@ export default function Checkout() {
                     />
                   </div>
                   <div className="">
-                    {(errors.district || errors.ward || errors.province || errors.street) && (
-                      <p className="text-red-500 text-xs md:text-sm">Địa chỉ giao hàng bị thiếu, vui lòng chọn "Giao hàng đến địa chỉ khác"</p>
+                    {(errors.district ||
+                      errors.ward ||
+                      errors.province ||
+                      errors.street) && (
+                      <p className="text-red-500 text-xs md:text-sm">
+                        Địa chỉ giao hàng bị thiếu, vui lòng chọn "Giao hàng đến
+                        địa chỉ khác"
+                      </p>
                     )}
                   </div>
                   <div className="flex items-center space-x-2">
-                    <input type="checkbox" {...register("deliveryToDifferentAddress")} className="text-xs md:text-sm" />
-                    <span className="text-xs md:text-sm">Giao hàng đến địa chỉ khác</span>
+                    <input
+                      type="checkbox"
+                      {...register("deliveryToDifferentAddress")}
+                      className="text-xs md:text-sm"
+                    />
+                    <span className="text-xs md:text-sm">
+                      Giao hàng đến địa chỉ khác
+                    </span>
                   </div>
 
                   {isDifferentAddress && (
@@ -993,7 +1064,9 @@ export default function Checkout() {
                             className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
                           />
                           {errors.name && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.name?.message}</p>
+                            <p className="text-red-500 text-xs md:text-sm">
+                              {errors.name?.message}
+                            </p>
                           )}
                         </div>
                         <div className="flex flex-col">
@@ -1004,7 +1077,9 @@ export default function Checkout() {
                             className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
                           />
                           {errors.phone && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.phone?.message}</p>
+                            <p className="text-red-500 text-xs md:text-sm">
+                              {errors.phone?.message}
+                            </p>
                           )}
                         </div>
                       </div>
@@ -1023,7 +1098,9 @@ export default function Checkout() {
                             ))}
                           </select>
                           {errors.province && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.province?.message}</p>
+                            <p className="text-red-500 text-xs md:text-sm">
+                              {errors.province?.message}
+                            </p>
                           )}
                         </div>
                         <div className="flex flex-col">
@@ -1033,14 +1110,19 @@ export default function Checkout() {
                             className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
                           >
                             <option value="">Chọn quận</option>
-                            {_.map(filterDistrictsByProviceId, (district, index) => (
-                              <option key={index} value={district.DistrictID}>
-                                {district.DistrictName}
-                              </option>
-                            ))}
+                            {_.map(
+                              filterDistrictsByProviceId,
+                              (district, index) => (
+                                <option key={index} value={district.DistrictID}>
+                                  {district.DistrictName}
+                                </option>
+                              )
+                            )}
                           </select>
                           {errors.district && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.district?.message}</p>
+                            <p className="text-red-500 text-xs md:text-sm">
+                              {errors.district?.message}
+                            </p>
                           )}
                         </div>
                       </div>
@@ -1060,7 +1142,9 @@ export default function Checkout() {
                             ))}
                           </select>
                           {errors.ward && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.ward?.message}</p>
+                            <p className="text-red-500 text-xs md:text-sm">
+                              {errors.ward?.message}
+                            </p>
                           )}
                         </div>
                         <div className="flex flex-col">
@@ -1071,18 +1155,21 @@ export default function Checkout() {
                             className="w-full rounded-md border-[#dbdbcf] text-xs md:text-sm"
                           />
                           {errors.street && (
-                            <p className="text-red-500 text-xs md:text-sm">{errors.street?.message}</p>
+                            <p className="text-red-500 text-xs md:text-sm">
+                              {errors.street?.message}
+                            </p>
                           )}
                         </div>
                       </div>
                     </div>
                   )}
-
                 </div>
               </div>
 
               <div className="mt-6">
-                <span className="text-sm md:text-lg font-semibold text-black">Phương thức thanh toán</span>
+                <span className="text-sm md:text-lg font-semibold text-black">
+                  Phương thức thanh toán
+                </span>
                 <div className="space-y-4">
                   {_.map(paymentMethods, (method, index) => (
                     <div key={index} className="flex items-center">
@@ -1092,15 +1179,29 @@ export default function Checkout() {
                         {...register("paymentMethod")}
                         className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-[#0055c3] focus:ring-2 focus:ring-[#0055c3]"
                       />
-                      <label className="ml-2 text-xs md:text-sm">{method.label}</label>
+                      <label className="ml-2 text-xs md:text-sm">
+                        {method.label}
+                      </label>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="flex justify-center pt-6">
-                <button disabled={isLoading} type="submit" className="w-56 flex items-center justify-center border-2 rounded-md h-10 text-white bg-[#0055c3] font-semibold text-xs md:text-sm">
-                  {isLoading ? <img src="/icons/loading.svg" alt="loading" className="w-7 h-7" /> : <span>Thanh Toán</span>}
+                <button
+                  disabled={isLoading}
+                  type="submit"
+                  className="w-56 flex items-center justify-center border-2 rounded-md h-10 text-white bg-[#0055c3] font-semibold text-xs md:text-sm"
+                >
+                  {isLoading ? (
+                    <img
+                      src="/icons/loading.svg"
+                      alt="loading"
+                      className="w-7 h-7"
+                    />
+                  ) : (
+                    <span>Thanh Toán</span>
+                  )}
                 </button>
               </div>
             </div>
@@ -1114,21 +1215,54 @@ export default function Checkout() {
                         <div className="w-1/3 bg-[#dbdbcf]">
                           <div className="w-32 h-64 ml-12 relative flex justify-between items-center">
                             <div className="absolute inset-0 max-lg:right-2/3 left-1/3 bottom-2/3">
-                              <Model topImage={item.topImage} bodyImage={item.bodyImage} strapImage={item.strapImage} width="300px" />
+                              <Model
+                                topImage={item.topImage}
+                                bodyImage={item.bodyImage}
+                                strapImage={item.strapImage}
+                                width="300px"
+                              />
                             </div>
                           </div>
                         </div>
                       ) : (
-                        <img src={item.productImageURL} alt={item.name} width="100px" />
+                        <img
+                          src={item.productImageURL}
+                          alt={item.name}
+                          width="100px"
+                        />
                       )}
 
                       <div className="w-2/3">
                         <div className="p-3 space-y-2">
                           <div className="flex justify-between">
-                            <p className="text-black text-xs md:text-sm">Bình giữ nhiệt <span className="font-semibold">{item.name}</span></p>
+                            <p className="text-black text-xs md:text-sm">
+                              Bình giữ nhiệt{" "}
+                              <span className="font-semibold">{item.name}</span>
+                              <div>
+                                <p className="text-xs md:text-sm">số lượng: {item.quantity}</p>
+                                <div className="text-xs md:text-sm p-2">
+                                  {" "}
+                                  <p>Dịch vụ đi kèm</p>
+                                  <p>Viết thư tay: {item.letter}</p>
+                                  <p>Gói quà:{item.isGift} </p>{" "}
+                                </div>
+                              </div>
+                            </p>
+
                             <div className="flex space-x-4">
-                              <p className="text-black text-xs md:text-sm">{formatMoney(item.price)}</p>
-                              <div className="cursor-pointer text-xs md:text-sm" onClick={() => deleteFromCart(item.orderDetailId)}>Xóa</div>
+                              <p className="text-black text-xs md:text-sm">
+                                {formatMoney(item.price)}
+                              </p>
+                            
+                              <div
+                                className="cursor-pointer text-xs md:text-sm"
+                                onClick={() =>
+                                  deleteFromCart(item.orderDetailId)
+                                }
+                              >
+                                Xóa
+                              </div>
+                              
                             </div>
                           </div>
                         </div>
@@ -1138,13 +1272,26 @@ export default function Checkout() {
                 </div>
 
                 <div className="flex space-x-3 justify-center pt-5 border-b-2 pb-5">
-                  <input type="text" placeholder="Mã Ego Flask Voucher" className="w-56 h-10 border border-[#dbdbcf] rounded-md bg-[#f9f8f7] text-xs md:text-sm" />
-                  <button type="button" className="w-24 h-10 border border-[#dbdbcf] rounded-md bg-[#f9f8f7] text-xs md:text-sm">Áp dụng</button>
+                  <input
+                    type="text"
+                    placeholder="Mã Ego Flask Voucher"
+                    className="w-56 h-10 border border-[#dbdbcf] rounded-md bg-[#f9f8f7] text-xs md:text-sm"
+                  />
+                  <button
+                    type="button"
+                    className="w-24 h-10 border border-[#dbdbcf] rounded-md bg-[#f9f8f7] text-xs md:text-sm"
+                  >
+                    Áp dụng
+                  </button>
                 </div>
 
                 <div className="pt-5 flex justify-between border-b-2 pb-5">
-                  <p className="text-black font-semibold text-xs md:text-sm">Phí giao hàng: {formatMoney(shippingFee)}</p>
-                  <p className="text-black font-semibold text-xs md:text-sm">Tạm tính: {formatMoney(itemTotal)}</p>
+                  <p className="text-black font-semibold text-xs md:text-sm">
+                    Phí giao hàng: {formatMoney(shippingFee)}
+                  </p>
+                  <p className="text-black font-semibold text-xs md:text-sm">
+                    Tạm tính: {formatMoney(itemTotal)}
+                  </p>
                 </div>
                 <div className="text-black font-semibold flex justify-between pt-5">
                   <p className="text-xs md:text-sm">Tổng thanh toán</p>
