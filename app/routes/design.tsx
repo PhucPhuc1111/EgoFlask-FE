@@ -403,6 +403,7 @@ export default function Design() {
   const [body, setBody] = useState<BottleComponent | null>(null);
   const [strap, setStrap] = useState<BottleComponent | null>(null);
   const [engrave, setEngrave] = useState<string>("");
+  const [letter, setLetter] = useState<string>("");
   const [engravePosition, setEngravePosition] = useState<string>("");
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [isGift, setisGift] = useState(false);
@@ -414,6 +415,7 @@ export default function Design() {
 
   const handleOptionClick = (value: string) => setActive(value);
   const handleEngraveChange = (event: React.ChangeEvent<HTMLInputElement>) => setEngrave(event.target.value);
+  const handleLetterChange = (event: React.ChangeEvent<HTMLInputElement>) => setLetter(event.target.value);
   const handleEngravePositionChange = (event: React.ChangeEvent<HTMLInputElement>) => setEngravePosition(event.target.value);
 
   const handleColorSelect = (optionValue: string, component: BottleComponent) => {
@@ -429,6 +431,7 @@ export default function Design() {
     setBody(null);
     setStrap(null);
     setEngrave("");
+    setLetter("");
     setEngravePosition("");
   };
 
@@ -441,6 +444,7 @@ export default function Design() {
           topComponentId: top?.componentId,
           bodyComponentId: body?.componentId,
           strapComponentId: strap?.componentId,
+          letter: letter || null,
           engrave: engrave || null,
           engravePosition: engravePosition || null,
           isGift: isGift,
@@ -512,6 +516,10 @@ export default function Design() {
               <div className="py-2">
                 <label className="text-xs sm:text-sm text-black">Nhập nội dung (tối đa 8 ký tự):</label>
                 <input type="text" className="w-full mt-1 border border-[#E6E6E0] p-2 text-xs sm:text-sm" maxLength={8} value={engrave} onChange={handleEngraveChange} />
+              </div>
+              <div className="py-2">
+                <span className="text-xs sm:text-sm text-black">Viết thư tay</span>
+                <input type="text" className="w-full mt-1 border border-[#E6E6E0] p-2 text-xs sm:text-sm"  value={letter} onChange={handleLetterChange}  />
               </div>
 
               <div className="border-b-2 border-[#E6E6E0] w-full py-2">

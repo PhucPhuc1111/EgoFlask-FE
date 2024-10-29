@@ -136,6 +136,7 @@ export type Customization = {
   bodyComponentId: string;
   strapComponentId?: string | null;
   engrave?: string | null;
+  letter?: string | null;
   engravePosition?: string | null;
   isGift: boolean;
 };
