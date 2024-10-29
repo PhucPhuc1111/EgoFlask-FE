@@ -353,18 +353,24 @@ export default function AdminOrder() {
                   <div className="w-full flex flex-row items-center justify-between gap-2">
                     <div>
                       <span className="font-bold">Nội dung khắc:{' '}</span>
-                      {item.engrave}; Vị trí khắc: {item.engravePosition || 'Ngẫu nhiên'}
+                      {item.engrave}
+                      <span className="font-bold"> 
+                        </span>
                     </div>
                   
-                    <span>{formatMoney(50000)}</span>
-                  </div>
+                    {/* <span>{formatMoney(50000)}</span> */}
+                   
+                  </div> <div>
+                      <span className="font-bold">Vị trí khắc:{' '}</span>
+                      {item.engravePosition || 'Ngẫu nhiên'} 
+                    </div>
                   <div>
-                      <span className="font-bold">Nội dung thư tay:{' '}</span>
+                      <span className="font-bold">Nội dung thư:{' '}</span>
                       {item.letter}
                     </div>
                   <div className="w-full flex flex-row items-center justify-between gap-2">
                     <span className="font-bold">Gói quà</span>
-                    <span>{formatMoney(10000)}</span>
+                    <span>Miễn phí</span> 
                   </div>
                 </div>
                 <div className="border-2 border-[#0055C3] rounded-full my-2" />
