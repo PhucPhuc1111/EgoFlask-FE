@@ -308,12 +308,31 @@ export default function AdminOrder() {
 
   const filteredOrder = useMemo(() => {
     return _(order.data)
+      .filter(it => {
+        if (searchValue && searchValue.length > 0) {
+          return it.orderId.toString().includes(searchValue) ||
+          it.customerName?.toLowerCase().trim().includes(searchValue?.toLowerCase().trim()) ||
+          it.customerEmail?.toLowerCase().trim().includes(searchValue?.toLowerCase().trim())
+        }
+        return true;
+      })
       .orderBy(it => it.updatedAt, 'desc')
       .value();
-  }, [order.data, searchValue, currentPage, pageSize]);
+  }, [order.data, searchValue, ]);
+
+  const pagingOrder = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
+    return _(filteredOrder)
+    .slice(startIndex, endIndex)
+    .value();
+  }, [currentPage, pageSize]);
 
   const debouncedSetSearchValue = useCallback(
     _.debounce((value: string) => {
+      console.log('Search: ', value);
+      
       setSearchValue(value);
     }, 500),
     []
@@ -461,7 +480,7 @@ export default function AdminOrder() {
       <div className="space-y-3 pr-4">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div>
-            {order.data?.length.toLocaleString() || 0} đơn hàng
+            {filteredOrder?.length.toLocaleString() || 0} đơn hàng
           </div>
           <div className="relative mt-4 md:mt-0">
             <IoSearchOutline className="absolute top-4 left-2 w-6 h-6" />
@@ -487,7 +506,7 @@ export default function AdminOrder() {
                 <td colSpan={6}>Không có đơn hàng cần duyệt</td>
               </tr>
             )}
-            {_.map(filteredOrder, (item, index) => (
+            {_.map(pagingOrder, (item, index) => (
               <tr key={index} className="text-center">
                 <td className="border-2 border-[#0055C3] border-opacity-70">{item.orderId}</td>
                 <td className="border-2 border-[#0055C3] border-opacity-70 w-1/3 overflow-auto">
@@ -530,7 +549,7 @@ export default function AdminOrder() {
           onChange={onChange}
           onShowSizeChange={onShowSizeChange}
           defaultCurrent={currentPage}
-          total={order.data?.length}
+          total={filteredOrder?.length}
         />
       </div>
       <Modal

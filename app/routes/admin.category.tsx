@@ -172,7 +172,8 @@ import { IoSearchOutline } from "react-icons/io5";
 import AddProductModal from "~/components/ProductModal/AddProductModal";
 import DeleteProductModal from "~/components/ProductModal/DeleteProductModal";
 import UpdateProductModal from "~/components/ProductModal/UpdateProductModal";
-import { useGetAllProducts, useGetProfile } from "~/data";
+import { formatMoney } from "~/components/utils";
+import { Product, useGetAllProducts, useGetProfile } from "~/data";
 
 export const handle = {
   hideHeader: true,
@@ -185,7 +186,7 @@ export default function AdminCategory() {
   const [pageSize, setPageSize] = useState<number>(100);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const { data: products, refetch } = useGetAllProducts(currentPage, pageSize, "");
 
@@ -217,7 +218,7 @@ export default function AdminCategory() {
     setSearchTerm(e.target.value);
   };
 
-  const handleEditProduct = (product) => {
+  const handleEditProduct = (product: Product) => {
     setSelectedProduct(product);
   };
 
@@ -297,7 +298,7 @@ export default function AdminCategory() {
                       </div>
                     </td>
                     <td className="border-2 border-[#0055C3] p-6">
-                      {product.price} VND
+                      {formatMoney(product.price)}
                     </td>
                     <td className="border-2 border-[#0055C3] p-6">
                       {product.inventory}
@@ -339,7 +340,7 @@ export default function AdminCategory() {
                 />
               </div>
               <div className="flex justify-between">
-                <span className="font-bold">Giá:</span> {product.price} VND
+                <span className="font-bold">Giá:</span> {formatMoney(product.price)}
               </div>
               <div className="flex justify-between">
                 <span className="font-bold">Kho:</span> {product.inventory}
@@ -356,6 +357,7 @@ export default function AdminCategory() {
           className="mt-4"
           align="center"
           showSizeChanger
+          pageSize={pageSize}
           onChange={onChange}
           onShowSizeChange={onShowSizeChange}
           defaultCurrent={currentPage}

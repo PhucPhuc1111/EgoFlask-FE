@@ -212,9 +212,10 @@
 // export default Orders;
 import { json, LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { Link, Outlet, useLocation } from "@remix-run/react";
+import { Pagination, PaginationProps } from "antd";
 import { format } from "date-fns";
 import _ from "lodash";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ProfileSidebar, SubFooter } from "~/components";
 import { formatMoney } from "~/components/utils";
 import { useGetAllOrder, useGetProfile } from "~/data";
@@ -232,12 +233,28 @@ const Orders = () => {
   const profile = useGetProfile();
   const myOrders = useGetAllOrder(profile.data?.user?.token || "");
   const location = useLocation();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+
+  const onChange: PaginationProps['onChange'] = (pageNumber, pageSize) => {
+    setCurrentPage(pageNumber);
+    setPageSize(pageSize);
+  };
+
+  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
+    setCurrentPage(current);
+    setPageSize(pageSize);
+  };
 
   const sortMyOrders = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+
     return _(myOrders.data)
+      .slice(startIndex, endIndex)
       .orderBy((it) => it.updatedAt, "desc")
       .value();
-  }, [myOrders.data]);
+  }, [myOrders.data, pageSize, currentPage]);  
 
   return (
     <main className="mt-[--m-header-top]">
@@ -251,7 +268,6 @@ const Orders = () => {
           <div className="lg:col-span-10 border-[#0055C3] my-9 border-2 p-4 lg:p-6">
             {/* Thêm class overflow-x-auto cho phép cuộn ngang */}
             <div className="overflow-x-auto">
-              {myOrders.isLoading && <img src="/icons/loading-2.svg" alt="loading" className="w-10 h-10 sm:w-12 sm:h-12 justify-self-center" />}
               <table className="min-w-[700px] w-full text-sm lg:text-base table-auto">
                 <thead className="bg-[#0055C3] text-white">
                   <tr>
@@ -267,6 +283,7 @@ const Orders = () => {
                   </tr>
                 </thead>
                 <tbody className="text-black">
+                  {myOrders.isLoading && <img src="/icons/loading-2.svg" alt="loading" className="w-10 h-10 sm:w-12 sm:h-12 justify-self-center" />}
                   {_.map(sortMyOrders, (order, index) => (
                     <tr key={index} className="border-b-2 justify-center items-center">
                       <th>#{order.orderId}</th>
@@ -276,7 +293,7 @@ const Orders = () => {
                           <div className="p-3 space-y-2">
                             <div className="border-b-2 border-[#0055C3] flex justify-center items-center">
                               <p className="text-[#0055C3] font-semibold pt-2">
-                                {formatMoney(_.sumBy(order.orderDetails, (it) => it.totalPrice))}
+                                {formatMoney(order.finalAmount || 0)}
                               </p>
                             </div>
                           </div>
@@ -344,6 +361,16 @@ const Orders = () => {
           </div>
         )}
       </div>
+      <Pagination
+        className="mt-4"
+        align="center"
+        showSizeChanger
+        onChange={onChange}
+        pageSize={pageSize}
+        onShowSizeChange={onShowSizeChange}
+        defaultCurrent={currentPage}
+        total={myOrders.data?.length}
+      />
       <div>
         <SubFooter />
       </div>
