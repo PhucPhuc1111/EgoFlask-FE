@@ -96,6 +96,7 @@ export type OrderDetail = {
   isCustom: boolean;
   productImageURL: string;
   engrave?: string;
+  letter?: string;
   engravePosition?: string;
   quantity: number;
   unitPrice: number;
