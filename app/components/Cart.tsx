@@ -19,7 +19,7 @@
 // }
 
 // interface CartProps {
-//   // token: string; 
+//   // token: string;
 // }
 
 // const Cart: React.FC<CartProps> = () => {
@@ -145,7 +145,7 @@
 
 //   return (
 //     <div className="relative z-[9999]">
-//       <IoCartOutline 
+//       <IoCartOutline
 //         className="cursor-pointer w-8 h-8 sm:w-6 sm:h-6"
 //         onClick={handleCartClick}
 //       />
@@ -257,6 +257,7 @@ import { formatMoney, splitProductImageURLs } from "./utils";
 import { Link } from "@remix-run/react";
 import { IoCartOutline, IoClose } from "react-icons/io5";
 import { message, Modal } from "antd";
+import Quantity from "./Quantity";
 const { confirm } = Modal;
 
 const Cart: React.FC = () => {
@@ -271,7 +272,15 @@ const Cart: React.FC = () => {
       return [];
     }
     return _.map(getInCart.data, (item) => {
-      const { orderDetailId, productImageURL, productName, unitPrice, quantity } = item;
+      const {
+        orderDetailId,
+        productImageURL,
+        productName,
+        unitPrice,
+        quantity,
+        letter,
+        isGift,
+      } = item;
       let topImage = "";
       let bodyImage = "";
       let strapImage = "";
@@ -288,6 +297,8 @@ const Cart: React.FC = () => {
         topImage,
         bodyImage,
         strapImage,
+        letter,
+        isGift,
         name: productName,
         price: unitPrice,
         quantity,
@@ -306,8 +317,8 @@ const Cart: React.FC = () => {
 
   const handleRemoveItem = async (id: string) => {
     confirm({
-      title: 'Xóa sản phẩm',
-      content: 'Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?',
+      title: "Xóa sản phẩm",
+      content: "Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?",
       onOk: async () => {
         try {
           let response = await removeFromCart(token || "", id);
@@ -319,7 +330,7 @@ const Cart: React.FC = () => {
           message.error("Xóa sản phẩm không thành công:", error?.message);
         }
       },
-    })
+    });
   };
 
   const calculateTotalPrice = () => {
@@ -351,26 +362,56 @@ const Cart: React.FC = () => {
         <div className="absolute right-0 mt-2 w-[300px] sm:w-[500px] bg-white border border-gray-300 rounded-[10px] shadow-lg z-50">
           <div className="flex justify-between items-center p-4">
             <p className="text-center font-bold">Giỏ hàng của bạn</p>
-            <button onClick={handleCloseCart} className="text-gray-600 hover:text-black text-xl">
+            <button
+              onClick={handleCloseCart}
+              className="text-gray-600 hover:text-black text-xl"
+            >
               <IoClose className="w-6 h-6 cursor-pointer" />
             </button>
           </div>
           <div className="p-4 h-[300px] overflow-y-auto">
             {cartItems.length > 0 ? (
               cartItems.map((item) => (
-                <div key={item.id} className="flex justify-between items-center mb-4">
+                <div
+                  key={item.id}
+                  className="flex justify-between items-center mb-4"
+                >
                   {item.bodyImage && item.strapImage ? (
-                    <Model topImage={item.topImage} bodyImage={item.bodyImage} strapImage={item.strapImage} width="100px" />
+                    <Model
+                      topImage={item.topImage}
+                      bodyImage={item.bodyImage}
+                      strapImage={item.strapImage}
+                      width="100px"
+                    />
                   ) : (
-                    <img src={item.topImage} alt={item.name} className="w-1/6 h-auto" />
+                    <img
+                      src={item.topImage}
+                      alt={item.name}
+                      className="w-1/6 h-auto"
+                    />
                   )}
                   <div className="flex flex-col flex-1 ml-4">
                     <div className="flex justify-between items-center w-full">
-                      <p className="font-light">Bình giữ nhiệt: <span className="font-bold">{item.name}</span></p>
+                      <p className="font-light">
+                        Bình giữ nhiệt:{" "}
+                        <span className="font-bold">{item.name}</span>
+                      </p>
                       <p className="text-gray-600">{formatMoney(item.price)}</p>
                     </div>
+                      <p>số lượng: {item.quantity}</p>
+                    <div className="text-sm">
+                      {" "}
+                      <p>Dịch vụ đi kèm</p>
+                      <p>Viết thư tay: {item.letter}</p>
+                      <p>Gói quà:{item.isGift} </p>{" "}
+                    </div>
                     <div className="flex items-center mt-2">
-                      <button className="bg-gray-300 px-2 py-1 rounded" onClick={() => handleRemoveItem(item.id)}>Xóa</button>
+                      <button
+                        className="bg-gray-300 px-2 py-1 rounded"
+                        onClick={() => handleRemoveItem(item.id)}
+                      >
+                        Xóa
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -382,10 +423,15 @@ const Cart: React.FC = () => {
           <div className="p-4 border-t border-gray-300 rounded-b-[5px] bg-gray-50">
             <div className="flex flex-col items-end">
               <p>Phí giao hàng: {formatMoney(shippingFee)}</p>
-              <p className="font-bold">Tổng số tiền phải trả: {formatMoney(total)}</p>
+              <p className="font-bold">
+                Tổng số tiền phải trả: {formatMoney(total)}
+              </p>
             </div>
             <div className="flex justify-center w-full mt-4">
-              <Link to="/checkout" className="bg-[#0055C3] hover:text-white text-white py-2 px-6 rounded-lg text-lg font-semibold">
+              <Link
+                to="/checkout"
+                className="bg-[#0055C3] hover:text-white text-white py-2 px-6 rounded-lg text-lg font-semibold"
+              >
                 Tiếp tục thanh toán
               </Link>
             </div>

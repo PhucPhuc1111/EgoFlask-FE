@@ -362,7 +362,7 @@ const ProductDetail = () => {
                 </p>
               </div>
 
-              <div> <Dropdown /></div>
+              <div> <Dropdown/></div>
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <div><Quantity quantity={quantity} setQuantity={setQuantity} /></div>
                 <button onClick={handleAddToCart} className="w-full sm:w-48 h-12 bg-[#0055c3] rounded-lg text-white">
