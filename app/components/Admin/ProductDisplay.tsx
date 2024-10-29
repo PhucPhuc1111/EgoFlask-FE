@@ -25,14 +25,10 @@ const ProductDisplay: React.FC<ProductDisplayProps> = ({
   select,
 }) => {
   // Ensure that the selected timeframe exists in the productData object
-  const selectedTimeframe = productData.hasOwnProperty(select)
-    ? select
-    : "Tháng này";
+  const selectedTimeframe = select;
 
-  const displayProducts =
-    totalProductsSold ?? productData[selectedTimeframe].product;
-  const lastPeriodProducts =
-    totalProductsSoldYesterday ?? productData[selectedTimeframe].lastPeriod;
+  const displayProducts = totalProductsSold ?? 0;
+  const lastPeriodProducts = totalProductsSoldYesterday ?? 0;
 
   const productsDifference = displayProducts - lastPeriodProducts;
   const productsPercentageChange =

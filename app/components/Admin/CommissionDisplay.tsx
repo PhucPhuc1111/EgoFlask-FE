@@ -27,14 +27,10 @@ const CommissionDisplay: React.FC<CommissionDisplayProps> = ({
   select,
 }) => {
   // Ensuring that the selected timeframe exists in the commissionData object
-  const selectedTimeframe = commissionData.hasOwnProperty(select)
-    ? select
-    : "Tháng này";
+  const selectedTimeframe = select;
 
-  const displayCommission =
-    commission ?? commissionData[selectedTimeframe]?.commission;
-  const lastPeriodCommission =
-    commissionYesterday ?? commissionData[selectedTimeframe]?.lastPeriod;
+  const displayCommission = commission ?? 0;
+  const lastPeriodCommission = commissionYesterday ?? 0;
 
   if (displayCommission === undefined || lastPeriodCommission === undefined) {
     console.error(
@@ -77,7 +73,15 @@ const CommissionDisplay: React.FC<CommissionDisplayProps> = ({
         {isLoading ? "Loading..." : `${displayCommission.toLocaleString()} đ`}
       </div>
       <div className="text-black">
-        Tháng trước: {lastPeriodCommission.toLocaleString()} đ
+        {selectedTimeframe === "Month"
+          ? `Tháng trước: ${lastPeriodCommission.toLocaleString()} đ`
+          : selectedTimeframe === "Year"
+          ? `Năm trước: ${lastPeriodCommission.toLocaleString()} đ`
+          : selectedTimeframe === "Day"
+          ? `Hôm qua: ${lastPeriodCommission.toLocaleString()} đ`
+          : selectedTimeframe === "Week"
+          ? `Tuần trước: ${lastPeriodCommission.toLocaleString()} đ`
+          : `Toàn bộ: ${lastPeriodCommission.toLocaleString()} đ`}
       </div>
     </div>
   );
