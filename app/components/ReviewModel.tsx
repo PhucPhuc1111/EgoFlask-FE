@@ -30,7 +30,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" onClick={handleClickOutside}>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[999]" onClick={handleClickOutside}>
       <div className="bg-white rounded-lg p-6 min-w-[500px] relative"
         style={{
           height: 'calc(100vh - 120px)',

@@ -347,15 +347,14 @@ const Cart: React.FC = () => {
 
   return (
     <div className="relative z-50">
-      <div className="relative">
+      <div className="relative" onClick={handleCartClick}>
         {profile.data?.detail.id && cartItems.length > 0 && (
-          <span className="bg-red-500 absolute rounded-full max-sm:w-4 max-sm:h-4 w-5 h-5 text-center max-sm:text-xs text-sm text-white font-bold left-1/2 -top-1">
+          <span className="bg-red-500 cursor-pointer absolute rounded-full max-sm:w-4 max-sm:h-4 w-5 h-5 text-center max-sm:text-xs text-sm text-white font-bold left-1/2 -top-1">
             {cartItems.length}
           </span>
         )}
         <IoCartOutline
           className="cursor-pointer w-6 h-6 sm:w-7 sm:h-7"
-          onClick={handleCartClick}
         />
       </div>
       {isCartOpen && (
