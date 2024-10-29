@@ -879,6 +879,12 @@ export default function Checkout() {
       if (data.paymentMethod === "PayOS") {
         window.location.href = response.url.checkoutUrl;
       } else {
+        queryClient.invalidateQueries({
+          queryKey: ['in-cart']
+        });
+        queryClient.invalidateQueries({
+          queryKey: ['order']
+        });
         navigate("/checkout/success");
       }
     } catch (error: any) {

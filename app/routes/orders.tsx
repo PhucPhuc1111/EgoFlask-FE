@@ -223,7 +223,7 @@ import { authenticator } from "~/services/auth.server";
 export async function loader({ request }: LoaderFunctionArgs) {
   let user = await authenticator.isAuthenticated(request);
   if (!user) {
-    return redirect("/login");
+    return redirect(`/login?message=${encodeURIComponent("Bạn cần đăng nhập để xem đơn hàng")}&type=error`);
   }
   return json({}, { status: 200 });
 }
