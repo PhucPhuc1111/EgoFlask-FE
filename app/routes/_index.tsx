@@ -2,9 +2,10 @@ import type { MetaFunction } from "@remix-run/node";
 import { SubFooter } from "~/components";
 import _ from "lodash";
 import { Link, useLocation } from "@remix-run/react";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
+import { useGetAllProducts } from "~/data";
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,24 +21,24 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-const products = [
-  {
-    'name': 'Dependable',
-    'image': '/images/products/bottle-6.png',
-  },
-  {
-    'name': 'Optimistic',
-    'image': '/images/products/bottle-7.png',
-  },
-  {
-    'name': 'Creative',
-    'image': '/images/products/bottle-3.png?v=1',
-  },
-  {
-    'name': 'Elegant',
-    'image': '/images/products/bottle-8.png',
-  },
-]
+// const products = [
+//   {
+//     'name': 'Dependable',
+//     'image': '/images/products/bottle-6.png',
+//   },
+//   {
+//     'name': 'Optimistic',
+//     'image': '/images/products/bottle-7.png',
+//   },
+//   {
+//     'name': 'Creative',
+//     'image': '/images/products/bottle-3.png?v=1',
+//   },
+//   {
+//     'name': 'Elegant',
+//     'image': '/images/products/bottle-8.png',
+//   },
+// ]
 
 // export default function Index() {
 //   const location = useLocation();
@@ -190,6 +191,14 @@ export default function Index() {
   const queryClient = useQueryClient();
   const messageParams = searchParams.get('message')
   const type = searchParams.get('type')
+  const products = useGetAllProducts(1, 100, "");
+
+  const mostPopularProducts = useMemo(() => {
+    return _(products.data)
+    .orderBy(it => it.sold, "desc")
+    .take(4)
+    .value();
+  }, [products.data]);
 
   useEffect(() => {
     if (messageParams) {
@@ -289,10 +298,10 @@ export default function Index() {
           </div>
           {/* Update grid layout for mobile */}
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 sm:p-12 text-center" uk-scrollspy="target: > div; cls:uk-animation-scale-up; repeat: true; delay: 300;">
-            {_.map(products, (product, index) => (
+            {_.map(mostPopularProducts, (product, index) => (
               <div key={index} className="w-full border-4 border-[#0055c3] cursor-pointer">
                 <div className="flex justify-center">
-                  <img src={product.image} className="w-3/4 h-auto aspect-[236/383]" alt={product.name} />
+                  <img src={product.imageUrl} className="w-3/4 h-auto aspect-[236/383]" alt={product.name} />
                 </div>
                 <p className="py-5 text-sm sm:text-base">{product.name}</p>
               </div>
