@@ -1242,9 +1242,9 @@ export default function Checkout() {
                                 <p className="text-xs md:text-sm">số lượng: {item.quantity}</p>
                                 <div className="text-xs md:text-sm p-2">
                                   {" "}
-                                  <p>Dịch vụ đi kèm</p>
-                                  <p>Viết thư tay: {item.letter}</p>
-                                  <p>Gói quà:{item.isGift} </p>{" "}
+                                  <p>Dịch vụ đi kèm: Gói quà</p>
+                                  <p>Viết thư tay: {item.letter || "không"}</p>
+                                  
                                 </div>
                               </div>
                             </p>
