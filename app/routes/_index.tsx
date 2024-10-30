@@ -299,12 +299,12 @@ export default function Index() {
           {/* Update grid layout for mobile */}
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 sm:p-12 text-center" uk-scrollspy="target: > div; cls:uk-animation-scale-up; repeat: true; delay: 300;">
             {_.map(mostPopularProducts, (product, index) => (
-              <div key={index} className="w-full border-4 border-[#0055c3] cursor-pointer">
+              <Link to={`/products/${product.productId}`} key={index} className="w-full border-4 border-[#0055c3] cursor-pointer hover:no-underline">
                 <div className="flex justify-center">
                   <img src={product.imageUrl} className="w-3/4 h-auto aspect-[236/383]" alt={product.name} />
                 </div>
                 <p className="py-5 text-sm sm:text-base">{product.name}</p>
-              </div>
+              </Link>
             ))}
           </div>
           <div className="w-full flex items-center pb-9">
