@@ -12,7 +12,7 @@ export default function VerifyRegisterError() {
         <p className="text-center text-[#393334] text-base">
           {message}
         </p>
-        <Link to="/login" className="text-[#0055C3] font-semibold">
+        <Link to={`/login?message=${encodeURIComponent('Đăng nhập bằng tài khoản mật khẩu đã đăng ký để nhận mail xác thực')}&type=error&duration=5`} className="text-[#0055C3] font-semibold">
           Gửi lại mã xác thực
         </Link>
       </div>

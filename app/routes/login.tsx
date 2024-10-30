@@ -66,11 +66,12 @@ export default function Login() {
   const queryParams = new URLSearchParams(location.search)
   const messageParams = queryParams.get('message')
   const type = queryParams.get('type')
+  const messageDuration = queryParams.get('duration')
 
   useEffect(() => {
     if (messageParams) {
       if (type == 'error') {
-        message.error(messageParams)
+        message.error(messageParams, messageDuration ? parseInt(messageDuration) : 3)
       }
     }
   }, [messageParams])
