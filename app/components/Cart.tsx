@@ -400,9 +400,9 @@ const Cart: React.FC = () => {
                       <p>số lượng: {item.quantity}</p>
                     <div className="text-sm">
                       {" "}
-                      <p>Dịch vụ đi kèm</p>
-                      <p>Viết thư tay: {item.letter}</p>
-                      <p>Gói quà:{item.isGift} </p>{" "}
+                      <p>Dịch vụ đi kèm: Gói quà</p>
+                      <p>Viết thư tay: {item.letter || "không"}</p>
+                      
                     </div>
                     <div className="flex items-center mt-2">
                       <button
