@@ -397,7 +397,7 @@ const Cart: React.FC = () => {
                       </p>
                       <p className="text-gray-600">{formatMoney(item.price)}</p>
                     </div>
-                      <p>số lượng: {item.quantity}</p>
+                      <p>Số lượng: {item.quantity}</p>
                     <div className="text-sm">
                       {" "}
                       <p>Dịch vụ đi kèm: Gói quà</p>
