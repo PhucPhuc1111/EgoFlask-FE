@@ -12,20 +12,21 @@ import {
   Legend,
 } from "chart.js";
 import { formatMoney } from "../utils";
+import { useGetProfile } from "~/data";
 
 ChartJS.register(LinearScale, CategoryScale, BarElement, Tooltip, Legend);
 
 interface IncomeBarChartProps {
-  token: string;
 }
 
-const IncomeBarChart: React.FC<IncomeBarChartProps> = ({ token }) => {
+const IncomeBarChart: React.FC<IncomeBarChartProps> = ({}) => {
+  const profile = useGetProfile();
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
 
   // Gọi hook để lấy dữ liệu
   const { data, isLoading, error } = useGetMonthlyIncomeData(
-    token,
+    profile.data?.user?.token || "",
     selectedYear
   );
 

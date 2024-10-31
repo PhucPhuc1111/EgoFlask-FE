@@ -22,7 +22,7 @@ export default function AdminDashboard() {
   const [selectedTimeframe, setSelectedTimeframe] = useState<string>("Day");
   const token = profile?.user?.token;
   const { data: dashboardData, isLoading } = useGetDashboardData(
-    token,
+    token || "",
     selectedTimeframe
   );
 
@@ -32,8 +32,8 @@ export default function AdminDashboard() {
 
   return (
     <main className="flex-1 pt-32 pb-10 max-h-screen overflow-auto ">
-      <div className="flex space-x-3 px-2">
-        <div className="w-1/2  ">
+      <div className="flex max-2xl:flex-col space-x-3 px-2">
+        <div className="w-1/2">
           <p className="text-black text-lg font-bold p-3">Tổng quan</p>
           <select
             value={selectedTimeframe}
@@ -100,9 +100,9 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
-        <div className="w-1/2 ">
-          <div className="py-2 pt-28">
-            <IncomeBarChart token={token} />
+        <div className="w-1/2 h-auto">
+          <div className="py-2 pt-28 w-full h-auto">
+            <IncomeBarChart />
           </div>
         </div>
       </div>

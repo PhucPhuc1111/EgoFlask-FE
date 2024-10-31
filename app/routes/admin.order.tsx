@@ -318,7 +318,7 @@ export default function AdminOrder() {
       })
       .orderBy(it => it.updatedAt, 'desc')
       .value();
-  }, [order.data, searchValue, ]);
+  }, [order.data, searchValue]);
 
   const pagingOrder = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
@@ -327,7 +327,7 @@ export default function AdminOrder() {
     return _(filteredOrder)
     .slice(startIndex, endIndex)
     .value();
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, filteredOrder]);
 
   const debouncedSetSearchValue = useCallback(
     _.debounce((value: string) => {
