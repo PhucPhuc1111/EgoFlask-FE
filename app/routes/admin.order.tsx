@@ -343,7 +343,7 @@ export default function AdminOrder() {
     debouncedSetSearchValue(search);
   }
 
-  const ProductCard = ({ orderDetail }: { orderDetail?: OrderDetail[] }) => {
+  const ProductCard = ({ orderDetail, finalPrice }: { orderDetail?: OrderDetail[], finalPrice?: number | null }) => {
     return (
       <div className="flex flex-wrap gap-4">
         {_.map(orderDetail, (item, index) => {
@@ -395,7 +395,7 @@ export default function AdminOrder() {
                 <div className="border-2 border-[#0055C3] rounded-full my-2" />
                 <div className="w-full flex flex-row items-center justify-between">
                   <span className="text-[#0055C3] font-bold">Tổng tiền: </span>
-                  <span className="text-[#0055C3] font-bold">{formatMoney(item.totalPrice)}</span>
+                  <span className="text-[#0055C3] font-bold">{formatMoney(finalPrice || 0)}</span>
                 </div>
               </div>
             </div>
@@ -513,7 +513,7 @@ export default function AdminOrder() {
                   <ProfileCard name={item.customerName} email={item.customerEmail} avatar={item.customerAvatar} />
                 </td>
                 <td className="border-2 border-[#0055C3] border-opacity-70 w-1/3 p-2">
-                  <ProductCard orderDetail={item.orderDetails} />
+                  <ProductCard orderDetail={item.orderDetails} finalPrice={item.finalAmount}/>
                 </td>
                 <td className="border-2 border-[#0055C3] border-opacity-70 p-2">
                   <AddressCard address={item.customerAddress} name={item.customerName} phone={item.customerPhone} />
