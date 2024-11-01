@@ -299,9 +299,9 @@ export type OrderTransaction = {
 };
 
 export type DashboardResponse = {
-  totalProductsSold: number;
-  totalProductsSoldYesterday:number;
+  totalSupplier: number;
   totalCustomer: number;
+  totalCustomerYesterday: number;
   totalOrders: number;
   totalOrdersYesterday: number;
   commission: number;
