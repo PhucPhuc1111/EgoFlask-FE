@@ -8,7 +8,7 @@ import { ProfileSidebar, SubFooter } from "~/components";
 import { updateProfile, useGetProfile } from "~/data"; 
 
 let schema = object({
-  name: string().required("Tên là bắt buộc"),
+  name: string().trim().required("Tên là bắt buộc"),
 });
 
 const resolver = yupResolver(schema);

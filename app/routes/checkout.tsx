@@ -671,13 +671,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 const schema = object({
-  name: string().required("Tên là bắt buộc"),
-  phone: string().required("Số điện thoại là bắt buộc"),
-  email: string().email("Email không hợp lệ").required("Email là bắt buộc"),
-  province: string().required("Thành phố là bắt buộc"),
-  district: string().required("Quận là bắt buộc"),
-  ward: string().required("Phường là bắt buộc"),
-  street: string().required("Địa chỉ là bắt buộc"),
+  name: string().required("Tên là bắt buộc").trim(),
+  phone: string().matches(/^[0-9]{10}$/, "Số điện thoại độ dài tối đa 10").required("Số điện thoại là bắt buộc").trim(),
+  email: string().email("Email không hợp lệ").required("Email là bắt buộc").trim(),
+  province: string().required("Thành phố là bắt buộc").trim(),
+  district: string().required("Quận là bắt buộc").trim(),
+  ward: string().required("Phường là bắt buộc").trim(),
+  street: string().required("Địa chỉ là bắt buộc").trim(),
   deliveryToDifferentAddress: boolean(),
   // receiverName: string().when("deliveryToDifferentAddress", {
   //   is: true,

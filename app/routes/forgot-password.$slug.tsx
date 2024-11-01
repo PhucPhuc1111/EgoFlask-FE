@@ -155,12 +155,14 @@ export function loader({ params, request }: LoaderFunctionArgs) {
 let loginSchema = object({
   email: string().trim().required("Email is a required field"),
   password: string()
+    .trim()
     .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
     .max(25, "Mật khẩu không được quá 25 ký tự")
     .matches(/[A-Z]/, 'Mật khẩu phải có ít nhất một chữ in hoa')
     .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Mật khẩu phải có ít nhất một ký tự đặc biệt')
     .required(),
   confirmPassword: string()
+    .trim()
     .oneOf([ref('password')], 'Mật khẩu xác nhận không khớp')
     .required(),
 });

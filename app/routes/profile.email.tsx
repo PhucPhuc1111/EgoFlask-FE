@@ -78,7 +78,7 @@ import { InferType, object, string } from "yup";
 import { ProfileSidebar, SubFooter } from "~/components";
 
 let schema = object({
-  email: string().email().required("Email là bắt buộc"),
+  email: string().email().trim().required("Email là bắt buộc"),
 });
 const resolver = yupResolver(schema);
 type UpdateEmailForm = InferType<typeof schema>;

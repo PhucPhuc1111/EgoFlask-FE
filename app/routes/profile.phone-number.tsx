@@ -84,7 +84,7 @@ import { ProfileSidebar, SubFooter } from "~/components";
 import { updateProfile, useGetProfile } from "~/data";
 
 let schema = object({
-  phone: number().required("Số điện thoại là bắt buộc"),
+  phone: string().matches(/^[0-9]{10}$/, "Số điện thoại độ dài tối đa 10").required("Số điện thoại là bắt buộc"),
 });
 
 const resolver = yupResolver(schema);
@@ -112,7 +112,7 @@ export default function ProfileUpdatePhoneNumber() {
     formData.append("Dob", profile.data?.detail?.birthday || "");
     formData.append("Address", profile.data?.detail?.address || "");
 
-    formData.append("PhoneNumber", data.phone.toString());
+    formData.append("PhoneNumber", data.phone);
 
     try {
       let response = await updateProfile(profile.data?.user?.token || '', formData);

@@ -10,15 +10,15 @@ import { useQueryClient } from "@tanstack/react-query";
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 let schema = object({
-  name: string().required("Vui lòng chọn tên sản phẩm"),
+  name: string().required("Vui lòng chọn tên sản phẩm").trim(),
   imageUrl: mixed().required("Vui lòng thêm tệp hình ảnh sản phẩm"),
-  description: string(),
-  guides: string(),
+  description: string().trim(),
+  guides: string().trim(),
   price: number().required("Vui lòng nhập giá sản phẩm"),
   inventory: number().required("Vui lòng nhập số lượng sản phẩm"),
-  engrave: string(),
-  createAt: string(),
-  status: string(),
+  engrave: string().trim(),
+  createAt: string().trim(),
+  status: string().trim(),
 });
 
 const resolver = yupResolver(schema);

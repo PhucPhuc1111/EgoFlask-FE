@@ -9,7 +9,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { format, parseISO } from "date-fns";
 
 let schema = object({
-  dob: string().required(),
+  dob: string().required().trim(),
 });
 
 const resolver = yupResolver(schema);

@@ -179,17 +179,19 @@ export const meta: MetaFunction = () => {
 };
 
 let schema = object({
-  firstName: string().required("Vui lòng nhập tên của bạn"),
-  lastName: string().required("Vui lòng nhập họ của bạn"),
-  email: string().email("Email chưa hợp lệ").required("Vui lòng nhập email của bạn"),
-  phone: string().matches(/^[0-9]{10}$/, "Số điện thoại độ dài tối đa 10").required("Vui lòng nhập số điện thoại của bạn"),
+  firstName: string().required("Vui lòng nhập tên của bạn").trim(),
+  lastName: string().required("Vui lòng nhập họ của bạn").trim(),
+  email: string().email("Email chưa hợp lệ").required("Vui lòng nhập email của bạn").trim(),
+  phone: string().matches(/^[0-9]{10}$/, "Số điện thoại độ dài tối đa 10").required("Vui lòng nhập số điện thoại của bạn").trim(),
   password: string()
     .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
     .max(25, "Mật khẩu không được quá 25 ký tự")
     .matches(/[A-Z]/, 'Mật khẩu phải có ít nhất một chữ in hoa')
     .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Mật khẩu phải có ít nhất một ký tự đặc biệt')
-    .required(),
+    .required()
+    .trim(),
   confirmPassword: string()
+    .trim()
     .oneOf([ref('password')], 'Mật khẩu xác nhận không khớp')
     .required(),
 });

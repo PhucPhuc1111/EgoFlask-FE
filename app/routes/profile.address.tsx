@@ -11,10 +11,10 @@ import { ProfileSidebar, SubFooter } from "~/components";
 import { updateProfile, useGetDistricts, useGetProfile, useGetProvinces, useGetWards } from "~/data";
 
 let schema = object({
-  address: string().required("Địa chỉ là bắt buộc"),
-  provinces: string().required("Thành phố là bắt buộc"),
-  districts: string().required("Quận là bắt buộc"),
-  wards: string().required("Phường là bắt buộc"),
+  address: string().required("Địa chỉ là bắt buộc").trim(),
+  provinces: string().required("Thành phố là bắt buộc").trim(),
+  districts: string().required("Quận là bắt buộc").trim(),
+  wards: string().required("Phường là bắt buộc").trim(),
 });
 const resolver = yupResolver(schema);
 type UpdateAddress = InferType<typeof schema>;
