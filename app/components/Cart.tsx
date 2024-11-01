@@ -428,6 +428,7 @@ const Cart: React.FC = () => {
             </div>
             <div className="flex justify-center w-full mt-4">
               <Link
+                onClick={() => setIsCartOpen(false)}
                 to="/checkout"
                 className="bg-[#0055C3] hover:text-white text-white py-2 px-6 rounded-lg text-lg font-semibold"
               >

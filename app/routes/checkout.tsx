@@ -774,10 +774,10 @@ export default function Checkout() {
     setValue("name", profile.data?.detail.name || "");
     setValue("phone", profile.data?.detail.phoneNumber || "");
     setValue("email", profile.data?.detail.email || "");
-    setValue("province", splitAddress[3] || "");
-    setValue("district", splitAddress[2] || "");
-    setValue("ward", splitAddress[1] || "");
-    setValue("street", splitAddress[0] || "");
+    setValue("province", splitAddress[3]);
+    setValue("district", splitAddress[2]);
+    setValue("ward", splitAddress[1]);
+    setValue("street", splitAddress[0]);
   }, [profile.data?.detail, setValue, splitAddress]);
 
   const cartItems = useMemo(() => {
@@ -871,9 +871,9 @@ export default function Checkout() {
     formData.append("Dob", profile.data?.detail?.birthday || "");
     formData.append(
       "Address",
-      `${data.street}, ${mapWards[data.ward || ""]?.WardName}, ${
-        mapDistricts[data.district || ""]?.DistrictName
-      }, ${mapProvinces[data.province || ""]?.ProvinceName}`
+      `${data.street}, ${mapWards[data.ward]?.WardName}, ${
+        mapDistricts[data.district]?.DistrictName
+      }, ${mapProvinces[data.province]?.ProvinceName}`
     );
     formData.append("PhoneNumber", data.phone || "");
 
