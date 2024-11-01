@@ -865,7 +865,7 @@ export default function Checkout() {
   const updateAddress = async (data: CheckoutForm) => {
     console.log("data", data);
     let formData = new FormData();
-    formData.append("Name", data.name || "");
+    formData.append("Name", data.name || profile.data?.detail.name || "");
     formData.append("AvatarPic", profile.data?.detail?.avatar || "");
     formData.append("Gender", profile.data?.detail?.gender || "");
     formData.append("Dob", profile.data?.detail?.birthday || "");
@@ -875,7 +875,7 @@ export default function Checkout() {
         mapDistricts[data.district]?.DistrictName
       }, ${mapProvinces[data.province]?.ProvinceName}`
     );
-    formData.append("PhoneNumber", data.phone || "");
+    formData.append("PhoneNumber", data.phone || profile.data?.detail.phoneNumber || "");
 
     try {
       let response = await updateProfile(
