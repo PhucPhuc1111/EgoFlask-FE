@@ -5,11 +5,9 @@ import CustomerDisplay from "~/components/Admin/CustomerDisplay";
 import IncomeBarChart from "~/components/Admin/IncomeBarChart";
 import IncomeDisplay from "~/components/Admin/IncomeDisplay";
 import OrderDisplay from "~/components/Admin/OderDisplay,";
-import ProductDisplay from "~/components/Admin/ProductDisplay";
-import UserDisplay from "~/components/Admin/CommissionDisplay";
 import WebsiteDisplay from "~/components/Admin/WebsiteDisplay";
-import WebsiteVisitsChart from "~/components/Admin/WebsiteVisitsChart";
 import CommissionDisplay from "~/components/Admin/CommissionDisplay";
+import SupplierDisplay from "~/components/Admin/SupplierDisplay";
 
 export const handle = {
   hideHeader: true,
@@ -18,7 +16,6 @@ export const handle = {
 
 export default function AdminDashboard() {
   const { data: profile, isLoading: profileLoading, isError } = useGetProfile();
-  const [websiteData, setWebsiteData] = useState<number>(89320);
   const [selectedTimeframe, setSelectedTimeframe] = useState<string>("Day");
   const token = profile?.user?.token;
   const { data: dashboardData, isLoading } = useGetDashboardData(
@@ -66,7 +63,6 @@ export default function AdminDashboard() {
               </div>
               <div className="p-2">
                 <WebsiteDisplay
-                  onWebsiteDataChange={setWebsiteData}
                   visitors={dashboardData?.visiter}
                   isLoading={isLoading}
                 />
@@ -82,18 +78,18 @@ export default function AdminDashboard() {
                 />
               </div>
               <div className="p-2">
-                <ProductDisplay
-                  totalProductsSold={dashboardData?.totalProductsSold}
-                  totalProductsSoldYesterday={
-                    dashboardData?.totalProductsSoldYesterday
+                <CustomerDisplay
+                  totalCustomers={dashboardData?.totalCustomer}
+                  totalCustomersYesterday={
+                    dashboardData?.totalCustomerYesterday
                   }
-                  select={selectedTimeframe}
                   isLoading={isLoading}
+                  select={selectedTimeframe}
                 />
               </div>
               <div className="p-2">
-                <CustomerDisplay
-                  totalCustomers={dashboardData?.totalCustomer}
+                <SupplierDisplay
+                  totalSupliers={dashboardData?.totalSupplier}
                   isLoading={isLoading}
                 />
               </div>

@@ -42,7 +42,7 @@ const OrderDisplay: React.FC<OrderDisplayProps> = ({
   return (
     <div className="p-4 font-sans border-2 rounded-2xl bg-[#f7f7f7] space-y-3 w-72 h-40 ">
       <div className="flex items-center justify-between ">
-        <div className="text-black font-semibold">Đơn hàng</div>
+        <div className="text-black font-semibold">Đơn hàng thành công</div>
         <span
           className={`text-sm font-semibold ${
             displayOrders === lastPeriodOrders

@@ -1,36 +1,21 @@
-import React, { useState } from "react";
-
-interface CustomerData {
-  customer: number;
-  lastPeriod: number;
-}
-
-const customerData: { [key: string]: CustomerData & { lastPeriod: number } } = {
-  "Tháng này": { customer: 9, lastPeriod: 9 },
-  "Năm này": { customer: 9, lastPeriod: 9 },
-  "Ngày này": { customer: 9, lastPeriod: 9 },
-};
+import React from "react";
 
 interface CustomerDisplayProps {
   totalCustomers?: number;
+  totalCustomersYesterday?: number;
   isLoading?: boolean;
+  select?: string;
 }
 
 const CustomerDisplay: React.FC<CustomerDisplayProps> = ({
   totalCustomers,
+  totalCustomersYesterday,
   isLoading,
+  select,
 }) => {
-  const [selectedTimeframe, setSelectedTimeframe] =
-    useState<string>("Tháng này");
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedTimeframe(e.target.value);
-  };
-
-  // This needs to use different properties for current and last period
-  const displayCustomers =
-    totalCustomers ?? customerData[selectedTimeframe].customer;
-  const lastPeriodCustomers = customerData[selectedTimeframe].lastPeriod;
+  const selectedTimeframe = select;
+  const displayCustomers = totalCustomers ?? 0;
+  const lastPeriodCustomers = totalCustomersYesterday ?? 0;
 
   const customersDifference = displayCustomers - lastPeriodCustomers;
   const customersPercentageChange =
@@ -67,7 +52,15 @@ const CustomerDisplay: React.FC<CustomerDisplayProps> = ({
         {isLoading ? "Loading..." : `${displayCustomers.toLocaleString()} `}
       </div>
       <div className="text-black">
-        Tháng trước: {lastPeriodCustomers.toLocaleString()}
+        {selectedTimeframe === "Month"
+          ? `Tháng trước: ${totalCustomersYesterday?.toLocaleString()}`
+          : selectedTimeframe === "Year"
+          ? `Năm trước: ${totalCustomersYesterday?.toLocaleString()}`
+          : selectedTimeframe === "Day"
+          ? `Hôm qua: ${totalCustomersYesterday?.toLocaleString()}`
+          : selectedTimeframe === "Week"
+          ? `Tuần trước: ${totalCustomersYesterday?.toLocaleString()}`
+          : `Toàn bộ: ${totalCustomersYesterday?.toLocaleString()}`}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-// IncomeBarChart.tsx
+// Updated IncomeBarChart.tsx
 
 import React, { useMemo, useState } from "react";
 import { useGetMonthlyIncomeData } from "~/data/admin";
@@ -16,8 +16,7 @@ import { useGetProfile } from "~/data";
 
 ChartJS.register(LinearScale, CategoryScale, BarElement, Tooltip, Legend);
 
-interface IncomeBarChartProps {
-}
+interface IncomeBarChartProps {}
 
 const IncomeBarChart: React.FC<IncomeBarChartProps> = ({}) => {
   const profile = useGetProfile();
@@ -62,27 +61,8 @@ const IncomeBarChart: React.FC<IncomeBarChartProps> = ({}) => {
         return {
           month,
           totalIncome: 0,
-          weeklyIncomes: [
-            { weekNumber: 1, income: 0 },
-            { weekNumber: 2, income: 0 },
-            { weekNumber: 3, income: 0 },
-            { weekNumber: 4, income: 0 },
-            { weekNumber: 5, income: 0 },
-          ],
+          weeklyIncomes: [],
         };
-      }
-    });
-
-    // Tạo dữ liệu weeklyData
-    const weeklyData = completeData.map((monthData) => {
-      if (monthData.weeklyIncomes && monthData.weeklyIncomes.length > 0) {
-        const weeks = monthData.weeklyIncomes.map((week: any) => week.income);
-        while (weeks.length < 5) {
-          weeks.push(0);
-        }
-        return weeks;
-      } else {
-        return [0, 0, 0, 0, 0];
       }
     });
 
@@ -95,7 +75,7 @@ const IncomeBarChart: React.FC<IncomeBarChartProps> = ({}) => {
           backgroundColor: "#0055c3",
         },
       ],
-      weeklyData: weeklyData,
+      weeklyData: completeData.map((item) => item.weeklyIncomes),
     };
   }, [data, selectedYear]);
 
@@ -122,11 +102,13 @@ const IncomeBarChart: React.FC<IncomeBarChartProps> = ({}) => {
               const index = context.dataIndex;
               const month = context.label;
               const monthData = context.parsed.y;
-              const weeks = chartData.weeklyData[index] || [];
+              const weeklyIncomes = chartData.weeklyData[index] || [];
 
               const lines = [`${month}: ${formatMoney(monthData)}`];
-              weeks.forEach((weekValue: number, weekIndex: number) => {
-                lines.push(`Tuần ${weekIndex + 1}: ${formatMoney(weekValue)}`);
+              weeklyIncomes.forEach((week: any) => {
+                lines.push(
+                  `Tuần ${week.weekNumber}: ${formatMoney(week.income)}`
+                );
               });
               return lines;
             },
