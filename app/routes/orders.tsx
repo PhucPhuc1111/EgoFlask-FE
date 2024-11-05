@@ -312,12 +312,12 @@ const Orders = () => {
                         {order.transactionStatus === 'PAID' ? (
                           <p>
                             {order.status === 'PENDING'
-                              ? 'Đang chờ duyệt đơn'
+                              ? 'Đang chờ'
                               : order.status === 'SHIPPING'
                                 ? 'Đang vận chuyển'
                                 : order.status === 'CANCELLED'
                                   ? 'Đã hủy'
-                                  : 'Đã giao hàng'}
+                                  : 'Đã hoàn thành'}
                           </p>
                         ) : order.transactionStatus === 'CANCELLED' ? (
                           <p>Đã hủy</p>
@@ -325,12 +325,12 @@ const Orders = () => {
                           // cho case COD
                           <p>
                             {order.status === 'PENDING'
-                              ? 'Đang chờ duyệt đơn'
+                              ? 'Đang chờ'
                               : order.status === 'SHIPPING'
                                 ? 'Đang vận chuyển'
                                 : order.status === 'CANCELLED'
                                   ? 'Đã hủy'
-                                  : 'Đã giao hàng'}
+                                  : 'Đã hoàn thành'}
                           </p>
                         )}
                       </td>
